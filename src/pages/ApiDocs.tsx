@@ -83,7 +83,7 @@ const ApiDocs = () => {
                 <h3 className="text-lg font-semibold mb-3">Endpoint</h3>
                 <div className="bg-secondary p-4 rounded-lg">
                   <code className="text-sm">
-                    POST https://xqzuctqmruyowkgftnuy.supabase.co/functions/v1/vote-api
+                    POST https://esavcohhdgdqkukirztz.supabase.co/functions/v1/vote-api
                   </code>
                 </div>
               </div>
@@ -222,7 +222,7 @@ const ApiDocs = () => {
                 <div className="bg-secondary p-4 rounded-lg">
                   <pre className="text-sm overflow-x-auto">
 {`// JavaScript/Node.js example
-const response = await fetch('https://xqzuctqmruyowkgftnuy.supabase.co/functions/v1/vote-api', {
+const response = await fetch('https://esavcohhdgdqkukirztz.supabase.co/functions/v1/vote-api', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
