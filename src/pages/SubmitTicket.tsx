@@ -145,7 +145,7 @@ export const SubmitTicket = () => {
           <Button 
             variant="link" 
             className="p-0 h-auto text-sm"
-            onClick={() => window.open('https://discord.gg/SVuaYxB4gq', '_blank')}
+            onClick={() => window.open('https://discord.gg/yr85pkUteU', '_blank')}
           >
             Discord
           </Button>
