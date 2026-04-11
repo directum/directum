@@ -165,7 +165,7 @@ const BotEdit = () => {
   };
 
   const generateVoteApiUrl = () => {
-    const baseUrl = 'https://xqzuctqmruyowkgftnuy.supabase.co/functions/v1/vote-api';
+    const baseUrl = 'https://esavcohhdgdqkukirztz.supabase.co/functions/v1/vote-api';
     const params = new URLSearchParams({
       botId: botId || '',
       ...(voteApiConfig.guildId && { guildId: voteApiConfig.guildId }),
