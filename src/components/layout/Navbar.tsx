@@ -277,7 +277,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                           variant="ghost" 
                           className="justify-start"
                           onClick={() => {
-                            window.open('https://discord.gg/SVuaYxB4gq', '_blank');
+                            window.open('https://discord.gg/yr85pkUteU', '_blank');
                             setShowMobileMenu(false);
                           }}
                         >
