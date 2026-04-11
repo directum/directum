@@ -533,7 +533,6 @@ const Index = () => {
           ) : filteredBots.length === 0 ? (
             <div className="text-center py-20">
               <div className="bubble-gradient rounded-full p-8 w-24 h-24 mx-auto mb-8 floating-animation">
-                <span className="text-4xl">🤖</span>
               </div>
               <h3 className="text-2xl font-bold mb-4 font-fredoka">
                 {searchQuery ? 'Oops! No bots found 🔍' : 'Ready to add the first bot? 🚀'}
