@@ -45,7 +45,7 @@ export const Footer = () => {
     },
     {
       icon: DiscordIcon,
-      href: 'https://discord.gg/SVuaYxB4gq',
+      href: 'https://discord.gg/yr85pkUteU',
       label: 'Join our Discord'
     }
   ];
