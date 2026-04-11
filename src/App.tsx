@@ -1,0 +1,65 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/components/auth/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { CookieProvider } from "@/contexts/CookieContext";
+import { CookieBanner } from "@/components/cookies/CookieBanner";
+import { Footer } from "@/components/layout/Footer";
+import Index from "./pages/Index";
+import Profile from "./pages/Profile";
+import PublicProfile from "./pages/PublicProfile";
+import Management from "./pages/Management";
+import BotEdit from "./pages/BotEdit";
+import BotDetail from "./pages/BotDetail";
+import Legal from "./pages/Legal";
+
+import Collections from "./pages/Collections";
+import CollectionDetail from "./pages/CollectionDetail";
+import { SubmitTicket } from "./pages/SubmitTicket";
+import ApiDocs from "./pages/ApiDocs";
+import MyBots from "./pages/MyBots";
+import PremiumSuccess from "./pages/PremiumSuccess";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <ThemeProvider>
+        <CookieProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <CookieBanner />
+            <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/user/:userId" element={<PublicProfile />} />
+              <Route path="/management" element={<Management />} />
+              <Route path="/bot/edit/:botId" element={<BotEdit />} />
+              <Route path="/bot/:botId" element={<BotDetail />} />
+              <Route path="/legal" element={<Legal />} />
+              
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/collection/:collectionId" element={<CollectionDetail />} />
+              <Route path="/submit-ticket" element={<SubmitTicket />} />
+              <Route path="/api-docs" element={<ApiDocs />} />
+              <Route path="/my-bots" element={<MyBots />} />
+              <Route path="/premium-success" element={<PremiumSuccess />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer />
+          </BrowserRouter>
+        </TooltipProvider>
+      </CookieProvider>
+    </ThemeProvider>
+  </AuthProvider>
+</QueryClientProvider>
+);
+
+export default App;
