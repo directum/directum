@@ -146,8 +146,8 @@ const Index = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error.message || "Failed to load bots",
+        title: "Error loading bots",
+        description: error.message,
       });
     } finally {
       setLoading(false);

@@ -311,7 +311,7 @@ export const BotForm = ({ onClose, onSuccess, bot }: BotFormProps) => {
         const { data: newBot, error: botError } = await supabase
           .from('bots')
           .insert({
-            owner_id: profile.id,
+            owner_id: user.id,
             client_id: formData.client_id,
             name: botName,
             avatar_url: avatarUrl,
