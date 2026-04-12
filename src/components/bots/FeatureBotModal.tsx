@@ -62,7 +62,7 @@ export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) =>
       console.error('Error fetching user bots:', error);
       toast({
         title: 'Error',
-        description: 'Failed to load your bots',
+        description: error.message || 'Failed to load your bots. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -103,8 +103,8 @@ export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) =>
     } catch (error) {
       console.error('Error creating checkout session:', error);
       toast({
-        title: 'Error',
-        description: 'Failed to start payment process. Please try again.',
+        title: 'Error Creating Checkout Session',
+        description: error.message,
         variant: 'destructive',
       });
     } finally {

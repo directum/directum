@@ -100,8 +100,8 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({
     } catch (error) {
       console.error('Error saving collection:', error);
       toast({
-        title: "Error",
-        description: "Failed to save collection",
+        title: "Error Saving Collection",
+        description: error.message || "Failed to save collection",
         variant: "destructive",
       });
     } finally {

@@ -131,8 +131,8 @@ export const FollowButton: React.FC<FollowButtonProps> = ({ userId, className })
     } catch (error) {
       console.error('Error toggling follow:', error);
       toast({
-        title: "Error",
-        description: "Failed to update follow status",
+        title: "Error Updating Follow Status",
+        description: error.message || "Failed to update follow status",
         variant: "destructive",
       });
     } finally {

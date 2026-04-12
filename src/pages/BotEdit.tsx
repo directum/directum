@@ -118,8 +118,8 @@ const BotEdit = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load bot data",
+        title: "Error Loading Bot Data",
+        description: error.message || "Failed to load bot data",
       });
       navigate('/profile');
     } finally {
@@ -139,8 +139,8 @@ const BotEdit = () => {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load tags",
+        title: "Error Loading Tags",
+        description: error.message || "Failed to load tags",
       });
     } finally {
       setLoadingTags(false);

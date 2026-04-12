@@ -43,7 +43,7 @@ export const PremiumPaymentModal = ({ isOpen, onClose, botId, botName }: Premium
       console.error('Error creating checkout:', error);
       toast({
         title: "Payment Error",
-        description: "Failed to create payment session. Please try again.",
+        description: error.message || "Failed to start payment process. Please try again.",
         variant: "destructive",
       });
     } finally {

@@ -99,8 +99,8 @@ const Management = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load profile",
+        title: "Error Loading Profile",
+        description: error.message || "Failed to load profile",
       });
       navigate('/');
     }
@@ -129,8 +129,8 @@ const Management = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load pending bots",
+        title: "Error Loading Pending Bots",
+        description: error.message || "Failed to load pending bots",
       });
     } finally {
       setLoading(false);
@@ -156,8 +156,8 @@ const Management = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load approved bots",
+        title: "Error Loading Approved Bots",
+        description: error.message || "Failed to load approved bots",
       });
     }
   };
@@ -223,8 +223,8 @@ const Management = () => {
       console.error('Failed to remove bot:', error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to remove bot: " + (error.message || 'Unknown error'),
+        title: "Error Removing Bot",
+        description: error.message,
       });
     } finally {
       setRemovingBot(false);
@@ -287,8 +287,8 @@ const Management = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to approve bot",
+        title: "Error Approving Bot",
+        description: error.message || "Failed to approve bot",
       });
     } finally {
       setActionLoading(null);
@@ -337,8 +337,8 @@ const Management = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to reject bot",
+        title: "Error Rejecting Bot",
+        description: error.message || "Failed to reject bot",
       });
     } finally {
       setActionLoading(null);

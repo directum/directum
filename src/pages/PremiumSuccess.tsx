@@ -40,8 +40,8 @@ const PremiumSuccess = () => {
     } catch (error: any) {
       console.error('Error verifying payment:', error);
       toast({
-        title: "Verification Error",
-        description: "There was an issue verifying your payment. Please contact support.",
+        title: "There was an issue verifying your payment. Please contact support.",
+        description: error.message || "There was an issue verifying your payment. Please contact support.",
         variant: "destructive",
       });
     } finally {

@@ -93,8 +93,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setThemeState(theme);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to save theme preference",
+        title: "Error Saving Theme Preference",
+        description: error.message || "Failed to save theme preference",
       });
     }
   };

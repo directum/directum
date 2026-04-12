@@ -32,7 +32,7 @@ export const DiscordLogin = () => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred",
+        description: error.message,
       });
     } finally {
       setLoading(false);

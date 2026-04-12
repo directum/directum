@@ -75,8 +75,8 @@ const MyBots = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load your bots",
+        title: "Error Loading Bots",
+        description: error.message || "Failed to load your bots",
       });
     } finally {
       setLoading(false);

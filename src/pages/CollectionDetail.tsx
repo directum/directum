@@ -113,8 +113,8 @@ const CollectionDetail: React.FC = () => {
     } catch (error) {
       console.error('Error fetching collection:', error);
       toast({
-        title: "Error",
-        description: "Failed to load collection",
+        title: "Error Loading Collection",
+        description: error.message || "Failed to load collection",
         variant: "destructive",
       });
       navigate('/collections');
@@ -214,8 +214,8 @@ const CollectionDetail: React.FC = () => {
     } catch (error) {
       console.error('Error adding bot to collection:', error);
       toast({
-        title: "Error",
-        description: "Failed to add bot to collection",
+        title: "Error Adding Bot to Collection",
+        description: error.message || "Failed to add bot to collection",
         variant: "destructive",
       });
     }
@@ -242,8 +242,8 @@ const CollectionDetail: React.FC = () => {
     } catch (error) {
       console.error('Error removing bot from collection:', error);
       toast({
-        title: "Error",
-        description: "Failed to remove bot from collection",
+        title: "Error Removing Bot from Collection",
+        description: error.message || "Failed to remove bot from collection",
         variant: "destructive",
       });
     }
@@ -273,8 +273,8 @@ const CollectionDetail: React.FC = () => {
     } catch (error) {
       console.error('Error deleting collection:', error);
       toast({
-        title: "Error",
-        description: "Failed to delete collection",
+        title: "Error Deleting Collection",
+        description: error.message || "Failed to delete collection",
         variant: "destructive",
       });
     }
@@ -303,8 +303,8 @@ const CollectionDetail: React.FC = () => {
       } catch (error) {
         console.error('Error copying to clipboard:', error);
         toast({
-          title: "Error",
-          description: "Failed to copy link",
+          title: "Error Copying Link",
+          description: error.message || "Failed to copy link",
           variant: "destructive",
         });
       }

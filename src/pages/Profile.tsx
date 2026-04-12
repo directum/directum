@@ -101,8 +101,8 @@ const Profile = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load profile",
+        title: "Error Loading Profile",
+        description: error.message || "Failed to load profile",
       });
     }
   };
@@ -122,8 +122,8 @@ const Profile = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load notifications",
+        title: "Error Loading Notifications",
+        description: error.message || "Failed to load notifications",
       });
     }
   };
@@ -148,8 +148,8 @@ const Profile = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load your bots",
+        title: "Error Loading Bots",
+        description: error.message || "Failed to load your bots",
       });
     } finally {
       setLoading(false);
@@ -195,8 +195,8 @@ const Profile = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to delete bot",
+        title: "Error Deleting Bot",
+        description: error.message || "Failed to delete bot",
       });
     }
   };
@@ -238,8 +238,8 @@ const Profile = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to mark notification as read",
+        title: "Error Marking Notification as Read",
+        description: error.message || "Failed to mark notification as read",
       });
     }
   };

@@ -267,8 +267,8 @@ const Index = () => {
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to vote",
+        title: "Error Voting",
+        description: error.message || "Failed to vote",
       });
     } finally {
       setVotingStates(prev => {
