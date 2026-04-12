@@ -147,7 +147,7 @@ const Index = () => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to load bots",
+        description: error.message || "Failed to load bots",
       });
     } finally {
       setLoading(false);
