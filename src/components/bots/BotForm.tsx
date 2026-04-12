@@ -70,8 +70,8 @@ export const BotForm = ({ onClose, onSuccess, bot }: BotFormProps) => {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Failed to load tags",
+        title: "Error to load tags",
+        description: error.message || "Failed to load tags",
       });
     } finally {
       setLoadingTags(false);

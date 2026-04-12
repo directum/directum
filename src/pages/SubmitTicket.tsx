@@ -53,7 +53,7 @@ export const SubmitTicket = () => {
       console.error('Error submitting ticket:', error);
       toast({
         title: "Error",
-        description: "Failed to submit ticket. Please try again.",
+        description: error.message,
         variant: "destructive",
       });
     } finally {

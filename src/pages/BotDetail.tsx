@@ -228,7 +228,7 @@ const BotDetail = () => {
       console.error('Error voting:', error);
       toast({
         title: "Error voting",
-        description: "Failed to record your vote. Please try again.",
+        description: error.message,
         variant: "destructive",
       });
     } finally {
