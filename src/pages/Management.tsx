@@ -15,8 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 // Define admin Discord IDs
 const ADMIN_DISCORD_IDS = [
-  '1374705890565029988',
-  '1230645006440595614',
+  '1254195552808206429',
   // Add more admin Discord IDs as needed
 ];
 

@@ -15,7 +15,7 @@ USING (
   (EXISTS (
     SELECT 1 FROM profiles 
     WHERE profiles.id = auth.uid() 
-    AND profiles.discord_id IN ('1374705890565029988', '1230645006440595614')
+    AND profiles.discord_id IN ('1254195552808206429')
   ))
 );
 
@@ -30,6 +30,6 @@ USING (
   (EXISTS (
     SELECT 1 FROM profiles 
     WHERE profiles.id = auth.uid() 
-    AND profiles.discord_id IN ('1374705890565029988', '1230645006440595614')
+    AND profiles.discord_id IN ('1254195552808206429')
   ))
 );

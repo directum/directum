@@ -7,6 +7,6 @@ USING (
     SELECT 1 
     FROM profiles 
     WHERE profiles.id = auth.uid() 
-    AND profiles.discord_id = ANY (ARRAY['1374705890565029988'::text, '1230645006440595614'::text])
+    AND profiles.discord_id = ANY (ARRAY['1254195552808206429'::text])
   )
 );
