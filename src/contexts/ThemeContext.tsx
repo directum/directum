@@ -84,8 +84,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (error) throw error;
 
       toast({
-        title: "Theme Updated",
-        description: `Switched to ${newTheme} mode`,
+        title: "Wanted to switch themes?",
+        description: `Dark mode only :)`,
       });
     } catch (error) {
       console.error('Failed to save theme preference:', error);
