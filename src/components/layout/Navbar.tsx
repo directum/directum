@@ -93,7 +93,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    <DropdownMenuItem onClick={() => window.open('https://discord.gg/SVuaYxB4gq', '_blank')}>
+                    <DropdownMenuItem onClick={() => window.open('https://discord.gg/yr85pkUteU', '_blank')}>
                       <DiscordIcon className="mr-2 h-4 w-4" />
                       Discord
                     </DropdownMenuItem>
