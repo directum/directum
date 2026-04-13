@@ -156,7 +156,7 @@ export default function PublicProfile() {
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Profile not found</h1>
-            <Button onClick={() => navigate('/')}>Go Home</Button>
+            <Button onClick={() => navigate('https://directium.vercel.app/')}>Go Home</Button>
           </div>
         </div>
       </div>
