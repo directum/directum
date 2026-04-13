@@ -33,11 +33,6 @@ export const Footer = () => {
 
   const socialLinks = [
     {
-      icon: XIcon,
-      href: 'https://x.com/directium', // ! NEED TO REPLACE
-      label: 'Follow us on X'
-    },
-    {
       icon: DiscordIcon,
       href: 'https://discord.gg/yr85pkUteU',
       label: 'Join our Discord'
