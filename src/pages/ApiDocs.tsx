@@ -5,8 +5,11 @@ import { Code, Zap, Shield, Clock, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ApiDocs = () => {
+  // Common styling for code blocks to ensure consistency
+  const codeBlockClass = "bg-slate-950 text-slate-50 p-4 rounded-lg border border-slate-800 shadow-inner";
+
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-gradient-subtle text-foreground">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Back to Home Button */}
@@ -28,10 +31,10 @@ const ApiDocs = () => {
           </div>
 
           {/* Overview */}
-          <Card className="mb-8">
+          <Card className="mb-8 border-muted">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Code className="w-5 h-5" />
+                <Code className="w-5 h-5 text-primary" />
                 API Overview
               </CardTitle>
               <CardDescription>
@@ -41,25 +44,25 @@ const ApiDocs = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/50">
+                <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
                   <Zap className="w-5 h-5 text-primary" />
                   <div>
                     <div className="font-medium">Fast & Reliable</div>
-                    <div className="text-sm text-muted-foreground">Edge-deployed for low latency</div>
+                    <div className="text-sm text-muted-foreground">Edge-deployed</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/50">
+                <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
                   <Shield className="w-5 h-5 text-primary" />
                   <div>
                     <div className="font-medium">Secure</div>
-                    <div className="text-sm text-muted-foreground">Rate limited and validated</div>
+                    <div className="text-sm text-muted-foreground">Rate limited</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/50">
+                <div className="flex items-center gap-3 p-4 rounded-lg bg-secondary/30">
                   <Clock className="w-5 h-5 text-primary" />
                   <div>
                     <div className="font-medium">Real-time</div>
-                    <div className="text-sm text-muted-foreground">Instant role rewards</div>
+                    <div className="text-sm text-muted-foreground">Instant updates</div>
                   </div>
                 </div>
               </div>
@@ -67,11 +70,11 @@ const ApiDocs = () => {
           </Card>
 
           {/* Vote API */}
-          <Card className="mb-8">
+          <Card className="mb-8 border-muted">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 Vote API
-                <Badge variant="secondary">v1</Badge>
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">v1</Badge>
               </CardTitle>
               <CardDescription>
                 Allow users to vote for your bot and automatically reward them with Discord roles
@@ -81,8 +84,8 @@ const ApiDocs = () => {
               {/* Endpoint */}
               <div>
                 <h3 className="text-lg font-semibold mb-3">Endpoint</h3>
-                <div className="bg-secondary p-4 rounded-lg">
-                  <code className="text-sm">
+                <div className={codeBlockClass}>
+                  <code className="text-sm font-mono text-emerald-400">
                     POST https://esavcohhdgdqkukirztz.supabase.co/functions/v1/vote-api
                   </code>
                 </div>
@@ -91,8 +94,8 @@ const ApiDocs = () => {
               {/* Request Body */}
               <div>
                 <h3 className="text-lg font-semibold mb-3">Request Body</h3>
-                <div className="bg-secondary p-4 rounded-lg">
-                  <pre className="text-sm overflow-x-auto">
+                <div className={codeBlockClass}>
+                  <pre className="text-sm overflow-x-auto font-mono">
 {`{
   "botId": "your-bot-id",
   "userId": "user-id-from-your-system",
@@ -108,49 +111,35 @@ const ApiDocs = () => {
               <div>
                 <h3 className="text-lg font-semibold mb-3">Parameters</h3>
                 <div className="space-y-3">
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <code className="text-sm font-mono bg-secondary px-2 py-1 rounded">botId</code>
-                      <Badge variant="destructive">Required</Badge>
+                  {[
+                    { name: 'botId', req: true, desc: 'The ID of your bot on Directum' },
+                    { name: 'userId', req: true, desc: 'Unique identifier for the user in your system' },
+                    { name: 'discordUserId', req: false, desc: 'Discord user ID for role rewards' },
+                    { name: 'guildId', req: false, desc: 'Discord server ID for the role' },
+                    { name: 'roleId', req: false, desc: 'Discord role ID to award' },
+                  ].map((param) => (
+                    <div key={param.name} className="border border-muted rounded-lg p-4 bg-card/50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <code className="text-sm font-mono bg-slate-950 text-primary-foreground px-2 py-0.5 rounded border border-slate-800">
+                          {param.name}
+                        </code>
+                        {param.req ? (
+                          <Badge variant="destructive" className="text-[10px] h-5">Required</Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[10px] h-5">Optional</Badge>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground">{param.desc}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground">The ID of your bot on Directum</p>
-                  </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <code className="text-sm font-mono bg-secondary px-2 py-1 rounded">userId</code>
-                      <Badge variant="destructive">Required</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Unique identifier for the user in your system</p>
-                  </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <code className="text-sm font-mono bg-secondary px-2 py-1 rounded">discordUserId</code>
-                      <Badge variant="outline">Optional</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Discord user ID for role rewards</p>
-                  </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <code className="text-sm font-mono bg-secondary px-2 py-1 rounded">guildId</code>
-                      <Badge variant="outline">Optional</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Discord server ID where the role should be awarded</p>
-                  </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <code className="text-sm font-mono bg-secondary px-2 py-1 rounded">roleId</code>
-                      <Badge variant="outline">Optional</Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">Discord role ID to award to the user</p>
-                  </div>
+                  ))}
                 </div>
               </div>
 
               {/* Response */}
               <div>
                 <h3 className="text-lg font-semibold mb-3">Response</h3>
-                <div className="bg-secondary p-4 rounded-lg">
-                  <pre className="text-sm overflow-x-auto">
+                <div className={codeBlockClass}>
+                  <pre className="text-sm overflow-x-auto font-mono text-blue-300">
 {`{
   "success": true,
   "message": "Vote recorded successfully",
@@ -168,80 +157,55 @@ const ApiDocs = () => {
               <div>
                 <h3 className="text-lg font-semibold mb-3">Webhook Notifications</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Configure a webhook URL in your bot settings to receive real-time notifications when users vote for your bot.
+                  Receive real-time notifications when users vote for your bot.
                 </p>
                 
                 <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium mb-2">Webhook Payload</h4>
-                    <div className="bg-secondary p-4 rounded-lg">
-                      <pre className="text-sm overflow-x-auto">
+                  <div className={codeBlockClass}>
+                    <pre className="text-sm overflow-x-auto font-mono">
 {`{
   "event": "bot_vote",
   "timestamp": "2024-01-01T12:00:00Z",
   "bot": {
     "id": "your-bot-id",
-    "name": "Your Bot Name",
-    "client_id": "123456789012345678",
     "votes": 43
   },
   "voter": {
-    "id": "user-id-from-your-system",
-    "username": "voter_username",
-    "discord_id": "987654321098765432",
-    "avatar_url": "https://cdn.discordapp.com/avatars/..."
+    "discord_id": "987654321098765432"
   }
 }`}
-                      </pre>
-                    </div>
+                    </pre>
                   </div>
 
-                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg">
-                    <p className="text-sm">
-                      <strong>💡 How to use:</strong> Set the <code className="bg-secondary px-1 rounded">webhook_url</code> field 
-                      in your bot's settings to receive POST requests whenever someone votes for your bot.
+                  <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg">
+                    <p className="text-sm text-blue-400">
+                      <strong>💡 How to use:</strong> Set the <code className="bg-slate-950 px-1 rounded border border-slate-800">webhook_url</code> in 
+                      your bot's settings.
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Rate Limiting */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Rate Limiting</h3>
-                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-4 rounded-lg">
-                  <p className="text-sm">
-                    <strong>⏰ Cooldown:</strong> Users can vote once every 12 hours per bot. 
-                    Attempts to vote before the cooldown expires will return a rate limit response.
-                  </p>
-                </div>
+              <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-lg">
+                <p className="text-sm text-amber-500">
+                  <strong>⏰ Cooldown:</strong> Users can vote once every 12 hours per bot.
+                </p>
               </div>
 
               {/* Example Integration */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Example Integration</h3>
-                <div className="bg-secondary p-4 rounded-lg">
-                  <pre className="text-sm overflow-x-auto">
-{`// JavaScript/Node.js example
-const response = await fetch('https://esavcohhdgdqkukirztz.supabase.co/functions/v1/vote-api', {
+                <h3 className="text-lg font-semibold mb-3">Example Integration (Node.js)</h3>
+                <div className={codeBlockClass}>
+                  <pre className="text-sm overflow-x-auto font-mono text-slate-300">
+{`const response = await fetch('https://api.directum.bot/v1/vote', {
   method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     botId: 'your-bot-id',
-    userId: interaction.user.id,
-    discordUserId: interaction.user.id,
-    guildId: interaction.guild.id,
-    roleId: 'your-role-id'
+    userId: interaction.user.id
   })
-});
-
-const data = await response.json();
-if (data.success) {
-  await interaction.reply(\`Thanks for voting! New vote count: \${data.newVoteCount}\`);
-} else {
-  await interaction.reply(data.message);
-}`}
+});`}
                   </pre>
                 </div>
               </div>
@@ -249,26 +213,19 @@ if (data.success) {
           </Card>
 
           {/* Coming Soon */}
-          <Card>
+          <Card className="border-muted bg-secondary/10">
             <CardHeader>
               <CardTitle>Coming Soon</CardTitle>
-              <CardDescription>
-                More API endpoints are in development to enhance your bot integrations
-              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-70">
                 <div className="p-4 border border-dashed border-muted-foreground/30 rounded-lg">
-                  <h4 className="font-medium mb-2">Statistics API</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Retrieve detailed vote statistics and analytics for your bot
-                  </p>
+                  <h4 className="font-medium mb-1">Statistics API</h4>
+                  <p className="text-xs text-muted-foreground">Detailed vote analytics</p>
                 </div>
                 <div className="p-4 border border-dashed border-muted-foreground/30 rounded-lg">
-                  <h4 className="font-medium mb-2">Statistics API</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Retrieve detailed vote statistics and analytics for your bot
-                  </p>
+                  <h4 className="font-medium mb-1">Reviews API</h4>
+                  <p className="text-xs text-muted-foreground">Manage bot reviews via API</p>
                 </div>
               </div>
             </CardContent>
