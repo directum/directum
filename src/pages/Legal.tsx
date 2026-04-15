@@ -32,7 +32,8 @@ const Legal = () => {
             <CardHeader>
               <CardTitle className="text-2xl">Terms of Service</CardTitle>
               <CardDescription>
-                Last updated: {new Date().toLocaleDateString()}
+                {/*w Date().toLocaleDateString()*/}
+                Last updated: 4/15/2026
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
