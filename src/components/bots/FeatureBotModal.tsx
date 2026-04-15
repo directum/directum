@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Bot, Crown, CreditCard } from 'lucide-react';
+import { Loader2, Bot, Crown, CreditCard, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/auth/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -23,11 +23,34 @@ interface FeatureBotModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+type PremiumPlan = 'monthly' | 'yearly';
+
+const planOptions: Array<{
+  value: PremiumPlan;
+  title: string;
+  price: string;
+  subtitle: string;
+}> = [
+  {
+    value: 'monthly',
+    title: 'Monthly',
+    price: '€4.99',
+    subtitle: '1 month of premium visibility',
+  },
+  {
+    value: 'yearly',
+    title: 'Yearly',
+    price: '€45.00',
+    subtitle: '12 months of premium visibility',
+  },
+];
+
 export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) => {
   const [userBots, setUserBots] = useState<Bot[]>([]);
   const [selectedBot, setSelectedBot] = useState<Bot | null>(null);
   const [loading, setLoading] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
+  const [plan, setPlan] = useState<PremiumPlan>('monthly');
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -39,7 +62,7 @@ export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) =>
 
   const fetchUserBots = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
       const { data: profile } = await supabase
@@ -58,7 +81,7 @@ export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) =>
 
       if (error) throw error;
       setUserBots(data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching user bots:', error);
       toast({
         title: 'Error',
@@ -85,32 +108,34 @@ export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) =>
       const { data, error } = await supabase.functions.invoke('create-premium-checkout', {
         body: {
           botId: selectedBot.id,
-          returnUrl: window.location.origin + '/premium-success'
+          plan,
+          returnUrl: window.location.origin + '/premium-success?session_id={CHECKOUT_SESSION_ID}'
         }
       });
 
       if (error) throw error;
 
-      // Open Stripe checkout in a new tab
       window.open(data.url, '_blank');
-      
+
       toast({
         title: 'Redirecting to payment...',
         description: 'Complete your payment to feature your bot!',
       });
-      
+
       onOpenChange(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating checkout session:', error);
       toast({
         title: 'Error Creating Checkout Session',
-        description: error.message,
+        description: error.message || 'Failed to create checkout session.',
         variant: 'destructive',
       });
     } finally {
       setPurchasing(false);
     }
   };
+
+  const selectedPlan = planOptions.find((option) => option.value === plan)!;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -129,16 +154,48 @@ export const FeatureBotModal = ({ open, onOpenChange }: FeatureBotModalProps) =>
             <p className="text-muted-foreground mb-4">
               Get your bot featured at the top of the directory for maximum visibility
             </p>
-            <div className="text-3xl font-bold text-primary">£10.00</div>
-            <p className="text-sm text-muted-foreground">30-day featured listing</p>
+            <div className="text-3xl font-bold text-primary">{selectedPlan.price}</div>
+            <p className="text-sm text-muted-foreground">{selectedPlan.subtitle}</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="font-semibold flex items-center gap-2">
+                <Zap className="h-4 w-4 text-primary" />
+                Choose your plan
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {planOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setPlan(option.value)}
+                  className={`rounded-2xl border p-4 text-left transition ${
+                    plan === option.value
+                      ? 'border-primary bg-primary/10'
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="text-sm font-semibold">{option.title}</div>
+                      <div className="text-xs text-muted-foreground">{option.subtitle}</div>
+                    </div>
+                    <div className={`h-5 w-5 rounded-full border ${
+                      plan === option.value ? 'border-primary bg-primary' : 'border-border'
+                    }`} />
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
 
           {!user ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">Please log in to feature your bots</p>
-              <Button onClick={() => onOpenChange(false)}>
-                Close
-              </Button>
+              <Button onClick={() => onOpenChange(false)}>Close</Button>
             </div>
           ) : loading ? (
             <div className="text-center py-8">

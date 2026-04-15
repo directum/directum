@@ -102,6 +102,11 @@ const PremiumSuccess = () => {
               <p className="text-green-700 dark:text-green-300">
                 Congratulations! Your bot is now featured as a premium listing and will receive enhanced visibility.
               </p>
+              {paymentDetails?.plan && (
+                <p className="text-green-700 dark:text-green-300">
+                  You purchased the {paymentDetails.plan} premium plan.
+                </p>
+              )}
 
               {paymentDetails?.featured_until && (
                 <div className="bg-white/50 dark:bg-black/20 rounded-lg p-4">
@@ -130,7 +135,7 @@ const PremiumSuccess = () => {
                   </div>
                   <div className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 mt-1 shrink-0" />
-                    <span>Priority placement for 30 days</span>
+                    <span>Priority placement until the featured expiry date shown above</span>
                   </div>
                 </div>
               </div>

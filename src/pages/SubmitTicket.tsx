@@ -32,13 +32,10 @@ export const SubmitTicket = () => {
           <CardHeader>
             <CardTitle>Support Ticket</CardTitle>
             <CardDescription>
-              At this time, tickets are only available through our Discord server.
+              At this time, tickets are only available through our Discord server. Our staff there will be happy to help and we apologize for any inconvenience this may caused!
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-muted-foreground text-lg">
-              Our staff there will be happy to help!
-            </p>
             <Button
               variant="secondary"
               onClick={() => window.open('https://discord.gg/yr85pkUteU', '_blank')}
