@@ -149,6 +149,8 @@ export const PremiumPaymentModal = ({ isOpen, onClose, botId, botName }: Premium
               ))}
             </div>
           </div>
+
+          <div className="space-y-4">
             <h4 className="font-semibold flex items-center gap-2">
               <Zap className="h-4 w-4 text-primary" />
               What you get
