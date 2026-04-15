@@ -575,15 +575,7 @@ const Index = () => {
         {/* Partnership Footer */}
         <div className="py-8 pb-24 text-center border-t border-border mt-16">
           <p className="text-muted-foreground text-sm">
-            Working in partnership with{' '}
-            <a 
-              href="https://supabase.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary hover:underline font-medium"
-            >
-              Supabase
-            </a>
+            Working in partnership with Soulnet and Ghostlabs
           </p>
         </div>
 
