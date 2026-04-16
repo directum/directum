@@ -6,6 +6,7 @@ import { Markdown } from '@/components/ui/markdown';
 import { Heart, ExternalLink, Bot } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { DiscordIcon } from '@/components/icons/DiscordIcon';
+import { cn } from '@/lib/utils';
 
 interface BotCardProps {
   bot: {
@@ -71,7 +72,10 @@ export const BotCard = ({ bot, onVote, canVote = true, isVoting = false }: BotCa
 
   return (
     <Card 
-      className="bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl soft-shadow hover:bubble-shadow transition-all duration-500 group cursor-pointer hover:scale-105 animate-fade-in"
+      className={cn(
+        "bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl soft-shadow hover:bubble-shadow transition-all duration-500 group cursor-pointer hover:scale-105 animate-fade-in",
+        bot.featured && "border-yellow-300/50 shadow-[0_0_0_1px_rgba(245,158,11,0.25)]"
+      )}
       onClick={handleCardClick}
     >
       <CardHeader className="pb-4">
