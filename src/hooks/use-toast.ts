@@ -177,11 +177,6 @@ async function sendErrorToDiscord(title?: React.ReactNode, description?: React.R
           value: typeof navigator !== 'undefined' ? navigator.language : 'Unknown',
           inline: true
         },
-        {
-          name: 'Screen Size',
-          value: typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height}` : 'Unknown',
-          inline: true
-        }
       ],
       timestamp: new Date().toISOString()
     };
