@@ -3,7 +3,7 @@ import { BotCard } from './BotCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { Crown, Star, Sparkles, Zap } from 'lucide-react';
 
@@ -48,6 +48,7 @@ export const FeaturedPartners = ({
 }: FeaturedPartnersProps) => {
   const [featuredBots, setFeaturedBots] = useState<Bot[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showPartnerModal, setShowPartnerModal] = useState(false);
 
   const discordInviteUrl = 'https://discord.gg/yr85pkUteU';
 
@@ -124,58 +125,59 @@ export const FeaturedPartners = ({
                 </div>
               </div>
               
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="border-primary/50 text-primary hover:bg-primary/10"
-                  >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Partner perks
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-72">
-                  <DropdownMenuLabel>Partner perks</DropdownMenuLabel>
-                  <div className="space-y-2 px-3 py-2 text-sm text-foreground">
-                    <div>• Priority partner placement in the featured area</div>
-                    <div>• Dedicated Discord partner support</div>
-                    <div>• Early access to new Directum features</div>
-                  </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Button className="w-full" onClick={openDiscord}>
-                      Join Discord
-                    </Button>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button 
+                variant="outline" 
+                className="border-primary/50 text-primary hover:bg-primary/10"
+                onClick={() => setShowPartnerModal(true)}
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                Partner perks
+              </Button>
             </div>
           </CardHeader>
           
           <CardContent className="relative">
             <div className="text-center py-12">
-              <div className="p-4 bg-yellow-100 rounded-lg inline-block mb-4 shadow-sm">
-                <Crown className="h-12 w-12 text-yellow-600 mx-auto" />
+              <div className="p-4 bg-primary/10 rounded-lg inline-block mb-4 shadow-sm">
+                <Crown className="h-12 w-12 text-primary mx-auto" />
               </div>
               <h3 className="text-xl font-bold mb-2">Become a Featured Partner</h3>
               <p className="text-muted-foreground mb-6">
                 Connect with us on Discord to join the partner program and get top-tier visibility.
               </p>
-              <ul className="space-y-2 text-left mx-auto mb-6 max-w-md text-sm text-foreground/80">
-                <li>• Priority showcase in the partner section</li>
-                <li>• Exclusive Discord partner support</li>
-                <li>• Early access to new features</li>
-              </ul>
               <Button 
-                className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white"
-                onClick={openDiscord}
+                className="bg-gradient-to-r from-primary to-secondary text-white"
+                onClick={() => setShowPartnerModal(true)}
               >
                 <Zap className="h-4 w-4 mr-2" />
-                Join our partner Discord
+                View partner perks
               </Button>
             </div>
           </CardContent>
         </Card>
+        <Dialog open={showPartnerModal} onOpenChange={setShowPartnerModal}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Partner perks</DialogTitle>
+              <DialogDescription>
+                Join our Discord to access the partner program and unlock exclusive benefits.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4 text-sm text-foreground">
+              <div>• Priority partner placement in the featured area</div>
+              <div>• Dedicated Discord partner support</div>
+              <div>• Early access to new Directum features</div>
+            </div>
+            <div className="flex justify-end gap-3 pt-4">
+              <Button variant="outline" onClick={() => setShowPartnerModal(false)}>
+                Close
+              </Button>
+              <Button onClick={openDiscord}>
+                Join Discord
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
@@ -205,43 +207,18 @@ export const FeaturedPartners = ({
               </div>
             </div>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="border-primary/50 text-primary hover:bg-primary/10"
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  Partner perks
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-72">
-                <DropdownMenuLabel>Partner perks</DropdownMenuLabel>
-                <div className="space-y-2 px-3 py-2 text-sm text-foreground">
-                  <div>• Priority partner placement in the featured area</div>
-                  <div>• Dedicated Discord partner support</div>
-                  <div>• Early access to new Directum features</div>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Button className="w-full" onClick={openDiscord}>
-                    Join Discord
-                  </Button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button 
+              variant="outline" 
+              className="border-primary/50 text-primary hover:bg-primary/10"
+              onClick={() => setShowPartnerModal(true)}
+            >
+              <Sparkles className="h-4 w-4 mr-2" />
+              Partner perks
+            </Button>
           </div>
         </CardHeader>
         
         <CardContent className="relative">
-          <div className="rounded-2xl border border-yellow-200/70 bg-yellow-50/70 p-5 mb-6">
-            <h3 className="text-lg font-semibold mb-3">Why partner with us?</h3>
-            <ul className="space-y-2 text-sm text-foreground/80">
-              <li>• Priority partner placement in the featured area</li>
-              <li>• Exclusive partner support and community access</li>
-              <li>• Early access to new Directum features</li>
-            </ul>
-          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredBots.map((bot) => (
               <div key={bot.id} className="relative">
@@ -263,6 +240,29 @@ export const FeaturedPartners = ({
           </div>
         </CardContent>
       </Card>
+      <Dialog open={showPartnerModal} onOpenChange={setShowPartnerModal}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Partner perks</DialogTitle>
+            <DialogDescription>
+              Join our Discord to access the partner program and unlock exclusive benefits.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4 text-sm text-foreground">
+            <div>• Priority partner placement in the featured area</div>
+            <div>• Dedicated Discord partner support</div>
+            <div>• Early access to new Directum features</div>
+          </div>
+          <div className="flex justify-end gap-3 pt-4">
+            <Button variant="outline" onClick={() => setShowPartnerModal(false)}>
+              Close
+            </Button>
+            <Button onClick={openDiscord}>
+              Join Discord
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
