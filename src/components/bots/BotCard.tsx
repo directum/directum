@@ -6,7 +6,6 @@ import { Markdown } from '@/components/ui/markdown';
 import { Heart, ExternalLink, Bot } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { DiscordIcon } from '@/components/icons/DiscordIcon';
-import { cn } from '@/lib/utils';
 
 interface BotCardProps {
   bot: {
@@ -72,17 +71,14 @@ export const BotCard = ({ bot, onVote, canVote = true, isVoting = false }: BotCa
 
   return (
     <Card 
-      className={cn(
-        "bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl soft-shadow hover:bubble-shadow transition-all duration-500 group cursor-pointer hover:scale-105 animate-fade-in",
-        bot.featured && "border-yellow-300/50 shadow-[0_0_0_1px_rgba(245,158,11,0.25)]"
-      )}
+      className="bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl soft-shadow hover:bubble-shadow transition-all duration-500 group cursor-pointer hover:scale-105 animate-fade-in"
       onClick={handleCardClick}
     >
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <Avatar className={cn("h-14 w-14 ring-4 ring-primary/20 transition-all duration-300 group-hover:ring-primary/40", bot.featured && "ring-yellow-300/60")}> 
+              <Avatar className="h-14 w-14 ring-4 ring-primary/20 transition-all duration-300 group-hover:ring-primary/40"> 
                 <AvatarImage 
                   src={getBotAvatarUrl(bot.avatar_url, bot.client_id)} 
                   alt={`${bot.name} avatar`}

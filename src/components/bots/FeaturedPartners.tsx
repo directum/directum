@@ -158,14 +158,15 @@ export const FeaturedPartners = ({
         <Dialog open={showPartnerModal} onOpenChange={setShowPartnerModal}>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle>Partner perks</DialogTitle>
+              <DialogTitle>Become a partner!</DialogTitle>
               <DialogDescription>
-                Join our Discord to access the partner program and unlock exclusive benefits.
+                Join our Discord to access our partner program and unlock exclusive benefits!
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4 text-sm text-foreground">
-              <div>• Priority partner placement in the featured area</div>
-              <div>• Dedicated Discord partner support</div>
+              <div>• Partner tag for your bot</div>
+              <div>• Priority listing in the featured bots section</div>
+              <div>• Access to partners only lounge on the Discord</div>
               <div>• Early access to new Directum features</div>
             </div>
             <div className="flex justify-end gap-3 pt-4">
@@ -209,7 +210,7 @@ export const FeaturedPartners = ({
               onClick={() => setShowPartnerModal(true)}
             >
               <Sparkles className="h-4 w-4 mr-2" />
-              Partner perks
+              Become a partner!
             </Button>
           </div>
         </CardHeader>
@@ -232,14 +233,15 @@ export const FeaturedPartners = ({
       <Dialog open={showPartnerModal} onOpenChange={setShowPartnerModal}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Partner perks</DialogTitle>
+            <DialogTitle>Become a partner!</DialogTitle>
             <DialogDescription>
-              Join our Discord to access the partner program and unlock exclusive benefits.
+              Join our Discord to access the partner program and unlock exclusive benefits!
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4 text-sm text-foreground">
-            <div>• Priority partner placement in the featured area</div>
-            <div>• Dedicated Discord partner support</div>
+            <div>• Partner tag for your bot</div>
+            <div>• Priority listing in the featured bots section</div>
+            <div>• Access to partners only lounge on the Discord</div>
             <div>• Early access to new Directum features</div>
           </div>
           <div className="flex justify-end gap-3 pt-4">
