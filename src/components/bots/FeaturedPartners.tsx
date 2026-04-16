@@ -3,6 +3,7 @@ import { BotCard } from './BotCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { supabase } from '@/integrations/supabase/client';
 import { Crown, Star, Sparkles, Zap } from 'lucide-react';
 
@@ -100,19 +101,19 @@ export const FeaturedPartners = ({
   if (featuredBots.length === 0) {
     return (
       <div className="mb-12">
-        <Card className="border-2 border-yellow-400/20 bg-gradient-to-br from-yellow-50/30 to-transparent relative overflow-hidden shadow-[0_0_0_1px_rgba(245,158,11,0.15)]">
-          <div className="absolute inset-0 bg-gradient-to-r from-yellow-100/20 via-transparent to-transparent opacity-70" />
+        <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden shadow-[0_0_0_1px_rgba(245,158,11,0.15)]">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20 opacity-40" />
           
           <CardHeader className="relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-r from-yellow-500 to-amber-400 rounded-lg shadow-lg">
+                <div className="p-2 bg-gradient-to-r from-primary to-secondary rounded-lg shadow-lg">
                   <Crown className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-bold flex items-center gap-2">
                     Featured Bots
-                    <Badge variant="secondary" className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
+                    <Badge variant="secondary" className="bg-gradient-to-r from-primary to-secondary text-white">
                       <Star className="h-3 w-3 mr-1" />
                       Partner
                     </Badge>
@@ -123,14 +124,31 @@ export const FeaturedPartners = ({
                 </div>
               </div>
               
-              <Button 
-                variant="outline" 
-                className="border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10"
-                onClick={openDiscord}
-              >
-                <Sparkles className="h-4 w-4 mr-2" />
-                Partner with us on Discord
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="border-primary/50 text-primary hover:bg-primary/10"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Partner perks
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-72">
+                  <DropdownMenuLabel>Partner perks</DropdownMenuLabel>
+                  <div className="space-y-2 px-3 py-2 text-sm text-foreground">
+                    <div>• Priority partner placement in the featured area</div>
+                    <div>• Dedicated Discord partner support</div>
+                    <div>• Early access to new Directum features</div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Button className="w-full" onClick={openDiscord}>
+                      Join Discord
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </CardHeader>
           
@@ -164,19 +182,19 @@ export const FeaturedPartners = ({
 
   return (
     <div className="mb-12">
-      <Card className="border-2 border-yellow-400/20 bg-gradient-to-br from-yellow-50/30 to-transparent relative overflow-hidden shadow-[0_0_0_1px_rgba(245,158,11,0.15)]">
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-100/20 via-transparent to-transparent opacity-70" />
+      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden shadow-[0_0_0_1px_rgba(245,158,11,0.15)]">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20 opacity-40" />
         
         <CardHeader className="relative">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-r from-yellow-500 to-amber-400 rounded-lg shadow-lg">
+              <div className="p-2 bg-gradient-to-r from-primary to-secondary rounded-lg shadow-lg">
                 <Crown className="h-6 w-6 text-white" />
               </div>
               <div>
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
                   Featured Bots
-                  <Badge variant="secondary" className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
+                  <Badge variant="secondary" className="bg-gradient-to-r from-primary to-secondary text-white">
                     <Star className="h-3 w-3 mr-1" />
                     Partner
                   </Badge>
@@ -187,14 +205,31 @@ export const FeaturedPartners = ({
               </div>
             </div>
             
-            <Button 
-              variant="outline" 
-              className="border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10"
-              onClick={openDiscord}
-            >
-              <Sparkles className="h-4 w-4 mr-2" />
-              Partner with us on Discord
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="border-primary/50 text-primary hover:bg-primary/10"
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Partner perks
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-72">
+                <DropdownMenuLabel>Partner perks</DropdownMenuLabel>
+                <div className="space-y-2 px-3 py-2 text-sm text-foreground">
+                  <div>• Priority partner placement in the featured area</div>
+                  <div>• Dedicated Discord partner support</div>
+                  <div>• Early access to new Directum features</div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Button className="w-full" onClick={openDiscord}>
+                    Join Discord
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </CardHeader>
         
