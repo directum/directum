@@ -111,7 +111,7 @@ export const FeaturedPartners = ({
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                    Featured Bots
+                    Partnerd Bots
                     <Badge variant="secondary" className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
                       <Star className="h-3 w-3 mr-1" />
                       Partner

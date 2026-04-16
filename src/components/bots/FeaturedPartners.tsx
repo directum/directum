@@ -113,7 +113,7 @@ export const FeaturedPartners = ({
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                    Featured Bots
+                    Partnered Bots
                     <Badge variant="secondary" className="bg-gradient-to-r from-primary to-secondary text-white">
                       <Star className="h-3 w-3 mr-1" />
                       Partner
@@ -131,7 +131,7 @@ export const FeaturedPartners = ({
                 onClick={() => setShowPartnerModal(true)}
               >
                 <Sparkles className="h-4 w-4 mr-2" />
-                Partner perks
+                Get Partnered!
               </Button>
             </div>
           </CardHeader>
@@ -194,12 +194,8 @@ export const FeaturedPartners = ({
                 <Crown className="h-6 w-6 text-white" />
               </div>
               <div>
-                <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                  Featured Bots
-                  <Badge variant="secondary" className="bg-gradient-to-r from-primary to-secondary text-white">
-                    <Star className="h-3 w-3 mr-1" />
-                    Partner
-                  </Badge>
+                <CardTitle className="text-2xl font-bold">
+                  Partnered Bots
                 </CardTitle>
                 <p className="text-muted-foreground">
                   Top partner bots selected by our community.
@@ -222,13 +218,6 @@ export const FeaturedPartners = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredBots.map((bot) => (
               <div key={bot.id} className="relative">
-                <div className="absolute top-2 right-2 z-10">
-                  <Badge className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
-                    <Crown className="h-3 w-3 mr-1" />
-                    Partner
-                  </Badge>
-                </div>
-                
                 <BotCard
                   bot={bot}
                   onVote={onVote}

@@ -98,7 +98,7 @@ export const BotCard = ({ bot, onVote, canVote = true, isVoting = false }: BotCa
             <div>
               <h3 className="font-bold text-xl font-fredoka text-foreground group-hover:gradient-text transition-all duration-300">{bot.name}</h3>
               <p className="text-sm text-muted-foreground font-medium">
-                by {bot.owner.username} 👤
+                by {bot.owner.username}
               </p>
             </div>
           </div>

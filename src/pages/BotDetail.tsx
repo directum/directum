@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Markdown } from '@/components/ui/markdown';
-import { Heart, ExternalLink, Bot, ArrowLeft, Calendar, User, Star } from 'lucide-react';
+import { Heart, ExternalLink, Bot, ArrowLeft, Calendar, User, Star, Crown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import ReviewForm from '@/components/reviews/ReviewForm';
 import ReviewsList from '@/components/reviews/ReviewsList';
@@ -37,6 +37,7 @@ interface BotDetailData {
     name: string;
     color: string;
   }>;
+  featured?: boolean;
 }
 
 const BotDetail = () => {
@@ -345,6 +346,12 @@ const BotDetail = () => {
                       <Markdown content={bot.short_description} />
                     </div>
                     <div className="flex flex-wrap gap-2 mt-4">
+                      {bot.featured && (
+                        <Badge className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
+                          <Crown className="h-3 w-3 mr-1" />
+                          Partner
+                        </Badge>
+                      )}
                       {bot.tags.map((tag) => (
                         <Badge
                           key={tag.id}

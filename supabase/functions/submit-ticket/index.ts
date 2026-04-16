@@ -26,7 +26,7 @@ const handler = async (req: Request): Promise<Response> => {
       color: 0x5865F2, // Discord blurple color
       fields: [
         {
-          name: "👤 Discord Name",
+          name: "Discord Name",
           value: discordName,
           inline: true
         },

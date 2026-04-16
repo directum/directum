@@ -93,7 +93,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   return (
     <Card className="mb-6 animate-fade-in">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg font-semibold">Advanced Filters</CardTitle>
+        <CardTitle className="text-lg font-semibold">Filter by Tags</CardTitle>
         <div className="flex gap-2">
           {hasActiveFilters && (
             <Button variant="ghost" size="sm" onClick={clearFilters}>

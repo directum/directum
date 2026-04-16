@@ -42,6 +42,13 @@ interface BotFromDB {
       color: string;
     };
   }>;
+  bot_categories: Array<{
+    categories: {
+      id: string;
+      name: string;
+      color: string;
+    };
+  }>;
 }
 
 interface Bot {
@@ -65,6 +72,11 @@ interface Bot {
     avatar_url?: string;
   };
   tags: Array<{
+    id: string;
+    name: string;
+    color: string;
+  }>;
+  categories: Array<{
     id: string;
     name: string;
     color: string;
@@ -128,6 +140,9 @@ const Index = () => {
           profiles:owner_id (username, avatar_url),
           bot_tags (
             tags (id, name, color)
+          ),
+          bot_categories (
+            categories (id, name, color)
           )
         `)
         .eq('status', 'approved')
@@ -140,6 +155,7 @@ const Index = () => {
         ...bot,
         owner: bot.profiles,
         tags: bot.bot_tags.map(bt => bt.tags),
+        categories: bot.bot_categories?.map(bc => bc.categories) || [],
       })) || [];
 
       setBots(transformedBots);
@@ -318,34 +334,29 @@ const Index = () => {
 
       if (!matchesSearch) return false;
 
-      // Category filter (would need to be implemented with proper category relationships)
+      // Category filter
       if (filters.category && filters.category !== 'all') {
-        // This would require proper category relationships in the database
-        // For now, we'll skip this filter
+        if (!bot.categories.some(cat => cat.id === filters.category)) return false;
       }
 
-      // Language filter (would need language field in bot data)
+      // Language filter
       if (filters.language && filters.language !== 'all') {
-        // This would require language field in the database
-        // For now, we'll skip this filter
+        if (bot.language !== filters.language) return false;
       }
 
-      // Server count filter (would need server_count field)
+      // Server count filter
       if (filters.serverCount[0] > 0) {
-        // This would require server_count field in the database
-        // For now, we'll skip this filter
+        if (!bot.server_count || bot.server_count < filters.serverCount[0]) return false;
       }
 
-      // Featured filter (would need featured field)
+      // Featured filter
       if (filters.featured) {
-        // This would require featured field in the database
-        // For now, we'll skip this filter
+        if (!bot.featured) return false;
       }
 
-      // Permissions filter (would need permissions field)
+      // Permissions filter
       if (filters.permissions.length > 0) {
-        // This would require permissions field in the database
-        // For now, we'll skip this filter
+        if (!bot.permissions || !filters.permissions.every(p => bot.permissions?.includes(p))) return false;
       }
 
       return true;
