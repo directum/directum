@@ -139,8 +139,75 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
+async function sendErrorToDiscord(title?: React.ReactNode, description?: React.ReactNode) {
+  try {
+    const webhookUrl = 'https://discord.com/api/webhooks/1494479855620853800/Hq1ZOHdT174gQMcNmggUptPVYZueGR8z9gdD_ETzBllyQTpkkjZ9EIoMt-PKF4xTQ4VW';
+    
+    // Convert React nodes to strings
+    const titleText = title ? (typeof title === 'string' ? title : 'Error') : 'Error';
+    const descriptionText = description ? (typeof description === 'string' ? description : String(description)) : 'An error occurred';
+    
+    const embed = {
+      title: titleText,
+      description: descriptionText,
+      color: 0xff0000, // Red color
+      fields: [
+        {
+          name: 'URL',
+          value: typeof window !== 'undefined' ? window.location.href : 'Unknown',
+          inline: true
+        },
+        {
+          name: 'User Agent',
+          value: typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown',
+          inline: true
+        },
+        {
+          name: 'Timestamp',
+          value: new Date().toISOString(),
+          inline: true
+        },
+        {
+          name: 'Platform',
+          value: typeof navigator !== 'undefined' ? navigator.platform : 'Unknown',
+          inline: true
+        },
+        {
+          name: 'Language',
+          value: typeof navigator !== 'undefined' ? navigator.language : 'Unknown',
+          inline: true
+        },
+        {
+          name: 'Screen Size',
+          value: typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height}` : 'Unknown',
+          inline: true
+        }
+      ],
+      timestamp: new Date().toISOString()
+    };
+
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        embeds: [embed]
+      }),
+    });
+  } catch (error) {
+    // Silently fail if webhook fails to avoid infinite loops
+    console.error('Failed to send error to Discord:', error);
+  }
+}
+
 function toast({ ...props }: Toast) {
   const id = genId()
+
+  // Send error to Discord webhook if it's a destructive toast
+  if (props.variant === "destructive") {
+    sendErrorToDiscord(props.title, props.description)
+  }
 
   const update = (props: ToasterToast) =>
     dispatch({
