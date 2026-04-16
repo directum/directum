@@ -7,7 +7,7 @@ import { AdvancedFilters } from '@/components/discovery/AdvancedFilters';
 import { BotComparison } from '@/components/discovery/BotComparison';
 import { DiscoverySection } from '@/components/discovery/DiscoverySection';
 import { ActivityFeed } from '@/components/social/ActivityFeed';
-import { PremiumListings } from '@/components/bots/PremiumListings';
+import { FeaturedPartners } from '@/components/bots/FeaturedPartners';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -441,7 +441,7 @@ const Index = () => {
           </div>
 
           {/* Premium Listings Section */}
-          <PremiumListings
+          <FeaturedPartners
             onVote={handleVote}
             userVotes={userVotes}
             votingStates={votingStates}

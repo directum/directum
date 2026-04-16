@@ -31,7 +31,6 @@ interface DiscoverySectionProps {
 }
 
 export const DiscoverySection: React.FC<DiscoverySectionProps> = ({ onBotClick }) => {
-  const [featuredBots, setFeaturedBots] = useState<Bot[]>([]);
   const [trendingBots, setTrendingBots] = useState<Bot[]>([]);
   const [recentBots, setRecentBots] = useState<Bot[]>([]);
   const [randomBot, setRandomBot] = useState<Bot | null>(null);
@@ -45,7 +44,6 @@ export const DiscoverySection: React.FC<DiscoverySectionProps> = ({ onBotClick }
     setIsLoading(true);
     try {
       await Promise.all([
-        fetchFeaturedBots(),
         fetchTrendingBots(),
         fetchRecentBots(),
         fetchRandomBot(),
@@ -54,41 +52,6 @@ export const DiscoverySection: React.FC<DiscoverySectionProps> = ({ onBotClick }
       console.error('Error fetching discovery data:', error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const fetchFeaturedBots = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('bots')
-        .select(`
-          *,
-          owner:owner_id (
-            username,
-            avatar_url
-          ),
-          bot_tags!inner (
-            tags!inner (
-              name,
-              color
-            )
-          )
-        `)
-        .eq('status', 'approved')
-        .eq('featured', true)
-        .order('featured_until', { ascending: false })
-        .limit(3);
-
-      if (error) throw error;
-
-      const formattedBots = data?.map(bot => ({
-        ...bot,
-        tags: bot.bot_tags?.map(bt => bt.tags) || [],
-      })) || [];
-
-      setFeaturedBots(formattedBots);
-    } catch (error) {
-      console.error('Error fetching featured bots:', error);
     }
   };
 
@@ -287,81 +250,6 @@ export const DiscoverySection: React.FC<DiscoverySectionProps> = ({ onBotClick }
 
   return (
     <div className="space-y-8">
-      {/* Featured Bots */}
-      {featuredBots.length > 0 && (
-        <section>
-          <div className="flex items-center gap-2 mb-6">
-            <Star className="h-6 w-6 text-yellow-500" />
-            <h2 className="text-2xl font-bold">Featured Bots</h2>
-            <Badge variant="secondary" className="ml-2">
-              Staff Picks
-            </Badge>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredBots.map((bot) => (
-              <Card key={bot.id} className="hover-scale transition-all duration-300 hover:shadow-xl border-2 border-yellow-500/20">
-                <CardHeader className="relative overflow-hidden">
-                  <div className="absolute top-2 right-2">
-                    <Badge className="bg-yellow-500 text-yellow-50">
-                      <Star className="h-3 w-3 mr-1" />
-                      Featured
-                    </Badge>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <Avatar className="h-16 w-16 border-2 border-yellow-500/30">
-                      <AvatarImage src={getBotAvatarUrl(bot.avatar_url, bot.client_id)} />
-                      <AvatarFallback className="text-lg">{bot.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <CardTitle className="text-lg truncate">{bot.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">
-                        by {bot.owner.username}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex items-center gap-1">
-                          <Star className="h-3 w-3 text-yellow-500" />
-                          <span className="text-sm">{bot.votes}</span>
-                        </div>
-                        {bot.server_count && (
-                          <div className="flex items-center gap-1">
-                            <Users className="h-3 w-3 text-blue-500" />
-                            <span className="text-sm">{formatNumber(bot.server_count)}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                    {bot.short_description}
-                  </p>
-                  {bot.tags && bot.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {bot.tags.slice(0, 2).map((tag) => (
-                        <Badge 
-                          key={tag.name} 
-                          variant="outline"
-                          style={{ borderColor: tag.color, color: tag.color }}
-                          className="text-xs"
-                        >
-                          {tag.name}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                  <Button asChild className="w-full">
-                    <Link to={`/bot/${bot.id}`}>
-                      View Bot
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Trending Bots */}
         <section>
