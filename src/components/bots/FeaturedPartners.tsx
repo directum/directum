@@ -166,7 +166,8 @@ export const FeaturedPartners = ({
             <div className="space-y-4 py-4 text-sm text-foreground">
               <div>• Partner tag for your bot</div>
               <div>• Priority listing in the featured bots section</div>
-              <div>• Access to partners only lounge on the Discord</div>
+              <div>• Access to partners-only lounge on the Discord</div>
+              <div>• Partner role on the Discord</div>
               <div>• Early access to new Directum features</div>
             </div>
             <div className="flex justify-end gap-3 pt-4">
@@ -241,7 +242,8 @@ export const FeaturedPartners = ({
           <div className="space-y-4 py-4 text-sm text-foreground">
             <div>• Partner tag for your bot</div>
             <div>• Priority listing in the featured bots section</div>
-            <div>• Access to partners only lounge on the Discord</div>
+            <div>• Access to partners-only lounge on the Discord</div>
+            <div>• Partner role on the Discord</div>
             <div>• Early access to new Directum features</div>
           </div>
           <div className="flex justify-end gap-3 pt-4">
