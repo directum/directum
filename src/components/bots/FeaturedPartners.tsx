@@ -160,7 +160,7 @@ export const FeaturedPartners = ({
             <DialogHeader>
               <DialogTitle>Become a partner!</DialogTitle>
               <DialogDescription>
-                Join our Discord to access our partner program and unlock exclusive benefits!
+                Join our Discord to apply for our partner program and unlock exclusive benefits!
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4 text-sm text-foreground">
@@ -235,7 +235,7 @@ export const FeaturedPartners = ({
           <DialogHeader>
             <DialogTitle>Become a partner!</DialogTitle>
             <DialogDescription>
-              Join our Discord to access the partner program and unlock exclusive benefits!
+              Join our Discord to apply for our partner program and unlock exclusive benefits!
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4 text-sm text-foreground">
