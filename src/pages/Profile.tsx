@@ -31,6 +31,7 @@ interface UserBot {
   support_server_url?: string;
   client_id: string;
   status: 'pending' | 'approved' | 'rejected';
+  featured?: boolean;
   created_at: string;
   updated_at: string;
   bot_tags: Array<{
@@ -64,6 +65,7 @@ const Profile = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingBot, setEditingBot] = useState<UserBot | null>(null);
+  const isPartner = userBots.some(bot => bot.featured);
 
   // Helper function to get the correct Discord bot avatar URL
   const getBotAvatarUrl = (avatarUrl?: string, clientId?: string) => {
@@ -261,7 +263,7 @@ const Profile = () => {
             Back to Home
           </Button>
           
-          <div className="flex items-center justify-between">
+          <div className={`flex items-center justify-between rounded-3xl p-6 ${isPartner ? 'border border-yellow-200/80 bg-yellow-50/70 shadow-sm' : ''}`}>
             <div className="flex items-center space-x-4">
               <Avatar className="h-16 w-16">
                 <AvatarImage 
@@ -277,12 +279,19 @@ const Profile = () => {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-3xl font-bold">
-                  {userProfile?.username || user.user_metadata?.user_name || 'User'}
-                  {userProfile?.discriminator && (
-                    <span className="text-muted-foreground">#{userProfile.discriminator}</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-3xl font-bold">
+                    {userProfile?.username || user.user_metadata?.user_name || 'User'}
+                    {userProfile?.discriminator && (
+                      <span className="text-muted-foreground">#{userProfile.discriminator}</span>
+                    )}
+                  </h1>
+                  {isPartner && (
+                    <Badge className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
+                      Partner
+                    </Badge>
                   )}
-                </h1>
+                </div>
                 <p className="text-muted-foreground">{user.email}</p>
               </div>
             </div>

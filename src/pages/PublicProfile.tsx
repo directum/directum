@@ -28,6 +28,7 @@ interface UserBot {
   invite_url: string;
   support_server_url: string | null;
   status: string;
+  featured?: boolean;
   created_at: string;
   tags: Array<{ name: string; color: string }>;
 }
@@ -38,6 +39,7 @@ export default function PublicProfile() {
   const { toast } = useToast();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [bots, setBots] = useState<UserBot[]>([]);
+  const [isPartner, setIsPartner] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -76,6 +78,7 @@ export default function PublicProfile() {
           invite_url,
           support_server_url,
           status,
+          featured,
           created_at,
           bot_tags!inner(
             tags!inner(
@@ -96,6 +99,7 @@ export default function PublicProfile() {
           tags: bot.bot_tags?.map((bt: any) => bt.tags) || []
         })) || [];
         setBots(formattedBots);
+        setIsPartner(formattedBots.some(bot => bot.featured));
       }
     } catch (error) {
       console.error('Error:', error);
@@ -168,7 +172,7 @@ export default function PublicProfile() {
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         {/* Profile Header */}
-        <Card className="mb-8">
+        <Card className={`mb-8 ${isPartner ? 'border border-yellow-200/80 bg-yellow-50/70 shadow-sm' : ''}`}>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-6">
@@ -179,7 +183,14 @@ export default function PublicProfile() {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h1 className="text-3xl font-bold">{profile.username}</h1>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h1 className="text-3xl font-bold">{profile.username}</h1>
+                    {isPartner && (
+                      <Badge className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
+                        Partner
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-muted-foreground">
                     {bots.length} published bot{bots.length !== 1 ? 's' : ''}
                   </p>
