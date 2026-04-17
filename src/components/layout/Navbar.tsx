@@ -139,7 +139,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
           {/* Right Side - Desktop Actions */}
           {!isMobile && (
               <div className="flex items-center space-x-4">
-                {user && (
+                {user && onAddBot && (
                   <Button 
                     onClick={handleAddBot} 
                     className="bubbly-button text-white font-bold"
@@ -262,7 +262,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                   <div className="flex flex-col space-y-6 mt-6">
 
                     {/* Add Bot/Server Button */}
-                    {user && (
+                    {user && onAddBot && (
                       <Button 
                         onClick={() => {
                           handleAddBot();
