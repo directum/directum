@@ -172,9 +172,9 @@ export default function PublicProfile() {
       <Navbar />
       <div className="container mx-auto px-4 py-8">
         {/* Profile Header */}
-        <Card className={`mb-8 ${isPartner ? 'border border-yellow-200/80 bg-yellow-50/70 shadow-sm' : ''}`}>
+        <Card className={`mb-8 ${isPartner ? 'border border-yellow-200/80 bg-[#16181d] shadow-sm' : ''}`}>
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            <div className={`flex items-center justify-between ${isPartner ? 'text-white' : ''}`}>
               <div className="flex items-center space-x-6">
                 <Avatar className="w-20 h-20">
                   <AvatarImage src={profile.avatar_url || ''} />
