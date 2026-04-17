@@ -265,6 +265,7 @@ const Profile = () => {
           
           <div className={`flex items-center justify-between rounded-3xl p-6 ${isPartner ? 'border border-yellow-200/80 bg-[#16181d] shadow-sm text-white' : ''}`}>
             <div className="flex items-center space-x-4">
+              <Avatar className="h-16 w-16">
                 <AvatarImage 
                   src={userProfile?.avatar_url || user.user_metadata?.avatar_url} 
                   alt="User avatar"
