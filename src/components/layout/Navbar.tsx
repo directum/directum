@@ -64,6 +64,13 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
     return userProfile && ADMIN_DISCORD_IDS.includes(userProfile.discord_id);
   };
 
+  const handleAddBot = () => {
+    if (onAddBot) {
+      onAddBot();
+    } else {
+      navigate('/my-bots');
+    }
+  };
 
   return (
     <nav className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50 soft-shadow">
@@ -134,7 +141,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
               <div className="flex items-center space-x-4">
                 {user && (
                   <Button 
-                    onClick={onAddBot} 
+                    onClick={handleAddBot} 
                     className="bubbly-button text-white font-bold"
                   >
                     <Plus className="w-4 h-4 mr-2" />
@@ -258,7 +265,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                     {user && (
                       <Button 
                         onClick={() => {
-                          onAddBot?.();
+                          handleAddBot();
                           setShowMobileMenu(false);
                         }} 
                         className="glow-effect w-full"
