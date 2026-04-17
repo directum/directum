@@ -8,8 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Navbar } from '@/components/layout/Navbar';
-import { PremiumPaymentModal } from '@/components/bots/PremiumPaymentModal';
-import { Bot, ArrowLeft, Crown, Star, Calendar, Plus, Edit } from 'lucide-react';
+import { Bot, ArrowLeft, Star, Calendar, Plus, Edit, Crown } from 'lucide-react';
 
 interface UserBot {
   id: string;
@@ -19,7 +18,6 @@ interface UserBot {
   votes: number;
   status: 'pending' | 'approved' | 'rejected';
   featured: boolean;
-  featured_until?: string;
   created_at: string;
   bot_tags: Array<{
     tags: {
@@ -36,8 +34,6 @@ const MyBots = () => {
   const { toast } = useToast();
   const [userBots, setUserBots] = useState<UserBot[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBot, setSelectedBot] = useState<UserBot | null>(null);
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -83,20 +79,6 @@ const MyBots = () => {
     }
   };
 
-  const handlePremiumPurchase = (bot: UserBot) => {
-    if (bot.status !== 'approved') {
-      toast({
-        variant: "destructive",
-        title: "Bot Not Approved",
-        description: "Only approved bots can be featured as premium listings.",
-      });
-      return;
-    }
-    
-    setSelectedBot(bot);
-    setPaymentModalOpen(true);
-  };
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
@@ -108,11 +90,6 @@ const MyBots = () => {
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
-  };
-
-  const isPremiumActive = (bot: UserBot): boolean => {
-    if (!bot.featured || !bot.featured_until) return false;
-    return new Date(bot.featured_until) > new Date();
   };
 
   if (!user) {
@@ -188,12 +165,6 @@ const MyBots = () => {
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <CardTitle className="text-xl">{bot.name}</CardTitle>
-                          {isPremiumActive(bot) && (
-                            <Badge className="bg-gradient-to-r from-primary to-secondary text-white">
-                              <Crown className="h-3 w-3 mr-1" />
-                              Premium
-                            </Badge>
-                          )}
                         </div>
                         <div className="flex items-center gap-2 mb-2">
                           {getStatusBadge(bot.status)}
@@ -205,12 +176,6 @@ const MyBots = () => {
                         <p className="text-sm text-muted-foreground">
                           Created: {new Date(bot.created_at).toLocaleDateString()}
                         </p>
-                        {bot.featured_until && (
-                          <p className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            Featured until: {new Date(bot.featured_until).toLocaleDateString()}
-                          </p>
-                        )}
                       </div>
                     </div>
                     
@@ -224,15 +189,11 @@ const MyBots = () => {
                         Edit
                       </Button>
                       
-                      {bot.status === 'approved' && !isPremiumActive(bot) && (
-                        <Button 
-                          size="sm"
-                          onClick={() => handlePremiumPurchase(bot)}
-                          className="bg-gradient-to-r from-primary to-secondary text-white"
-                        >
-                          <Crown className="w-4 h-4 mr-2" />
-                          Get Premium
-                        </Button>
+                      {bot.featured && (
+                        <Badge className="bg-gradient-to-r from-yellow-500 to-amber-400 text-white">
+                          <Crown className="h-3 w-3 mr-1" />
+                          Partner
+                        </Badge>
                       )}
                     </div>
                   </div>
@@ -268,16 +229,6 @@ const MyBots = () => {
             ))}
           </div>
         )}
-
-        <PremiumPaymentModal
-          isOpen={paymentModalOpen}
-          onClose={() => {
-            setPaymentModalOpen(false);
-            setSelectedBot(null);
-          }}
-          botId={selectedBot?.id}
-          botName={selectedBot?.name}
-        />
       </div>
     </div>
   );
