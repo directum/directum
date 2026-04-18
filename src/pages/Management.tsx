@@ -57,6 +57,15 @@ const Management = () => {
   const [rejectionNotes, setRejectionNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [approvedSearchQuery, setApprovedSearchQuery] = useState('');
+  const [editSearchQuery, setEditSearchQuery] = useState('');
+  const [selectedBotForEdit, setSelectedBotForEdit] = useState<PendingBot | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editShortDescription, setEditShortDescription] = useState('');
+  const [editLongDescription, setEditLongDescription] = useState('');
+  const [editInviteUrl, setEditInviteUrl] = useState('');
+  const [editSupportServerUrl, setEditSupportServerUrl] = useState('');
+  const [editFeatured, setEditFeatured] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
   const [reviewName, setReviewName] = useState('');
   const [reviewShortDescription, setReviewShortDescription] = useState('');
   const [reviewLongDescription, setReviewLongDescription] = useState('');
@@ -86,6 +95,7 @@ const Management = () => {
     }
     if (userProfile && isAdmin()) {
       fetchPendingBots();
+      fetchApprovedBots();
     }
   }, [userProfile]);
 
@@ -127,6 +137,64 @@ const Management = () => {
     setReviewFeatured(!!bot.featured);
   };
 
+  const openEditBot = (bot: PendingBot) => {
+    setSelectedBotForEdit(bot);
+    setEditName(bot.name);
+    setEditShortDescription(bot.short_description);
+    setEditLongDescription(bot.long_description);
+    setEditInviteUrl(bot.invite_url);
+    setEditSupportServerUrl(bot.support_server_url || '');
+    setEditFeatured(!!bot.featured);
+  };
+
+  const clearEditState = () => {
+    setSelectedBotForEdit(null);
+    setEditName('');
+    setEditShortDescription('');
+    setEditLongDescription('');
+    setEditInviteUrl('');
+    setEditSupportServerUrl('');
+    setEditFeatured(false);
+    setEditSearchQuery('');
+  };
+
+  const handleSaveEdit = async () => {
+    if (!selectedBotForEdit) return;
+
+    setEditLoading(true);
+    try {
+      const { error } = await supabase
+        .from('bots')
+        .update({
+          name: editName,
+          short_description: editShortDescription,
+          long_description: editLongDescription,
+          invite_url: editInviteUrl,
+          support_server_url: editSupportServerUrl || null,
+          featured: editFeatured,
+        })
+        .eq('id', selectedBotForEdit.id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Bot updated',
+        description: `${selectedBotForEdit.name} has been updated successfully.`,
+      });
+
+      await fetchApprovedBots();
+      clearEditState();
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error saving bot',
+        description: error.message || 'Failed to update the bot.',
+      });
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
   const clearReviewState = () => {
     setSelectedBot(null);
     setApprovalNotes('');
@@ -151,6 +219,16 @@ const Management = () => {
 
   const filteredApprovedBots = approvedBots.filter((bot) => {
     const query = approvedSearchQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      bot.name.toLowerCase().includes(query) ||
+      bot.client_id.toLowerCase().includes(query) ||
+      bot.id.toLowerCase().includes(query)
+    );
+  });
+
+  const filteredEditableBots = approvedBots.filter((bot) => {
+    const query = editSearchQuery.trim().toLowerCase();
     if (!query) return true;
     return (
       bot.name.toLowerCase().includes(query) ||
@@ -711,7 +789,111 @@ const Management = () => {
               </Card>
             ))}
           </div>
-        )}
+
+        <div className="mb-10">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">Edit Registered Bot</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Search approved bots by name or ID and update their listing data.
+              </p>
+            </div>
+            <Button variant="outline" onClick={() => fetchApprovedBots()}>
+              Refresh approved bots
+            </Button>
+          </div>
+
+          <div className="grid gap-4 mt-4">
+            <div className="relative max-w-2xl">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
+              <Input
+                value={editSearchQuery}
+                onChange={(e) => setEditSearchQuery(e.target.value)}
+                placeholder="Search approved bots by name or ID..."
+                className="pl-10"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">Select a bot to edit</label>
+              <Select value={selectedBotForEdit?.id || ''} onValueChange={(value) => {
+                const bot = approvedBots.find((bot) => bot.id === value);
+                if (bot) openEditBot(bot);
+                else clearEditState();
+              }}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Pick a bot..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredEditableBots.length === 0 ? (
+                    <div className="p-3 text-sm text-muted-foreground">
+                      No approved bots match your search.
+                    </div>
+                  ) : (
+                    filteredEditableBots.map((bot) => (
+                      <SelectItem key={bot.id} value={bot.id}>
+                        <div className="flex flex-col gap-1 text-left">
+                          <span>{bot.name}</span>
+                          <span className="text-xs text-muted-foreground">ID: {bot.client_id}</span>
+                        </div>
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {selectedBotForEdit ? (
+              <Card>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-4">
+                    <div>
+                      <label className="text-sm font-medium">Bot Name</label>
+                      <Input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Bot name" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Short Description</label>
+                      <Input value={editShortDescription} onChange={(e) => setEditShortDescription(e.target.value)} placeholder="Short description" />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Long Description</label>
+                      <Textarea value={editLongDescription} onChange={(e) => setEditLongDescription(e.target.value)} rows={5} placeholder="Long description" />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="text-sm font-medium">Invite URL</label>
+                        <Input value={editInviteUrl} onChange={(e) => setEditInviteUrl(e.target.value)} placeholder="Invite URL" />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Support Server URL</label>
+                        <Input value={editSupportServerUrl} onChange={(e) => setEditSupportServerUrl(e.target.value)} placeholder="Support server URL" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Checkbox checked={editFeatured} onCheckedChange={(checked) => setEditFeatured(Boolean(checked))} />
+                      <span className="text-sm">Featured listing</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button onClick={handleSaveEdit} disabled={editLoading} className="w-full sm:w-auto">
+                      {editLoading ? 'Saving...' : 'Save changes'}
+                    </Button>
+                    <Button variant="outline" onClick={clearEditState} className="w-full sm:w-auto">
+                      Clear selection
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card>
+                <CardContent className="text-sm text-muted-foreground">
+                  Use the search field above to find an approved bot and edit its information.
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
 
         {/* Bot Removal Modal */}
         <Dialog open={showRemovalModal} onOpenChange={setShowRemovalModal}>
