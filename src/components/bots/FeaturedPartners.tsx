@@ -50,7 +50,7 @@ export const FeaturedPartners = ({
   const [loading, setLoading] = useState(true);
   const [showPartnerModal, setShowPartnerModal] = useState(false);
 
-  const discordInviteUrl = 'https://discord.gg/yr85pkUteU';
+  const discordInviteUrl = 'https://discord.gg/UHeWA6mXxS';
 
   const openDiscord = () => {
     if (typeof globalThis !== 'undefined' && 'open' in globalThis) {

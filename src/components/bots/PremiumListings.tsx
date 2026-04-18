@@ -48,7 +48,7 @@ export const FeaturedPartners = ({
   const [featuredBots, setFeaturedBots] = useState<Bot[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const discordInviteUrl = 'https://discord.gg/yr85pkUteU';
+  const discordInviteUrl = 'https://discord.gg/UHeWA6mXxS';
 
   const openDiscord = () => {
     if (typeof globalThis !== 'undefined' && 'open' in globalThis) {

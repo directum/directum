@@ -100,7 +100,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    <DropdownMenuItem onClick={() => window.open('https://discord.gg/yr85pkUteU', '_blank')}>
+                    <DropdownMenuItem onClick={() => window.open('https://discord.gg/UHeWA6mXxS', '_blank')}>
                       <DiscordIcon className="mr-2 h-4 w-4" />
                       Discord
                     </DropdownMenuItem>
@@ -283,7 +283,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                           variant="ghost" 
                           className="justify-start"
                           onClick={() => {
-                            window.open('https://discord.gg/yr85pkUteU', '_blank');
+                            window.open('https://discord.gg/UHeWA6mXxS', '_blank');
                             setShowMobileMenu(false);
                           }}
                         >

@@ -34,7 +34,7 @@ export const Footer = () => {
   const socialLinks = [
     {
       icon: DiscordIcon,
-      href: 'https://discord.gg/yr85pkUteU',
+      href: 'https://discord.gg/UHeWA6mXxS',
       label: 'Join our Discord'
     }
   ];

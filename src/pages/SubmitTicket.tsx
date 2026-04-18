@@ -38,7 +38,7 @@ export const SubmitTicket = () => {
           <CardContent className="space-y-4">
             <Button
               variant="secondary"
-              onClick={() => window.open('https://discord.gg/yr85pkUteU', '_blank')}
+              onClick={() => window.open('https://discord.gg/UHeWA6mXxS', '_blank')}
             >
               Open Discord Support
             </Button>
