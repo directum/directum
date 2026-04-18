@@ -7,17 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Navbar } from '@/components/layout/Navbar';
-import { Bot, Check, X, ArrowLeft, Eye, Clock, AlertCircle, User, Trash2 } from 'lucide-react';
+import { Bot, Check, X, ArrowLeft, Eye, Clock, AlertCircle, User, Trash2, Search } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-// Define admin Discord IDs
-const ADMIN_DISCORD_IDS = [
-  '1254195552808206429',
-  // Add more admin Discord IDs as needed
-];
+import { ADMIN_DISCORD_IDS } from '@/config/admin';
 
 interface PendingBot {
   id: string;
@@ -28,6 +25,7 @@ interface PendingBot {
   votes: number;
   invite_url: string;
   support_server_url?: string;
+  featured?: boolean;
   client_id: string;
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
@@ -57,7 +55,15 @@ const Management = () => {
   const [selectedBot, setSelectedBot] = useState<PendingBot | null>(null);
   const [approvalNotes, setApprovalNotes] = useState('');
   const [rejectionNotes, setRejectionNotes] = useState('');
-  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [approvedSearchQuery, setApprovedSearchQuery] = useState('');
+  const [reviewName, setReviewName] = useState('');
+  const [reviewShortDescription, setReviewShortDescription] = useState('');
+  const [reviewLongDescription, setReviewLongDescription] = useState('');
+  const [reviewInviteUrl, setReviewInviteUrl] = useState('');
+  const [reviewSupportServerUrl, setReviewSupportServerUrl] = useState('');
+  const [reviewFeatured, setReviewFeatured] = useState(false);
+
   // Bot removal states
   const [showRemovalModal, setShowRemovalModal] = useState(false);
   const [approvedBots, setApprovedBots] = useState<PendingBot[]>([]);
@@ -108,6 +114,50 @@ const Management = () => {
   const isAdmin = (): boolean => {
     return userProfile && ADMIN_DISCORD_IDS.includes(userProfile.discord_id);
   };
+
+  const openReview = (bot: PendingBot) => {
+    setSelectedBot(bot);
+    setApprovalNotes('');
+    setRejectionNotes('');
+    setReviewName(bot.name);
+    setReviewShortDescription(bot.short_description);
+    setReviewLongDescription(bot.long_description);
+    setReviewInviteUrl(bot.invite_url);
+    setReviewSupportServerUrl(bot.support_server_url || '');
+    setReviewFeatured(!!bot.featured);
+  };
+
+  const clearReviewState = () => {
+    setSelectedBot(null);
+    setApprovalNotes('');
+    setRejectionNotes('');
+    setReviewName('');
+    setReviewShortDescription('');
+    setReviewLongDescription('');
+    setReviewInviteUrl('');
+    setReviewSupportServerUrl('');
+    setReviewFeatured(false);
+  };
+
+  const filteredPendingBots = pendingBots.filter((bot) => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      bot.name.toLowerCase().includes(query) ||
+      bot.client_id.toLowerCase().includes(query) ||
+      bot.id.toLowerCase().includes(query)
+    );
+  });
+
+  const filteredApprovedBots = approvedBots.filter((bot) => {
+    const query = approvedSearchQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      bot.name.toLowerCase().includes(query) ||
+      bot.client_id.toLowerCase().includes(query) ||
+      bot.id.toLowerCase().includes(query)
+    );
+  });
 
   const fetchPendingBots = async () => {
     try {
@@ -260,7 +310,13 @@ const Management = () => {
         .from('bots')
         .update({ 
           status: 'approved',
-          approval_notes: approvalNotes || null
+          approval_notes: approvalNotes || null,
+          name: reviewName,
+          short_description: reviewShortDescription,
+          long_description: reviewLongDescription,
+          invite_url: reviewInviteUrl,
+          support_server_url: reviewSupportServerUrl || null,
+          featured: reviewFeatured,
         })
         .eq('id', bot.id);
 
@@ -276,8 +332,7 @@ const Management = () => {
       );
 
       setPendingBots(prev => prev.filter(b => b.id !== bot.id));
-      setApprovalNotes('');
-      setSelectedBot(null);
+      clearReviewState();
       
       toast({
         title: "Bot Approved",
@@ -326,8 +381,7 @@ const Management = () => {
       );
 
       setPendingBots(prev => prev.filter(b => b.id !== bot.id));
-      setRejectionNotes('');
-      setSelectedBot(null);
+      clearReviewState();
       
       toast({
         title: "Bot Rejected",
@@ -409,6 +463,18 @@ const Management = () => {
           </div>
         </div>
 
+        <div className="mb-6 max-w-xl">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search pending bots by name or ID..."
+              className="pl-10"
+            />
+          </div>
+        </div>
+
         {loading ? (
           <div className="text-center py-8">Loading pending bots...</div>
         ) : pendingBots.length === 0 ? (
@@ -421,9 +487,18 @@ const Management = () => {
               </p>
             </CardContent>
           </Card>
+        ) : filteredPendingBots.length === 0 ? (
+          <Card>
+            <CardContent className="text-center py-12">
+              <h3 className="text-lg font-semibold mb-2">No bots matched your search</h3>
+              <p className="text-muted-foreground">
+                Try a different name or ID to find the bot you're looking for.
+              </p>
+            </CardContent>
+          </Card>
         ) : (
           <div className="grid gap-6">
-            {pendingBots.map((bot) => (
+            {filteredPendingBots.map((bot) => (
               <Card key={bot.id} className="card-gradient">
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -448,7 +523,7 @@ const Management = () => {
                     <div className="flex items-center space-x-2">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" onClick={() => setSelectedBot(bot)}>
+                          <Button variant="outline" size="sm" onClick={() => openReview(bot)}>
                             <Eye className="w-4 h-4 mr-2" />
                             Review
                           </Button>
@@ -482,13 +557,43 @@ const Management = () => {
                             </div>
                             
                             <div>
-                              <h4 className="font-semibold mb-2">Short Description</h4>
-                              <p className="text-sm text-muted-foreground">{bot.short_description}</p>
+                              <h4 className="font-semibold mb-2">Bot Name</h4>
+                              <Input
+                                value={reviewName}
+                                onChange={(e) => setReviewName(e.target.value)}
+                                placeholder="Bot name"
+                              />
                             </div>
-                            
+
+                            <div className="grid gap-4 sm:grid-cols-2">
+                              <div>
+                                <h4 className="font-semibold mb-2">Short Description</h4>
+                                <Input
+                                  value={reviewShortDescription}
+                                  onChange={(e) => setReviewShortDescription(e.target.value)}
+                                  placeholder="Short description"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-end">
+                                <label className="text-sm font-semibold mb-2">Featured</label>
+                                <div className="flex items-center space-x-2">
+                                  <Checkbox
+                                    checked={reviewFeatured}
+                                    onCheckedChange={(checked) => setReviewFeatured(Boolean(checked))}
+                                  />
+                                  <span className="text-sm">Featured listing</span>
+                                </div>
+                              </div>
+                            </div>
+
                             <div>
                               <h4 className="font-semibold mb-2">Long Description</h4>
-                              <p className="text-sm text-muted-foreground whitespace-pre-wrap">{bot.long_description}</p>
+                              <Textarea
+                                value={reviewLongDescription}
+                                onChange={(e) => setReviewLongDescription(e.target.value)}
+                                placeholder="Long description"
+                                rows={5}
+                              />
                             </div>
                             
                             <div>
@@ -510,31 +615,23 @@ const Management = () => {
                               </div>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                               <div>
                                 <h4 className="font-semibold mb-2">Invite URL</h4>
-                                <a 
-                                  href={bot.invite_url} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
-                                  className="text-sm text-primary hover:underline break-all"
-                                >
-                                  {bot.invite_url}
-                                </a>
+                                <Input
+                                  value={reviewInviteUrl}
+                                  onChange={(e) => setReviewInviteUrl(e.target.value)}
+                                  placeholder="Invite URL"
+                                />
                               </div>
-                              {bot.support_server_url && (
-                                <div>
-                                  <h4 className="font-semibold mb-2">Support Server</h4>
-                                  <a 
-                                    href={bot.support_server_url} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-sm text-primary hover:underline break-all"
-                                  >
-                                    {bot.support_server_url}
-                                  </a>
-                                </div>
-                              )}
+                              <div>
+                                <h4 className="font-semibold mb-2">Support Server</h4>
+                                <Input
+                                  value={reviewSupportServerUrl}
+                                  onChange={(e) => setReviewSupportServerUrl(e.target.value)}
+                                  placeholder="Support server URL"
+                                />
+                              </div>
                             </div>
                             
                             <div className="border-t pt-6 space-y-4">
@@ -628,13 +725,27 @@ const Management = () => {
             
             <div className="space-y-4">
               <div>
+                <label className="text-sm font-medium mb-2 block">Search Approved Bots</label>
+                <div className="relative mb-3">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
+                  <Input
+                    value={approvedSearchQuery}
+                    onChange={(e) => setApprovedSearchQuery(e.target.value)}
+                    placeholder="Search approved bots by name or ID..."
+                    className="pl-10"
+                  />
+                </div>
                 <label className="text-sm font-medium mb-2 block">Select Bot to Remove</label>
                 <Select value={selectedBotForRemoval} onValueChange={setSelectedBotForRemoval}>
                   <SelectTrigger>
                     <SelectValue placeholder="Choose a bot..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {approvedBots.map((bot) => (
+                    {filteredApprovedBots.length === 0 ? (
+                      <div className="p-3 text-sm text-muted-foreground">
+                        No approved bots match your search.
+                      </div>
+                    ) : filteredApprovedBots.map((bot) => (
                       <SelectItem key={bot.id} value={bot.id}>
                         <div className="flex items-center space-x-2">
                           <Avatar className="h-5 w-5">

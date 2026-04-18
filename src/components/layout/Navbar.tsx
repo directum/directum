@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useAuth } from '@/components/auth/AuthContext';
-import { Bot, Search, Plus, User, LogOut, Settings, Menu, ChevronDown, Ticket, Code } from 'lucide-react';
+import { Bot, Plus, User, LogOut, Settings, Menu, ChevronDown, Ticket, Code } from 'lucide-react';
 import { DiscordLogin } from '@/components/auth/DiscordLogin';
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -14,9 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DiscordIcon } from '@/components/icons/DiscordIcon';
+import { ADMIN_DISCORD_IDS } from '@/config/admin';
 
 interface NavbarProps {
   onAddBot?: () => void;
@@ -29,13 +29,6 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // Define admin Discord IDs
-  const ADMIN_DISCORD_IDS = [
-    '1254195552808206429',
-    // Add more admin Discord IDs as needed
-  ];
 
   useEffect(() => {
     if (user) {
