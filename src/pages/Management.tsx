@@ -508,7 +508,7 @@ const Management = () => {
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm mb-10">
           <Button 
             variant="ghost" 
             onClick={() => navigate('/')}
@@ -518,40 +518,64 @@ const Management = () => {
             Back to Home
           </Button>
           
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
                 <Bot className="h-8 w-8 text-primary" />
-                <h1 className="text-3xl font-bold">Bot Management</h1>
+                <div>
+                  <h1 className="text-3xl font-bold">Bot Management</h1>
+                  <p className="text-sm text-muted-foreground">Review pending submissions, edit approved bots, and remove listings with staff tools.</p>
+                </div>
               </div>
-              <Badge variant="secondary" className="flex items-center space-x-1">
-                <Clock className="h-3 w-3" />
-                <span>{pendingBots.length} Pending</span>
-              </Badge>
+              <div className="flex flex-wrap items-center gap-3">
+                <Badge variant="secondary" className="flex items-center space-x-1">
+                  <Clock className="h-3 w-3" />
+                  <span>{pendingBots.length} Pending</span>
+                </Badge>
+                <Badge variant="secondary" className="flex items-center space-x-1">
+                  <span>{approvedBots.length} Approved</span>
+                </Badge>
+              </div>
             </div>
-            
-            <Button 
-              onClick={openRemovalModal}
-              variant="destructive"
-              className="flex items-center space-x-2"
-            >
-              <Trash2 className="w-4 h-4" />
-              <span>Remove a Bot</span>
-            </Button>
+
+            <div className="flex flex-wrap gap-3">
+              <Button variant="outline" onClick={() => fetchApprovedBots()}>
+                Refresh approved bots
+              </Button>
+              <Button 
+                onClick={openRemovalModal}
+                variant="destructive"
+                className="flex items-center space-x-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Remove a Bot</span>
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className="mb-6 max-w-xl">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search pending bots by name or ID..."
-              className="pl-10"
-            />
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm mb-10">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold">Pending Review</h2>
+              <p className="text-sm text-muted-foreground">Search and review pending bots before they go live.</p>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              {pendingBots.length} pending approvals
+            </div>
           </div>
-        </div>
+
+          <div className="mb-6 max-w-xl">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search pending bots by name or ID..."
+                className="pl-10"
+              />
+            </div>
+          </div>
 
         {loading ? (
           <div className="text-center py-8">Loading pending bots...</div>
@@ -790,8 +814,9 @@ const Management = () => {
             ))}
           </div>
         )}
+      </div>
 
-        <div className="mb-10">
+        <div className="mb-10 rounded-3xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl font-bold">Edit Registered Bot</h2>
