@@ -789,6 +789,7 @@ const Management = () => {
               </Card>
             ))}
           </div>
+        )}
 
         <div className="mb-10">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
