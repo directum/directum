@@ -1002,9 +1002,6 @@ const Management = () => {
             ))}
           </div>
         )}
-                </div>
-              </div>
-            )}
 
             {/* Edit Bots Tab */}
             {activeTab === 'edit' && (
