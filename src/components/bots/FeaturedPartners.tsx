@@ -74,9 +74,7 @@ export const FeaturedPartners = ({
           )
         `)
         .eq('status', 'approved')
-        .eq('featured', true)
-        .order('votes', { ascending: false })
-        .limit(6);
+        .eq('featured', true);
 
       if (error) throw error;
 
@@ -86,7 +84,11 @@ export const FeaturedPartners = ({
         tags: bot.bot_tags?.map((bt: { tags: { id: string; name: string; color: string } }) => bt.tags) || [],
       })) || [];
 
-      setFeaturedBots(transformedBots);
+      // Select 3 random partners
+      const shuffled = transformedBots.sort(() => 0.5 - Math.random());
+      const selectedBots = shuffled.slice(0, 3);
+
+      setFeaturedBots(selectedBots);
     } catch (error) {
       console.error('Error fetching featured partners:', error);
     } finally {

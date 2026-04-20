@@ -18,11 +18,11 @@ import Legal from "./pages/Legal";
 
 import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
-import { SubmitTicket } from "./pages/SubmitTicket";
 import ApiDocs from "./pages/ApiDocs";
 import MyBots from "./pages/MyBots";
 import PremiumSuccess from "./pages/PremiumSuccess";
 import NotFound from "./pages/NotFound";
+import Partners from "./pages/Partners";
 
 const queryClient = new QueryClient();
 
@@ -47,7 +47,7 @@ const App = () => (
               
               <Route path="/collections" element={<Collections />} />
               <Route path="/collection/:collectionId" element={<CollectionDetail />} />
-              <Route path="/submit-ticket" element={<SubmitTicket />} />
+              <Route path="/partners" element={<Partners />} />
               <Route path="/api-docs" element={<ApiDocs />} />
               <Route path="/my-bots" element={<MyBots />} />
               <Route path="/premium-success" element={<PremiumSuccess />} />

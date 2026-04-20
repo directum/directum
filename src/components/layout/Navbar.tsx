@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/components/auth/AuthContext';
-import { Bot, Plus, User, LogOut, Settings, Menu, ChevronDown, Ticket, Code } from 'lucide-react';
+import { Bot, Plus, User, LogOut, Settings, Menu, Ticket, Code } from 'lucide-react';
 import { DiscordLogin } from '@/components/auth/DiscordLogin';
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -85,30 +85,20 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
             {/* Desktop Navigation Buttons */}
             {!isMobile && (
               <div className="flex items-center space-x-4">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm">
-                      Support
-                      <ChevronDown className="w-4 h-4 ml-1" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    <DropdownMenuItem onClick={() => window.open('https://discord.gg/UHeWA6mXxS', '_blank')}>
-                      <DiscordIcon className="mr-2 h-4 w-4" />
-                      Discord
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/submit-ticket')}>
-                      <Ticket className="mr-2 h-4 w-4" />
-                      Ticket
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
                 <Button 
                   variant="ghost" 
                   size="sm"
                   onClick={() => navigate('/collections')}
                 >
                   Collections
+                </Button>
+                
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => navigate('/partners')}
+                >
+                  Partners
                 </Button>
                 
                 <Button 
@@ -141,6 +131,14 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                     Add Bot
                   </Button>
                 )}
+                
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => window.open('https://discord.gg/UHeWA6mXxS', '_blank')}
+                >
+                  <DiscordIcon className="w-4 h-4" />
+                </Button>
                 
                 {user ? (
                   <DropdownMenu>
@@ -270,34 +268,21 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
 
                     {/* Navigation Links */}
                     <div className="flex flex-col space-y-3">
-                      <div className="flex flex-col space-y-2">
-                        <span className="text-sm font-medium text-muted-foreground px-3">Support</span>
+                      <Button 
+                        variant="ghost" 
+                        className="justify-start"
+                        onClick={() => {
+                          window.open('https://discord.gg/UHeWA6mXxS', '_blank');
+                          setShowMobileMenu(false);
+                        }}
+                      >
+                        <DiscordIcon className="w-4 h-4 mr-2" />
+                        Discord
+                      </Button>
+                      
+                      {user && (
                         <Button 
                           variant="ghost" 
-                          className="justify-start"
-                          onClick={() => {
-                            window.open('https://discord.gg/UHeWA6mXxS', '_blank');
-                            setShowMobileMenu(false);
-                          }}
-                        >
-                          <DiscordIcon className="w-4 h-4 mr-2" />
-                          Discord
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          className="justify-start"
-                          onClick={() => {
-                            navigate('/submit-ticket');
-                            setShowMobileMenu(false);
-                          }}
-                        >
-                          <Ticket className="w-4 h-4 mr-2" />
-                          Ticket
-                        </Button>
-                       </div>
-                       {user && (
-                         <Button 
-                           variant="ghost" 
                            className="justify-start"
                            onClick={() => {
                              navigate('/my-bots');
@@ -318,6 +303,17 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                        >
                          Collections
                        </Button>
+                      
+                      <Button 
+                        variant="ghost" 
+                        className="justify-start"
+                        onClick={() => {
+                          navigate('/partners');
+                          setShowMobileMenu(false);
+                        }}
+                      >
+                        Partners
+                      </Button>
                       
                       <Button 
                         variant="ghost" 

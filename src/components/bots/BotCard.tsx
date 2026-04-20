@@ -73,7 +73,7 @@ export const BotCard = ({ bot, onVote, canVote = true, isVoting = false }: BotCa
   return (
     <Card 
       className={cn(
-        "bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl soft-shadow hover:bubble-shadow transition-all duration-500 group cursor-pointer hover:scale-105 animate-fade-in",
+        "bg-card/80 backdrop-blur-sm border border-border/50 rounded-3xl soft-shadow hover:bubble-shadow transition-all duration-500 group cursor-pointer hover:scale-105 min-h-[320px] flex flex-col",
         bot.featured && "border-yellow-300/50 shadow-[0_0_0_1px_rgba(245,158,11,0.25)]"
       )}
       onClick={handleCardClick}
@@ -121,8 +121,8 @@ export const BotCard = ({ bot, onVote, canVote = true, isVoting = false }: BotCa
         </div>
       </CardHeader>
       
-      <CardContent className="space-y-5">
-        <div className="text-sm text-muted-foreground line-clamp-3 font-medium leading-relaxed">
+      <CardContent className="space-y-5 flex-1 flex flex-col">
+        <div className="text-sm text-muted-foreground line-clamp-3 font-medium leading-relaxed flex-1">
           <Markdown content={bot.short_description} />
         </div>
         
