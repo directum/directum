@@ -122,7 +122,7 @@ export const FeaturedPartners = ({
                     </Badge>
                   </CardTitle>
                   <p className="text-muted-foreground">
-                    Top partner bots selected by our community.
+                    Check out three randomly selected partners!
                   </p>
                 </div>
               </div>
@@ -202,7 +202,7 @@ export const FeaturedPartners = ({
                   Partnered Bots
                 </CardTitle>
                 <p className="text-muted-foreground">
-                  Top partner bots selected by our community.
+                  Check out three randomly selected partners!
                 </p>
               </div>
             </div>
