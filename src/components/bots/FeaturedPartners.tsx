@@ -236,23 +236,41 @@ export const FeaturedPartners = ({
       <Dialog open={showPartnerModal} onOpenChange={setShowPartnerModal}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Become a partner!</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <Crown className="h-5 w-5 text-primary" />
+              Become a Partner!
+            </DialogTitle>
             <DialogDescription>
               Join our Discord to apply for our partner program and unlock exclusive benefits!
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4 text-sm text-foreground">
-            <div>• Partner tag for your bot</div>
-            <div>• Priority listing in the featured bots section</div>
-            <div>• Access to partners-only lounge on the Discord</div>
-            <div>• Partner role on the Discord</div>
-            <div>• Early access to new Directum features</div>
+            <div className="flex items-center gap-2">
+              <Crown className="h-4 w-4 text-primary" />
+              <span>Partner tag for your bot</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="h-4 w-4 text-primary" />
+              <span>Priority listing in the featured bots section</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span>Access to partners-only lounge on the Discord</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="h-4 w-4 text-primary" />
+              <span>Partner role on the Discord</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Star className="h-4 w-4 text-primary" />
+              <span>Early access to new Directum features</span>
+            </div>
           </div>
           <div className="flex justify-end gap-3 pt-4">
             <Button variant="outline" onClick={() => setShowPartnerModal(false)}>
               Close
             </Button>
-            <Button onClick={openDiscord}>
+            <Button onClick={openDiscord} className="bg-gradient-to-r from-primary to-secondary text-white">
               Join Discord
             </Button>
           </div>
