@@ -464,7 +464,7 @@ const BotDetail = () => {
                 <Button
                   variant="outline"
                   onClick={() => setReportModalOpen(true)}
-                  className="w-full text-destructive hover:text-destructive"
+                  className="w-full text-red-500 hover:text-red-600"
                 >
                   <Flag className="w-4 h-4 mr-1" />
                   Report Bot
