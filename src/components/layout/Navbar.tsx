@@ -74,7 +74,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
             {/* Logo */}
             <button 
               onClick={() => navigate('/')} 
-              className="flex items-center space-x-3 floating-animation hover:opacity-80 transition-opacity cursor-pointer"
+              className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer"
             >
               <div className="p-2 rounded-xl">
                 <img src="/lovable-uploads/5420916f-cb8a-4c2b-8be2-ae87fcf516df.png" alt="Directum Logo" className="h-8 w-8" />

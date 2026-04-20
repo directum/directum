@@ -52,6 +52,13 @@ const Partners = () => {
     }
   };
 
+  const scrollToCTA = () => {
+    const element = document.getElementById('partner-cta');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   useEffect(() => {
     fetchPartners();
   }, []);
@@ -114,6 +121,17 @@ const Partners = () => {
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-medium">
             Discover our featured partner bots that make Discord amazing! ✨
           </p>
+          
+          {/* Scroll to CTA Button */}
+          <div className="mt-8">
+            <Button 
+              onClick={scrollToCTA}
+              className="bg-gradient-to-r from-primary to-secondary text-white font-bold text-lg px-8 py-4 bubbly-button"
+            >
+              <Crown className="h-5 w-5 mr-2" />
+              Become a Partner
+            </Button>
+          </div>
         </div>
 
         <div className="container mx-auto px-4">
@@ -159,13 +177,13 @@ const Partners = () => {
         </div>
 
         {/* Call to Action Section */}
-        <div className="mt-16 mb-8">
+        <div id="partner-cta" className="mt-16 mb-8">
           <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/10 to-secondary/10 relative overflow-hidden shadow-[0_0_0_1px_rgba(245,158,11,0.15)]">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-secondary/20 opacity-40" />
             
             <CardHeader className="relative text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
-                <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-xl shadow-lg floating-animation">
+                <div className="p-3 bg-gradient-to-r from-primary to-secondary rounded-xl shadow-lg">
                   <Crown className="h-8 w-8 text-white" />
                 </div>
                 <div>
