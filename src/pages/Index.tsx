@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, TrendingUp, Star, Users, Search, GitCompare, Activity } from 'lucide-react';
+import { Loader2, TrendingUp, Star, Users, Search, GitCompare, Activity, AlertTriangle, AlertOctagon, X } from 'lucide-react';
 
 interface BotFromDB {
   id: string;
@@ -103,12 +103,24 @@ const Index = () => {
   });
   const [categories, setCategories] = useState<Array<{ id: string; name: string; color: string }>>([]);
   const { toast } = useToast();
+  const [siteAlert, setSiteAlert] = useState<any>(null);
+  const [dismissedAlert, setDismissedAlert] = useState(false);
 
   useEffect(() => {
     fetchBots();
     fetchCategories();
     if (user) {
       fetchUserVotes();
+    }
+    
+    // Load alert from localStorage
+    try {
+      const stored = localStorage.getItem('site_alert');
+      if (stored) {
+        setSiteAlert(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error('Failed to load alert:', error);
     }
   }, [user]);
 
@@ -371,6 +383,46 @@ const Index = () => {
       <Navbar 
         onAddBot={() => setShowBotForm(true)}
       />
+      
+      {/* Site Alert Banner */}
+      {siteAlert && !dismissedAlert && (
+        <div className={`border-b ${
+          siteAlert.type === 'warning'
+            ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950/20 dark:border-yellow-800'
+            : 'bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-800'
+        }`}>
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-start gap-3">
+              <div>
+                {siteAlert.type === 'warning' ? (
+                  <AlertTriangle className={`h-5 w-5 ${siteAlert.type === 'warning' ? 'text-yellow-600 dark:text-yellow-500' : 'text-red-600 dark:text-red-500'}`} />
+                ) : (
+                  <AlertOctagon className={`h-5 w-5 text-red-600 dark:text-red-500`} />
+                )}
+              </div>
+              <div className="flex-1">
+                <p className={`text-sm font-medium ${
+                  siteAlert.type === 'warning'
+                    ? 'text-yellow-900 dark:text-yellow-200'
+                    : 'text-red-900 dark:text-red-200'
+                }`}>
+                  {siteAlert.message}
+                </p>
+              </div>
+              <button
+                onClick={() => setDismissedAlert(true)}
+                className={`flex-shrink-0 ${
+                  siteAlert.type === 'warning'
+                    ? 'text-yellow-600 hover:text-yellow-700 dark:text-yellow-500'
+                    : 'text-red-600 hover:text-red-700 dark:text-red-500'
+                }`}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Hero Section with Bubbly Design */}
       <div className="container mx-auto px-4 py-16">

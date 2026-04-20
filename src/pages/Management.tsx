@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Navbar } from '@/components/layout/Navbar';
-import { Bot, Check, X, ArrowLeft, Eye, Clock, AlertCircle, User, Trash2, Search } from 'lucide-react';
+import { Bot, Check, X, ArrowLeft, Eye, Clock, AlertCircle, User, Trash2, Search, Settings, AlertTriangle, AlertOctagon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ADMIN_DISCORD_IDS } from '@/config/admin';
 
@@ -48,14 +48,30 @@ const Management = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [pendingBots, setPendingBots] = useState<PendingBot[]>([]);
+  
+  // Tab state
+  const [activeTab, setActiveTab] = useState<'pending' | 'edit' | 'users' | 'alerts'>('pending');
+  
+  // User & auth states
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
+  
+  // Pending bot states
+  const [pendingBots, setPendingBots] = useState<PendingBot[]>([]);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [selectedBot, setSelectedBot] = useState<PendingBot | null>(null);
   const [approvalNotes, setApprovalNotes] = useState('');
   const [rejectionNotes, setRejectionNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [reviewName, setReviewName] = useState('');
+  const [reviewShortDescription, setReviewShortDescription] = useState('');
+  const [reviewLongDescription, setReviewLongDescription] = useState('');
+  const [reviewInviteUrl, setReviewInviteUrl] = useState('');
+  const [reviewSupportServerUrl, setReviewSupportServerUrl] = useState('');
+  const [reviewFeatured, setReviewFeatured] = useState(false);
+
+  // Edit bot states
+  const [approvedBots, setApprovedBots] = useState<PendingBot[]>([]);
   const [approvedSearchQuery, setApprovedSearchQuery] = useState('');
   const [editSearchQuery, setEditSearchQuery] = useState('');
   const [selectedBotForEdit, setSelectedBotForEdit] = useState<PendingBot | null>(null);
@@ -66,19 +82,23 @@ const Management = () => {
   const [editSupportServerUrl, setEditSupportServerUrl] = useState('');
   const [editFeatured, setEditFeatured] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
-  const [reviewName, setReviewName] = useState('');
-  const [reviewShortDescription, setReviewShortDescription] = useState('');
-  const [reviewLongDescription, setReviewLongDescription] = useState('');
-  const [reviewInviteUrl, setReviewInviteUrl] = useState('');
-  const [reviewSupportServerUrl, setReviewSupportServerUrl] = useState('');
-  const [reviewFeatured, setReviewFeatured] = useState(false);
 
   // Bot removal states
   const [showRemovalModal, setShowRemovalModal] = useState(false);
-  const [approvedBots, setApprovedBots] = useState<PendingBot[]>([]);
   const [selectedBotForRemoval, setSelectedBotForRemoval] = useState('');
   const [removalReason, setRemovalReason] = useState('');
   const [removingBot, setRemovingBot] = useState(false);
+
+  // User management states
+  const [userSearchId, setUserSearchId] = useState('');
+  const [foundUser, setFoundUser] = useState<any>(null);
+  const [userSearching, setUserSearching] = useState(false);
+  
+  // Alert states
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'warning' | 'critical'>('warning');
+  const [alertLoading, setAlertLoading] = useState(false);
+  const [currentAlert, setCurrentAlert] = useState<any>(null);
 
   useEffect(() => {
     if (!user) {
@@ -363,6 +383,136 @@ const Management = () => {
     setShowRemovalModal(true);
   };
 
+  const searchUserById = async () => {
+    if (!userSearchId.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please enter a user ID to search.",
+      });
+      return;
+    }
+
+    setUserSearching(true);
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userSearchId)
+        .single();
+
+      if (error) throw error;
+      setFoundUser(data);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "User Not Found",
+        description: "Could not find a user with that ID.",
+      });
+      setFoundUser(null);
+    } finally {
+      setUserSearching(false);
+    }
+  };
+
+  const handleSignOutUser = async () => {
+    if (!foundUser?.id) return;
+
+    try {
+      const { error } = await supabase.auth.admin.signOut(foundUser.id, true);
+      if (error) throw error;
+
+      toast({
+        title: "User signed out",
+        description: `${foundUser.username} has been signed out from all sessions.`,
+      });
+      
+      setFoundUser(null);
+      setUserSearchId('');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to sign out user.",
+      });
+    }
+  };
+
+  const handleSaveAlert = async () => {
+    if (!alertMessage.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please enter an alert message.",
+      });
+      return;
+    }
+
+    setAlertLoading(true);
+    try {
+      // For now, we'll store alerts in localStorage until we create a database table
+      // In production, this should be in the database
+      const alert = {
+        id: Date.now().toString(),
+        message: alertMessage,
+        type: alertType,
+        created_at: new Date().toISOString(),
+      };
+
+      localStorage.setItem('site_alert', JSON.stringify(alert));
+      setCurrentAlert(alert);
+
+      toast({
+        title: "Alert saved",
+        description: "The alert banner will now display on the home page.",
+      });
+
+      setAlertMessage('');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save alert.",
+      });
+    } finally {
+      setAlertLoading(false);
+    }
+  };
+
+  const handleClearAlert = async () => {
+    try {
+      localStorage.removeItem('site_alert');
+      setCurrentAlert(null);
+      setAlertMessage('');
+
+      toast({
+        title: "Alert cleared",
+        description: "The alert banner has been removed from the home page.",
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to clear alert.",
+      });
+    }
+  };
+
+  const fetchCurrentAlert = () => {
+    try {
+      const stored = localStorage.getItem('site_alert');
+      if (stored) {
+        setCurrentAlert(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error('Failed to load alert:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentAlert();
+  }, []);
+
   const createNotification = async (userId: string, type: string, title: string, message: string, botId: string) => {
     try {
       const { error } = await supabase
@@ -508,7 +658,7 @@ const Management = () => {
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm mb-10">
+        <div className="mb-6">
           <Button 
             variant="ghost" 
             onClick={() => navigate('/')}
@@ -517,69 +667,107 @@ const Management = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
-          
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <Bot className="h-8 w-8 text-primary" />
-                <div>
-                  <h1 className="text-3xl font-bold">Bot Management</h1>
-                  <p className="text-sm text-muted-foreground">Review pending submissions, edit approved bots, and remove listings with staff tools.</p>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <Badge variant="secondary" className="flex items-center space-x-1">
-                  <Clock className="h-3 w-3" />
-                  <span>{pendingBots.length} Pending</span>
-                </Badge>
-                <Badge variant="secondary" className="flex items-center space-x-1">
-                  <span>{approvedBots.length} Approved</span>
-                </Badge>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Button variant="outline" onClick={() => fetchApprovedBots()}>
-                Refresh approved bots
-              </Button>
-              <Button 
-                onClick={openRemovalModal}
-                variant="destructive"
-                className="flex items-center space-x-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                <span>Remove a Bot</span>
-              </Button>
-            </div>
-          </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm mb-10">
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold">Pending Review</h2>
-              <p className="text-sm text-muted-foreground">Search and review pending bots before they go live.</p>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {pendingBots.length} pending approvals
-            </div>
+        <div className="grid gap-6 lg:grid-cols-4">
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-24">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Settings className="h-5 w-5" />
+                  Staff Tools
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <button
+                  onClick={() => setActiveTab('pending')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition ${
+                    activeTab === 'pending'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Pending Review
+                    {pendingBots.length > 0 && (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {pendingBots.length}
+                      </Badge>
+                    )}
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('edit')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition ${
+                    activeTab === 'edit'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <Bot className="h-4 w-4" />
+                    Edit Bots
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('users')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition ${
+                    activeTab === 'users'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    User Profiles
+                  </span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('alerts')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition ${
+                    activeTab === 'alerts'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-muted'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" />
+                    Alert Banner
+                  </span>
+                </button>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="mb-6 max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search pending bots by name or ID..."
-                className="pl-10"
-              />
-            </div>
-          </div>
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            {/* Pending Review Tab */}
+            {activeTab === 'pending' && (
+              <div className="space-y-6">
+                <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+                  <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h2 className="text-2xl font-semibold">Pending Review</h2>
+                      <p className="text-sm text-muted-foreground">Search and review pending bots before they go live.</p>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {pendingBots.length} pending approvals
+                    </div>
+                  </div>
 
-        {loading ? (
-          <div className="text-center py-8">Loading pending bots...</div>
-        ) : pendingBots.length === 0 ? (
+                  <div className="mb-6 max-w-xl">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
+                      <Input
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search pending bots by name or ID..."
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
           <Card>
             <CardContent className="text-center py-12">
               <Check className="h-12 w-12 mx-auto mb-4 text-green-500" />
@@ -814,9 +1002,14 @@ const Management = () => {
             ))}
           </div>
         )}
-      </div>
+                </div>
+              </div>
+            )}
 
-        <div className="mb-10 rounded-3xl border border-border bg-card p-6 shadow-sm">
+            {/* Edit Bots Tab */}
+            {activeTab === 'edit' && (
+              <div className="space-y-6">
+                <div className="mb-10 rounded-3xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl font-bold">Edit Registered Bot</h2>
@@ -917,6 +1110,171 @@ const Management = () => {
                   Use the search field above to find an approved bot and edit its information.
                 </CardContent>
               </Card>
+            )}
+          </div>
+                </div>
+              </div>
+            )}
+
+            {/* User Profiles Tab */}
+            {activeTab === 'users' && (
+              <div className="space-y-6">
+                <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-semibold">User Profile Lookup</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Search for users by ID and manage their accounts.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input
+                        value={userSearchId}
+                        onChange={(e) => setUserSearchId(e.target.value)}
+                        placeholder="Enter user ID to search..."
+                        onKeyDown={(e) => e.key === 'Enter' && searchUserById()}
+                      />
+                      <Button onClick={searchUserById} disabled={userSearching}>
+                        {userSearching ? 'Searching...' : 'Search'}
+                      </Button>
+                    </div>
+
+                    {foundUser ? (
+                      <Card>
+                        <CardHeader>
+                          <div className="flex items-center gap-4">
+                            <Avatar className="h-16 w-16">
+                              <AvatarImage src={foundUser.avatar_url} />
+                              <AvatarFallback>
+                                <User className="h-8 w-8" />
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                              <CardTitle className="text-2xl">{foundUser.username}</CardTitle>
+                              <p className="text-sm text-muted-foreground">ID: {foundUser.id}</p>
+                              <p className="text-sm text-muted-foreground">Discord ID: {foundUser.discord_id}</p>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div>
+                              <label className="text-sm font-medium">Joined</label>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(foundUser.created_at).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium">Last Updated</label>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(foundUser.updated_at || foundUser.created_at).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="border-t pt-4">
+                            <h4 className="font-semibold mb-3">Staff Actions</h4>
+                            <Button
+                              variant="destructive"
+                              onClick={handleSignOutUser}
+                              className="w-full"
+                            >
+                              Sign Out User From All Sessions
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ) : (
+                      <Card>
+                        <CardContent className="text-center py-8 text-sm text-muted-foreground">
+                          Enter a user ID above to view their profile and manage their account.
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Alert Banner Tab */}
+            {activeTab === 'alerts' && (
+              <div className="space-y-6">
+                <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-semibold">Site Alert Banner</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Set an alert banner to display on the home page.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Alert Type</label>
+                      <Select value={alertType} onValueChange={(value: any) => setAlertType(value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="warning">
+                            <span className="flex items-center gap-2">
+                              <AlertTriangle className="h-4 w-4" />
+                              Caution / Warning (Yellow)
+                            </span>
+                          </SelectItem>
+                          <SelectItem value="critical">
+                            <span className="flex items-center gap-2">
+                              <AlertOctagon className="h-4 w-4" />
+                              Critical Alert (Red)
+                            </span>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Alert Message</label>
+                      <Textarea
+                        value={alertMessage}
+                        onChange={(e) => setAlertMessage(e.target.value)}
+                        placeholder="Enter the alert message that will be displayed on the home page..."
+                        rows={4}
+                      />
+                    </div>
+
+                    {currentAlert && (
+                      <Card className={`p-4 ${currentAlert.type === 'warning' ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950/20' : 'bg-red-50 border-red-200 dark:bg-red-950/20'}`}>
+                        <div className="flex gap-3">
+                          <div>
+                            {currentAlert.type === 'warning' ? (
+                              <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-500" />
+                            ) : (
+                              <AlertOctagon className="h-5 w-5 text-red-600 dark:text-red-500" />
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">Current Alert Active:</p>
+                            <p className="text-sm mt-1">{currentAlert.message}</p>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              Set on {new Date(currentAlert.created_at).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    )}
+
+                    <div className="flex gap-3">
+                      <Button onClick={handleSaveAlert} disabled={alertLoading} className="flex-1">
+                        {alertLoading ? 'Saving...' : 'Save Alert'}
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={handleClearAlert}
+                        disabled={!currentAlert}
+                        className="flex-1"
+                      >
+                        Clear Alert
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
