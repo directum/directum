@@ -9,12 +9,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Markdown } from '@/components/ui/markdown';
-import { Heart, ExternalLink, Bot, ArrowLeft, Calendar, User, Star, Crown } from 'lucide-react';
+import { Heart, ExternalLink, Bot, ArrowLeft, Calendar, User, Star, Crown, Flag } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import ReviewForm from '@/components/reviews/ReviewForm';
 import ReviewsList from '@/components/reviews/ReviewsList';
 import { FollowButton } from '@/components/social/FollowButton';
 import { DiscordIcon } from '@/components/icons/DiscordIcon';
+import { BotReportModal } from '@/components/bots/BotReportModal';
 
 interface BotDetailData {
   id: string;
@@ -51,6 +52,7 @@ const BotDetail = () => {
   const [isVoting, setIsVoting] = useState(false);
   const [userReview, setUserReview] = useState<any>(null);
   const [reviewsRefreshTrigger, setReviewsRefreshTrigger] = useState(0);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
 
   // Helper function to get the correct Discord bot avatar URL
   const getBotAvatarUrl = (avatarUrl?: string, clientId?: string) => {
@@ -459,6 +461,14 @@ const BotDetail = () => {
                   <Heart className={`w-4 h-4 mr-1 ${isVoting ? 'animate-pulse' : ''}`} />
                   {isVoting ? 'Voting...' : canVote ? 'Vote' : 'Vote Cooldown'} ({bot.votes})
                 </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setReportModalOpen(true)}
+                  className="w-full text-destructive hover:text-destructive"
+                >
+                  <Flag className="w-4 h-4 mr-1" />
+                  Report Bot
+                </Button>
               </CardContent>
             </Card>
 
@@ -489,6 +499,14 @@ const BotDetail = () => {
             </Card>
           </div>
         </div>
+
+        <BotReportModal
+          open={reportModalOpen}
+          onOpenChange={setReportModalOpen}
+          botId={bot.id}
+          botName={bot.name}
+          botLink={bot.invite_url}
+        />
       </div>
     </div>
   );
