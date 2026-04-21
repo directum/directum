@@ -1007,19 +1007,19 @@ const Management = () => {
             {activeTab === 'edit' && (
               <div className="space-y-6">
                 <div className="mb-10 rounded-3xl border border-border bg-card p-6 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">Edit Registered Bot</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Search approved bots by name or ID and update their listing data.
-              </p>
-            </div>
-            <Button variant="outline" onClick={() => fetchApprovedBots()}>
-              Refresh approved bots
-            </Button>
-          </div>
+                  <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold">Edit Registered Bot</h2>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Search approved bots by name or ID and update their listing data.
+                      </p>
+                    </div>
+                    <Button variant="outline" onClick={() => fetchApprovedBots()}>
+                      Refresh approved bots
+                    </Button>
+                  </div>
 
-          <div className="grid gap-4 mt-4">
+                  <div className="grid gap-4 mt-4">
             <div className="relative max-w-2xl">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
               <Input
@@ -1109,9 +1109,7 @@ const Management = () => {
               </Card>
             )}
           </div>
-                </div>
-              </div>
-            )}
+        </div>
 
             {/* User Profiles Tab */}
             {activeTab === 'users' && (
