@@ -789,219 +789,219 @@ const Management = () => {
                     </Card>
                   ) : (
                     <div className="grid gap-6">
-            {filteredPendingBots.map((bot) => (
-              <Card key={bot.id} className="card-gradient">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={bot.avatar_url} />
-                        <AvatarFallback>
-                          <Bot className="h-6 w-6" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <CardTitle className="text-xl">{bot.name}</CardTitle>
-                        <p className="text-sm text-muted-foreground">
-                          by {bot.profiles.username} • Client ID: {bot.client_id}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Submitted: {new Date(bot.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" onClick={() => openReview(bot)}>
-                            <Eye className="w-4 h-4 mr-2" />
-                            Review
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                          <DialogHeader>
-                            <DialogTitle>Review Bot: {bot.name}</DialogTitle>
-                          </DialogHeader>
+                      {filteredPendingBots.map((bot) => (
+                        <Card key={bot.id} className="card-gradient">
+                          <CardHeader>
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center space-x-4">
+                                <Avatar className="h-12 w-12">
+                                  <AvatarImage src={bot.avatar_url} />
+                                  <AvatarFallback>
+                                    <Bot className="h-6 w-6" />
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <CardTitle className="text-xl">{bot.name}</CardTitle>
+                                  <p className="text-sm text-muted-foreground">
+                                    by {bot.profiles.username} • Client ID: {bot.client_id}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    Submitted: {new Date(bot.created_at).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center space-x-2">
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="outline" size="sm" onClick={() => openReview(bot)}>
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      Review
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                                    <DialogHeader>
+                                      <DialogTitle>Review Bot: {bot.name}</DialogTitle>
+                                    </DialogHeader>
+                                    
+                                    <div className="space-y-6">
+                                      <div className="flex items-start space-x-4">
+                                        <Avatar className="h-16 w-16">
+                                          <AvatarImage src={bot.avatar_url} />
+                                          <AvatarFallback>
+                                            <Bot className="h-8 w-8" />
+                                          </AvatarFallback>
+                                        </Avatar>
+                                        <div className="flex-1">
+                                          <h3 className="text-2xl font-bold">{bot.name}</h3>
+                                          <p className="text-muted-foreground">Client ID: {bot.client_id}</p>
+                                          <div className="flex items-center space-x-2 mt-2">
+                                            <Avatar className="h-6 w-6">
+                                              <AvatarImage src={bot.profiles.avatar_url} />
+                                              <AvatarFallback>
+                                                <User className="h-3 w-3" />
+                                              </AvatarFallback>
+                                            </Avatar>
+                                            <span className="text-sm">Owner: {bot.profiles.username}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                      <div>
+                                        <h4 className="font-semibold mb-2">Bot Name</h4>
+                                        <Input
+                                          value={reviewName}
+                                          onChange={(e) => setReviewName(e.target.value)}
+                                          placeholder="Bot name"
+                                        />
+                                      </div>
+
+                                      <div className="grid gap-4 sm:grid-cols-2">
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Short Description</h4>
+                                          <Input
+                                            value={reviewShortDescription}
+                                            onChange={(e) => setReviewShortDescription(e.target.value)}
+                                            placeholder="Short description"
+                                          />
+                                        </div>
+                                        <div className="flex flex-col justify-end">
+                                          <label className="text-sm font-semibold mb-2">Featured</label>
+                                          <div className="flex items-center space-x-2">
+                                            <Checkbox
+                                              checked={reviewFeatured}
+                                              onCheckedChange={(checked) => setReviewFeatured(Boolean(checked))}
+                                            />
+                                            <span className="text-sm">Featured listing</span>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div>
+                                        <h4 className="font-semibold mb-2">Long Description</h4>
+                                        <Textarea
+                                          value={reviewLongDescription}
+                                          onChange={(e) => setReviewLongDescription(e.target.value)}
+                                          placeholder="Long description"
+                                          rows={5}
+                                        />
+                                      </div>
+                                      
+                                      <div>
+                                        <h4 className="font-semibold mb-2">Tags</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                          {bot.bot_tags.map((botTag) => (
+                                            <Badge
+                                              key={botTag.tags.id}
+                                              variant="secondary"
+                                              className="text-xs"
+                                              style={{ 
+                                                backgroundColor: botTag.tags.color + '20', 
+                                                color: botTag.tags.color 
+                                              }}
+                                            >
+                                              {botTag.tags.name}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                      
+                                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Invite URL</h4>
+                                          <Input
+                                            value={reviewInviteUrl}
+                                            onChange={(e) => setReviewInviteUrl(e.target.value)}
+                                            placeholder="Invite URL"
+                                          />
+                                        </div>
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Support Server</h4>
+                                          <Input
+                                            value={reviewSupportServerUrl}
+                                            onChange={(e) => setReviewSupportServerUrl(e.target.value)}
+                                            placeholder="Support server URL"
+                                          />
+                                        </div>
+                                      </div>
+                                      
+                                      <div className="border-t pt-6 space-y-4">
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Approval Notes (optional)</h4>
+                                          <Textarea
+                                            placeholder="Add any notes for the bot owner (visible to them)..."
+                                            value={approvalNotes}
+                                            onChange={(e) => setApprovalNotes(e.target.value)}
+                                            rows={3}
+                                          />
+                                        </div>
+                                        
+                                        <div>
+                                          <h4 className="font-semibold mb-2">Rejection Reason (required if rejecting)</h4>
+                                          <Textarea
+                                            placeholder="Explain why this bot is being rejected..."
+                                            value={rejectionNotes}
+                                            onChange={(e) => setRejectionNotes(e.target.value)}
+                                            rows={3}
+                                          />
+                                        </div>
+                                        
+                                        <div className="flex space-x-3">
+                                          <Button 
+                                            onClick={() => handleApproveBot(bot)}
+                                            disabled={actionLoading === bot.id}
+                                            className="flex-1 bg-green-600 hover:bg-green-700"
+                                          >
+                                            <Check className="w-4 h-4 mr-2" />
+                                            {actionLoading === bot.id ? 'Approving...' : 'Approve'}
+                                          </Button>
+                                          <Button 
+                                            variant="destructive"
+                                            onClick={() => handleRejectBot(bot)}
+                                            disabled={actionLoading === bot.id}
+                                            className="flex-1"
+                                          >
+                                            <X className="w-4 h-4 mr-2" />
+                                            {actionLoading === bot.id ? 'Rejecting...' : 'Reject'}
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            </div>
+                          </CardHeader>
                           
-                          <div className="space-y-6">
-                            <div className="flex items-start space-x-4">
-                              <Avatar className="h-16 w-16">
-                                <AvatarImage src={bot.avatar_url} />
-                                <AvatarFallback>
-                                  <Bot className="h-8 w-8" />
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className="flex-1">
-                                <h3 className="text-2xl font-bold">{bot.name}</h3>
-                                <p className="text-muted-foreground">Client ID: {bot.client_id}</p>
-                                <div className="flex items-center space-x-2 mt-2">
-                                  <Avatar className="h-6 w-6">
-                                    <AvatarImage src={bot.profiles.avatar_url} />
-                                    <AvatarFallback>
-                                      <User className="h-3 w-3" />
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="text-sm">Owner: {bot.profiles.username}</span>
-                                </div>
-                              </div>
-                            </div>
+                          <CardContent className="space-y-4">
+                            <p className="text-sm text-muted-foreground">
+                              {bot.short_description}
+                            </p>
                             
-                            <div>
-                              <h4 className="font-semibold mb-2">Bot Name</h4>
-                              <Input
-                                value={reviewName}
-                                onChange={(e) => setReviewName(e.target.value)}
-                                placeholder="Bot name"
-                              />
-                            </div>
-
-                            <div className="grid gap-4 sm:grid-cols-2">
-                              <div>
-                                <h4 className="font-semibold mb-2">Short Description</h4>
-                                <Input
-                                  value={reviewShortDescription}
-                                  onChange={(e) => setReviewShortDescription(e.target.value)}
-                                  placeholder="Short description"
-                                />
-                              </div>
-                              <div className="flex flex-col justify-end">
-                                <label className="text-sm font-semibold mb-2">Featured</label>
-                                <div className="flex items-center space-x-2">
-                                  <Checkbox
-                                    checked={reviewFeatured}
-                                    onCheckedChange={(checked) => setReviewFeatured(Boolean(checked))}
-                                  />
-                                  <span className="text-sm">Featured listing</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div>
-                              <h4 className="font-semibold mb-2">Long Description</h4>
-                              <Textarea
-                                value={reviewLongDescription}
-                                onChange={(e) => setReviewLongDescription(e.target.value)}
-                                placeholder="Long description"
-                                rows={5}
-                              />
-                            </div>
-                            
-                            <div>
-                              <h4 className="font-semibold mb-2">Tags</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {bot.bot_tags.map((botTag) => (
-                                  <Badge
-                                    key={botTag.tags.id}
-                                    variant="secondary"
-                                    className="text-xs"
-                                    style={{ 
-                                      backgroundColor: botTag.tags.color + '20', 
-                                      color: botTag.tags.color 
-                                    }}
-                                  >
-                                    {botTag.tags.name}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                              <div>
-                                <h4 className="font-semibold mb-2">Invite URL</h4>
-                                <Input
-                                  value={reviewInviteUrl}
-                                  onChange={(e) => setReviewInviteUrl(e.target.value)}
-                                  placeholder="Invite URL"
-                                />
-                              </div>
-                              <div>
-                                <h4 className="font-semibold mb-2">Support Server</h4>
-                                <Input
-                                  value={reviewSupportServerUrl}
-                                  onChange={(e) => setReviewSupportServerUrl(e.target.value)}
-                                  placeholder="Support server URL"
-                                />
-                              </div>
-                            </div>
-                            
-                            <div className="border-t pt-6 space-y-4">
-                              <div>
-                                <h4 className="font-semibold mb-2">Approval Notes (optional)</h4>
-                                <Textarea
-                                  placeholder="Add any notes for the bot owner (visible to them)..."
-                                  value={approvalNotes}
-                                  onChange={(e) => setApprovalNotes(e.target.value)}
-                                  rows={3}
-                                />
-                              </div>
-                              
-                              <div>
-                                <h4 className="font-semibold mb-2">Rejection Reason (required if rejecting)</h4>
-                                <Textarea
-                                  placeholder="Explain why this bot is being rejected..."
-                                  value={rejectionNotes}
-                                  onChange={(e) => setRejectionNotes(e.target.value)}
-                                  rows={3}
-                                />
-                              </div>
-                              
-                              <div className="flex space-x-3">
-                                <Button 
-                                  onClick={() => handleApproveBot(bot)}
-                                  disabled={actionLoading === bot.id}
-                                  className="flex-1 bg-green-600 hover:bg-green-700"
+                            <div className="flex flex-wrap gap-2">
+                              {bot.bot_tags.slice(0, 3).map((botTag) => (
+                                <Badge
+                                  key={botTag.tags.id}
+                                  variant="secondary"
+                                  className="text-xs"
+                                  style={{ 
+                                    backgroundColor: botTag.tags.color + '20', 
+                                    color: botTag.tags.color 
+                                  }}
                                 >
-                                  <Check className="w-4 h-4 mr-2" />
-                                  {actionLoading === bot.id ? 'Approving...' : 'Approve'}
-                                </Button>
-                                <Button 
-                                  variant="destructive"
-                                  onClick={() => handleRejectBot(bot)}
-                                  disabled={actionLoading === bot.id}
-                                  className="flex-1"
-                                >
-                                  <X className="w-4 h-4 mr-2" />
-                                  {actionLoading === bot.id ? 'Rejecting...' : 'Reject'}
-                                </Button>
-                              </div>
+                                  {botTag.tags.name}
+                                </Badge>
+                              ))}
+                              {bot.bot_tags.length > 3 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{bot.bot_tags.length - 3} more
+                                </Badge>
+                              )}
                             </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                          </CardContent>
+                        </Card>
+                      ))}
                     </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    {bot.short_description}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    {bot.bot_tags.slice(0, 3).map((botTag) => (
-                      <Badge
-                        key={botTag.tags.id}
-                        variant="secondary"
-                        className="text-xs"
-                        style={{ 
-                          backgroundColor: botTag.tags.color + '20', 
-                          color: botTag.tags.color 
-                        }}
-                      >
-                        {botTag.tags.name}
-                      </Badge>
-                    ))}
-                    {bot.bot_tags.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{bot.bot_tags.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-                    ))}
-                  </div>
                   )}
                 </div>
               </div>
