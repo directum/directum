@@ -1114,6 +1114,7 @@ const Management = () => {
             )}
           </div>
         </div>
+            )}
 
             {/* User Profiles Tab */}
             {activeTab === 'users' && (
