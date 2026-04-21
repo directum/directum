@@ -768,26 +768,27 @@ const Management = () => {
                       />
                     </div>
                   </div>
-          <Card>
-            <CardContent className="text-center py-12">
-              <Check className="h-12 w-12 mx-auto mb-4 text-green-500" />
-              <h3 className="text-lg font-semibold mb-2">All caught up!</h3>
-              <p className="text-muted-foreground">
-                There are no pending bots to review at this time.
-              </p>
-            </CardContent>
-          </Card>
-        ) : filteredPendingBots.length === 0 ? (
-          <Card>
-            <CardContent className="text-center py-12">
-              <h3 className="text-lg font-semibold mb-2">No bots matched your search</h3>
-              <p className="text-muted-foreground">
-                Try a different name or ID to find the bot you're looking for.
-              </p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-6">
+                  {pendingBots.length === 0 ? (
+                    <Card>
+                      <CardContent className="text-center py-12">
+                        <Check className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                        <h3 className="text-lg font-semibold mb-2">All caught up!</h3>
+                        <p className="text-muted-foreground">
+                          There are no pending bots to review at this time.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ) : filteredPendingBots.length === 0 ? (
+                    <Card>
+                      <CardContent className="text-center py-12">
+                        <h3 className="text-lg font-semibold mb-2">No bots matched your search</h3>
+                        <p className="text-muted-foreground">
+                          Try a different name or ID to find the bot you're looking for.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <div className="grid gap-6">
             {filteredPendingBots.map((bot) => (
               <Card key={bot.id} className="card-gradient">
                 <CardHeader>
@@ -999,9 +1000,12 @@ const Management = () => {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        )}
+                    ))}
+                  </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Edit Bots Tab */}
             {activeTab === 'edit' && (
