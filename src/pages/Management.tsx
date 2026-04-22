@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Search, Settings, Clock, Eye, Check, X, Bot, User, Trash2, AlertTriangle, AlertOctagon, ArrowLeft } from 'lucide-react';
-import { ADMIN_DISCORD_IDS } from '@/config/admin';
+import { isAdminDiscordId } from '@/config/admin';
 
 type BotRow = any;
 
@@ -65,17 +65,35 @@ const Management: React.FC = () => {
   const [removingBot, setRemovingBot] = useState(false);
 
   // basic admin gate
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
+
   useEffect(() => {
     if (!user) {
       navigate('/');
       return;
     }
-    const discordId = (user as any)?.user_metadata?.discord_id;
-    if (!discordId || !ADMIN_DISCORD_IDS.includes(discordId)) {
-      navigate('/');
-      return;
-    }
-    loadAll();
+
+    const checkAdmin = async () => {
+      try {
+        const { data, error } = await supabase.from('profiles').select('discord_id').eq('id', user.id).single();
+        if (error || !data) {
+          navigate('/');
+          return;
+        }
+        const discordId = data.discord_id as string | undefined | null;
+        if (!discordId || !isAdminDiscordId(discordId)) {
+          navigate('/');
+          return;
+        }
+        await loadAll();
+      } catch (e) {
+        navigate('/');
+      } finally {
+        setCheckingAdmin(false);
+      }
+    };
+
+    checkAdmin();
   }, [user]);
 
   function getUserDiscordId() {
@@ -84,7 +102,7 @@ const Management: React.FC = () => {
 
   function isAdmin() {
     const id = getUserDiscordId();
-    return !!id && ADMIN_DISCORD_IDS.includes(id);
+    return isAdminDiscordId(id);
   }
 
   async function loadAll() {

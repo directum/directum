@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DiscordIcon } from '@/components/icons/DiscordIcon';
-import { ADMIN_DISCORD_IDS } from '@/config/admin';
+import { ADMIN_DISCORD_IDS, isAdminDiscordId } from '@/config/admin';
 
 interface NavbarProps {
   onAddBot?: () => void;
@@ -54,7 +54,7 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
   };
 
   const isAdmin = (): boolean => {
-    return userProfile && ADMIN_DISCORD_IDS.includes(userProfile.discord_id);
+    return isAdminDiscordId(userProfile?.discord_id);
   };
 
   const handleAddBot = () => {
