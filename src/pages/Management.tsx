@@ -76,7 +76,6 @@ const Management: React.FC = () => {
 
     const checkAdmin = async () => {
       try {
-        // Fetch discord_id directly from the database profile
         const { data, error } = await supabase
           .from('profiles')
           .select('discord_id')
@@ -103,7 +102,6 @@ const Management: React.FC = () => {
     checkAdmin();
   }, [user]);
 
-  // Updated helpers to use the verified database ID
   function isAdmin() {
     return adminDiscordId ? isAdminDiscordId(adminDiscordId) : false;
   }
@@ -142,7 +140,6 @@ const Management: React.FC = () => {
     setFilteredPending(pendingBots.filter((b) => (b.name || '')?.toLowerCase().includes(q) || (b.client_id || '')?.toLowerCase().includes(q)));
   }, [pendingQuery, pendingBots]);
 
-  // review
   function openReview(bot: BotRow) {
     setReviewBot(bot);
     setReviewNotes('');
@@ -184,7 +181,6 @@ const Management: React.FC = () => {
     }
   }
 
-  // edit
   function openEdit(bot: BotRow) {
     setSelectedEditBot(bot);
     setEditName(bot.name || '');
@@ -217,7 +213,6 @@ const Management: React.FC = () => {
     }
   }
 
-  // users
   async function searchUserById() {
     if (!userSearchId) return;
     setUserSearching(true);
@@ -248,7 +243,6 @@ const Management: React.FC = () => {
     }
   }
 
-  // alerts (localStorage)
   function loadAlertFromStorage() {
     try {
       const raw = localStorage.getItem('site_alert');
@@ -259,7 +253,7 @@ const Management: React.FC = () => {
     }
   }
 
-  function saveAlert() {
+  async function saveAlert() {
     if (!isAdmin()) { 
       toast({ title: 'Unauthorized', description: 'You are not authorized to set alerts.', variant: 'destructive' }); 
       return; 
@@ -288,7 +282,6 @@ const Management: React.FC = () => {
     setAlertMessage('');
   }
 
-  // removal
   async function confirmRemoval() {
     if (!selectedRemovalBot) return;
     if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to remove bots.', variant: 'destructive' }); return; }
@@ -345,7 +338,6 @@ const Management: React.FC = () => {
           </div>
 
           <div className="lg:col-span-3">
-            {/* Pending */}
             {activeTab === 'pending' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
@@ -404,7 +396,6 @@ const Management: React.FC = () => {
               </div>
             )}
 
-            {/* Edit Bots */}
             {activeTab === 'edit' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
@@ -465,7 +456,6 @@ const Management: React.FC = () => {
               </div>
             )}
 
-            {/* Users */}
             {activeTab === 'users' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
@@ -505,7 +495,6 @@ const Management: React.FC = () => {
               </div>
             )}
 
-            {/* Alerts */}
             {activeTab === 'alerts' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
@@ -521,8 +510,8 @@ const Management: React.FC = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="warning">Caution / Warning (Yellow)</SelectItem>
-                          <SelectItem value="critical">Critical Alert (Red)</SelectItem>
+                          <SelectItem value="warning">Caution / Warning (Yellow Icon)</SelectItem>
+                          <SelectItem value="critical">Critical Alert (Red Icon)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -532,18 +521,30 @@ const Management: React.FC = () => {
                     </div>
 
                     {currentAlert && (
-                      <Card className={currentAlert.type === 'warning' ? 'bg-yellow-100 border-yellow-300' : 'bg-red-100 border-red-300'}>
-                        <CardContent className="p-6">
-                          <div className="flex flex-col items-center text-center gap-4">
-                            <div>{currentAlert.type === 'warning' ? <AlertTriangle className="w-10 h-10 text-yellow-600" /> : <AlertOctagon className="w-10 h-10 text-red-600" />}</div>
-                            <div className="flex-1">
-                              <div className="text-sm font-medium text-center">Current Alert Active:</div>
-                              <div className="text-sm mt-1 text-center">{currentAlert.message}</div>
-                              <div className="text-xs text-muted-foreground mt-2 text-center">Set on {new Date(currentAlert.created_at).toLocaleString()}</div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Preview (Management View)</label>
+                        <Card className={`bg-zinc-950 border-2 ${currentAlert.type === 'warning' ? 'border-yellow-500/30' : 'border-red-500/30'}`}>
+                          <CardContent className="p-8">
+                            <div className="flex flex-col items-center text-center gap-5">
+                              <div className="p-3 rounded-full bg-background/10">
+                                {currentAlert.type === 'warning' ? 
+                                  <AlertTriangle className="w-12 h-12 text-yellow-500 animate-pulse" /> : 
+                                  <AlertOctagon className="w-12 h-12 text-red-500 animate-pulse" />
+                                }
+                              </div>
+                              <div className="max-w-md">
+                                <h4 className={`text-lg font-bold mb-2 ${currentAlert.type === 'warning' ? 'text-yellow-500' : 'text-red-500'}`}>
+                                  {currentAlert.type === 'warning' ? 'CAUTION' : 'URGENT ALERT'}
+                                </h4>
+                                <p className="text-zinc-100 text-sm leading-relaxed">{currentAlert.message}</p>
+                                <div className="text-[10px] text-zinc-500 mt-6 uppercase tracking-widest font-mono">
+                                  Deployed: {new Date(currentAlert.created_at).toLocaleString()}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                          </CardContent>
+                        </Card>
+                      </div>
                     )}
 
                     <div className="flex gap-3">
