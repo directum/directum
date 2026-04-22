@@ -532,14 +532,14 @@ const Management: React.FC = () => {
                     </div>
 
                     {currentAlert && (
-                      <Card>
+                      <Card className={currentAlert.type === 'warning' ? 'bg-yellow-100 border-yellow-300' : 'bg-red-100 border-red-300'}>
                         <CardContent className="p-6">
-                          <div className="flex gap-3 items-start">
-                            <div>{currentAlert.type === 'warning' ? <AlertTriangle className="w-5 h-5 text-yellow-600" /> : <AlertOctagon className="w-5 h-5 text-red-600" />}</div>
+                          <div className="flex flex-col items-center text-center gap-4">
+                            <div>{currentAlert.type === 'warning' ? <AlertTriangle className="w-10 h-10 text-yellow-600" /> : <AlertOctagon className="w-10 h-10 text-red-600" />}</div>
                             <div className="flex-1">
-                              <div className="text-sm font-medium">Current Alert Active:</div>
-                              <div className="text-sm mt-1">{currentAlert.message}</div>
-                              <div className="text-xs text-muted-foreground mt-2">Set on {new Date(currentAlert.created_at).toLocaleString()}</div>
+                              <div className="text-sm font-medium text-center">Current Alert Active:</div>
+                              <div className="text-sm mt-1 text-center">{currentAlert.message}</div>
+                              <div className="text-xs text-muted-foreground mt-2 text-center">Set on {new Date(currentAlert.created_at).toLocaleString()}</div>
                             </div>
                           </div>
                         </CardContent>
