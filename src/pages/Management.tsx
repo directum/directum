@@ -78,6 +78,15 @@ const Management: React.FC = () => {
     loadAll();
   }, [user]);
 
+  function getUserDiscordId() {
+    return (user as any)?.user_metadata?.discord_id as string | undefined;
+  }
+
+  function isAdmin() {
+    const id = getUserDiscordId();
+    return !!id && ADMIN_DISCORD_IDS.includes(id);
+  }
+
   async function loadAll() {
     await Promise.all([fetchPending(), fetchApproved(), loadAlertFromStorage()]);
   }
@@ -118,6 +127,7 @@ const Management: React.FC = () => {
 
   async function handleApproveBot() {
     if (!reviewBot) return;
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to approve bots.' }); return; }
     setActionLoading(reviewBot.id);
     try {
       await supabase.from('bots').update({ status: 'approved' }).eq('id', reviewBot.id);
@@ -134,6 +144,7 @@ const Management: React.FC = () => {
 
   async function handleRejectBot() {
     if (!reviewBot) return;
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to reject bots.' }); return; }
     if (!reviewRejection) { toast({ title: 'Rejection reason required' }); return; }
     setActionLoading(reviewBot.id);
     try {
@@ -161,6 +172,7 @@ const Management: React.FC = () => {
 
   async function saveEdit() {
     if (!selectedEditBot) return;
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to edit bots.' }); return; }
     setEditLoading(true);
     try {
       await supabase.from('bots').update({
@@ -196,6 +208,7 @@ const Management: React.FC = () => {
 
   async function handleSignOutUser() {
     if (!foundUser) return;
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to sign out users.' }); return; }
     try {
       // best-effort sign out via admin API; may require server-side function
       // try client admin signOut if available
@@ -224,9 +237,10 @@ const Management: React.FC = () => {
   }
 
   function saveAlert() {
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to set alerts.' }); return; }
     setAlertLoading(true);
     try {
-      const payload = { message: alertMessage, type: alertType, created_at: new Date().toISOString() };
+      const payload = { message: alertMessage, type: alertType, created_at: new Date().toISOString(), by: getUserDiscordId() };
       localStorage.setItem('site_alert', JSON.stringify(payload));
       setCurrentAlert(payload);
       toast({ title: 'Saved', description: 'Alert saved' });
@@ -246,6 +260,7 @@ const Management: React.FC = () => {
   // removal
   async function confirmRemoval() {
     if (!selectedRemovalBot) return;
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to remove bots.' }); return; }
     setRemovingBot(true);
     try {
       await supabase.from('bots').delete().eq('id', selectedRemovalBot);
