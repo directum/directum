@@ -25,6 +25,10 @@ const Management: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'pending' | 'edit' | 'users' | 'alerts'>('pending');
 
+  // Admin verification state
+  const [adminDiscordId, setAdminDiscordId] = useState<string | null>(null);
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
+
   // pending review
   const [pendingBots, setPendingBots] = useState<BotRow[]>([]);
   const [filteredPending, setFilteredPending] = useState<BotRow[]>([]);
@@ -64,9 +68,6 @@ const Management: React.FC = () => {
   const [removalReason, setRemovalReason] = useState('');
   const [removingBot, setRemovingBot] = useState(false);
 
-  // basic admin gate
-  const [checkingAdmin, setCheckingAdmin] = useState(true);
-
   useEffect(() => {
     if (!user) {
       navigate('/');
@@ -75,16 +76,22 @@ const Management: React.FC = () => {
 
     const checkAdmin = async () => {
       try {
-        const { data, error } = await supabase.from('profiles').select('discord_id').eq('id', user.id).single();
-        if (error || !data) {
+        // Fetch discord_id directly from the database profile
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('discord_id')
+          .eq('id', user.id)
+          .single();
+
+        const discordId = data?.discord_id;
+
+        if (error || !discordId || !isAdminDiscordId(discordId)) {
+          console.error("Access denied: Not an admin or no Discord ID found.");
           navigate('/');
           return;
         }
-        const discordId = data.discord_id as string | undefined | null;
-        if (!discordId || !isAdminDiscordId(discordId)) {
-          navigate('/');
-          return;
-        }
+
+        setAdminDiscordId(discordId);
         await loadAll();
       } catch (e) {
         navigate('/');
@@ -96,13 +103,13 @@ const Management: React.FC = () => {
     checkAdmin();
   }, [user]);
 
-  function getUserDiscordId() {
-    return (user as any)?.user_metadata?.discord_id as string | undefined;
+  // Updated helpers to use the verified database ID
+  function isAdmin() {
+    return adminDiscordId ? isAdminDiscordId(adminDiscordId) : false;
   }
 
-  function isAdmin() {
-    const id = getUserDiscordId();
-    return isAdminDiscordId(id);
+  function getUserDiscordId() {
+    return adminDiscordId || undefined;
   }
 
   async function loadAll() {
@@ -145,7 +152,7 @@ const Management: React.FC = () => {
 
   async function handleApproveBot() {
     if (!reviewBot) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to approve bots.' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to approve bots.', variant: 'destructive' }); return; }
     setActionLoading(reviewBot.id);
     try {
       await supabase.from('bots').update({ status: 'approved' }).eq('id', reviewBot.id);
@@ -154,7 +161,7 @@ const Management: React.FC = () => {
       await fetchPending();
       await fetchApproved();
     } catch (e) {
-      toast({ title: 'Error', description: 'Failed to approve' });
+      toast({ title: 'Error', description: 'Failed to approve', variant: 'destructive' });
     } finally {
       setActionLoading(null);
     }
@@ -162,7 +169,7 @@ const Management: React.FC = () => {
 
   async function handleRejectBot() {
     if (!reviewBot) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to reject bots.' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to reject bots.', variant: 'destructive' }); return; }
     if (!reviewRejection) { toast({ title: 'Rejection reason required' }); return; }
     setActionLoading(reviewBot.id);
     try {
@@ -171,7 +178,7 @@ const Management: React.FC = () => {
       setReviewOpen(false);
       await fetchPending();
     } catch (e) {
-      toast({ title: 'Error', description: 'Failed to reject' });
+      toast({ title: 'Error', description: 'Failed to reject', variant: 'destructive' });
     } finally {
       setActionLoading(null);
     }
@@ -190,7 +197,7 @@ const Management: React.FC = () => {
 
   async function saveEdit() {
     if (!selectedEditBot) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to edit bots.' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to edit bots.', variant: 'destructive' }); return; }
     setEditLoading(true);
     try {
       await supabase.from('bots').update({
@@ -204,7 +211,7 @@ const Management: React.FC = () => {
       toast({ title: 'Saved', description: 'Bot updated' });
       await fetchApproved();
     } catch (e) {
-      toast({ title: 'Error', description: 'Failed to save' });
+      toast({ title: 'Error', description: 'Failed to save', variant: 'destructive' });
     } finally {
       setEditLoading(false);
     }
@@ -226,20 +233,18 @@ const Management: React.FC = () => {
 
   async function handleSignOutUser() {
     if (!foundUser) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to sign out users.' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to sign out users.', variant: 'destructive' }); return; }
     try {
-      // best-effort sign out via admin API; may require server-side function
-      // try client admin signOut if available
       // @ts-ignore
       if (supabase.auth?.admin?.signOut) {
         // @ts-ignore
         await supabase.auth.admin.signOut(foundUser.id, true);
         toast({ title: 'Signed out', description: 'User sessions cleared' });
       } else {
-        toast({ title: 'Info', description: 'Server-side sign-out required' });
+        toast({ title: 'Info', description: 'Server-side sign-out required (Edge Function)' });
       }
     } catch (e) {
-      toast({ title: 'Error', description: 'Failed to sign out user' });
+      toast({ title: 'Error', description: 'Failed to sign out user', variant: 'destructive' });
     }
   }
 
@@ -255,15 +260,23 @@ const Management: React.FC = () => {
   }
 
   function saveAlert() {
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to set alerts.' }); return; }
+    if (!isAdmin()) { 
+      toast({ title: 'Unauthorized', description: 'You are not authorized to set alerts.', variant: 'destructive' }); 
+      return; 
+    }
     setAlertLoading(true);
     try {
-      const payload = { message: alertMessage, type: alertType, created_at: new Date().toISOString(), by: getUserDiscordId() };
+      const payload = { 
+        message: alertMessage, 
+        type: alertType, 
+        created_at: new Date().toISOString(), 
+        by: getUserDiscordId() 
+      };
       localStorage.setItem('site_alert', JSON.stringify(payload));
       setCurrentAlert(payload);
       toast({ title: 'Saved', description: 'Alert saved' });
     } catch (e) {
-      toast({ title: 'Error', description: 'Failed to save alert' });
+      toast({ title: 'Error', description: 'Failed to save alert', variant: 'destructive' });
     } finally {
       setAlertLoading(false);
     }
@@ -278,7 +291,7 @@ const Management: React.FC = () => {
   // removal
   async function confirmRemoval() {
     if (!selectedRemovalBot) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to remove bots.' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to remove bots.', variant: 'destructive' }); return; }
     setRemovingBot(true);
     try {
       await supabase.from('bots').delete().eq('id', selectedRemovalBot);
@@ -287,12 +300,20 @@ const Management: React.FC = () => {
       await fetchPending();
       await fetchApproved();
     } catch (e) {
-      toast({ title: 'Error', description: 'Failed to remove bot' });
+      toast({ title: 'Error', description: 'Failed to remove bot', variant: 'destructive' });
     } finally {
       setRemovingBot(false);
       setSelectedRemovalBot('');
       setRemovalReason('');
     }
+  }
+
+  if (checkingAdmin) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Verifying staff permissions...</div>
+      </div>
+    );
   }
 
   return (
@@ -403,7 +424,7 @@ const Management: React.FC = () => {
                   <div className="grid gap-4">
                     {approvedBots.filter((b) => !editQuery || (b.name || '').toLowerCase().includes(editQuery.toLowerCase()) || (b.client_id || '').includes(editQuery)).map((b) => (
                       <Card key={b.id}>
-                        <CardContent className="flex items-center justify-between">
+                        <CardContent className="flex items-center justify-between p-6">
                           <div>
                             <div className="font-semibold">{b.name}</div>
                             <div className="text-xs text-muted-foreground">ID: {b.client_id}</div>
@@ -416,9 +437,10 @@ const Management: React.FC = () => {
                     ))}
 
                     {selectedEditBot && (
-                      <Card>
-                        <CardContent>
+                      <Card className="border-primary/50">
+                        <CardContent className="p-6">
                           <div className="grid gap-4">
+                            <h3 className="font-bold">Editing: {selectedEditBot.name}</h3>
                             <Input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Bot name" />
                             <Input value={editShort} onChange={(e) => setEditShort(e.target.value)} placeholder="Short description" />
                             <Textarea value={editLong} onChange={(e) => setEditLong(e.target.value)} rows={4} placeholder="Long description" />
@@ -459,7 +481,7 @@ const Management: React.FC = () => {
 
                     {foundUser ? (
                       <Card>
-                        <CardContent>
+                        <CardContent className="p-6">
                           <div className="flex items-center gap-4">
                             <Avatar className="h-16 w-16"><AvatarImage src={foundUser.avatar_url} /><AvatarFallback><User className="w-8 h-8" /></AvatarFallback></Avatar>
                             <div>
@@ -511,7 +533,7 @@ const Management: React.FC = () => {
 
                     {currentAlert && (
                       <Card>
-                        <CardContent>
+                        <CardContent className="p-6">
                           <div className="flex gap-3 items-start">
                             <div>{currentAlert.type === 'warning' ? <AlertTriangle className="w-5 h-5 text-yellow-600" /> : <AlertOctagon className="w-5 h-5 text-red-600" />}</div>
                             <div className="flex-1">
