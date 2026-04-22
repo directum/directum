@@ -13,7 +13,25 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Search, Settings, Clock, Eye, Check, X, Bot, User, Trash2, AlertTriangle, AlertOctagon, ArrowLeft } from 'lucide-react';
+import { 
+  Search, 
+  Settings, 
+  Clock, 
+  Eye, 
+  Check, 
+  X, 
+  Bot, 
+  User, 
+  Trash2, 
+  AlertTriangle, 
+  AlertOctagon, 
+  ArrowLeft,
+  LayoutDashboard,
+  ClipboardList,
+  ShieldCheck,
+  Megaphone,
+  Users
+} from 'lucide-react';
 import { isAdminDiscordId } from '@/config/admin';
 
 type BotRow = any;
@@ -313,65 +331,104 @@ const Management: React.FC = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate('/') }>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Home
           </Button>
+          <Badge variant="outline" className="px-3 py-1 bg-primary/5 text-primary border-primary/20">
+            <ShieldCheck className="w-3 h-3 mr-1.5" /> Staff Session Active
+          </Badge>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <Card className="sticky top-24">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Settings className="w-4 h-4" /> Staff Tools</CardTitle>
+            <Card className="sticky top-24 border-border/40 shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                  <LayoutDashboard className="w-4 h-4" /> Management
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-2">
-                  <Button variant={activeTab === 'pending' ? 'secondary' : 'ghost'} onClick={() => setActiveTab('pending')}>Pending Review</Button>
-                  <Button variant={activeTab === 'edit' ? 'secondary' : 'ghost'} onClick={() => setActiveTab('edit')}>Edit Bots</Button>
-                  <Button variant={activeTab === 'users' ? 'secondary' : 'ghost'} onClick={() => setActiveTab('users')}>User Profiles</Button>
-                  <Button variant={activeTab === 'alerts' ? 'secondary' : 'ghost'} onClick={() => setActiveTab('alerts')}>Alert Banner</Button>
-                </div>
+              <CardContent className="grid gap-1 px-2 pb-2">
+                <Button 
+                  variant={activeTab === 'pending' ? 'secondary' : 'ghost'} 
+                  onClick={() => setActiveTab('pending')}
+                  className={`justify-start h-11 w-full gap-3 ${activeTab === 'pending' ? 'bg-secondary font-medium' : 'text-muted-foreground'}`}
+                >
+                  <ClipboardList className={`w-4 h-4 ${activeTab === 'pending' ? 'text-primary' : ''}`} />
+                  Pending Review
+                </Button>
+                <Button 
+                  variant={activeTab === 'edit' ? 'secondary' : 'ghost'} 
+                  onClick={() => setActiveTab('edit')}
+                  className={`justify-start h-11 w-full gap-3 ${activeTab === 'edit' ? 'bg-secondary font-medium' : 'text-muted-foreground'}`}
+                >
+                  <Bot className={`w-4 h-4 ${activeTab === 'edit' ? 'text-primary' : ''}`} />
+                  Edit Bots
+                </Button>
+                <Button 
+                  variant={activeTab === 'users' ? 'secondary' : 'ghost'} 
+                  onClick={() => setActiveTab('users')}
+                  className={`justify-start h-11 w-full gap-3 ${activeTab === 'users' ? 'bg-secondary font-medium' : 'text-muted-foreground'}`}
+                >
+                  <Users className={`w-4 h-4 ${activeTab === 'users' ? 'text-primary' : ''}`} />
+                  User Profiles
+                </Button>
+                <Button 
+                  variant={activeTab === 'alerts' ? 'secondary' : 'ghost'} 
+                  onClick={() => setActiveTab('alerts')}
+                  className={`justify-start h-11 w-full gap-3 ${activeTab === 'alerts' ? 'bg-secondary font-medium' : 'text-muted-foreground'}`}
+                >
+                  <Megaphone className={`w-4 h-4 ${activeTab === 'alerts' ? 'text-primary' : ''}`} />
+                  Alert Banner
+                </Button>
               </CardContent>
             </Card>
           </div>
 
           <div className="lg:col-span-3">
+            {/* Pending */}
             {activeTab === 'pending' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-                  <div className="mb-6 flex items-center justify-between">
+                  <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                       <h2 className="text-2xl font-semibold">Pending Review</h2>
-                      <p className="text-sm text-muted-foreground">Search and review pending bots before they go live.</p>
+                      <p className="text-sm text-muted-foreground">Verify and approve new bot submissions.</p>
                     </div>
-                    <div className="max-w-xs">
+                    <div className="w-full sm:max-w-xs">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
-                        <Input className="pl-10" placeholder="Search pending bots by name or ID..." value={pendingQuery} onChange={(e) => setPendingQuery(e.target.value)} />
+                        <Input className="pl-10 h-10" placeholder="Search pending..." value={pendingQuery} onChange={(e) => setPendingQuery(e.target.value)} />
                       </div>
                     </div>
                   </div>
 
                   <div className="grid gap-4">
                     {filteredPending.length === 0 ? (
-                      <Card>
-                        <CardContent className="text-center py-12">No pending bots.</CardContent>
-                      </Card>
+                      <div className="text-center py-12 border-2 border-dashed rounded-2xl border-muted/50">
+                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-muted/50 mb-4">
+                          <Check className="w-6 h-6 text-muted-foreground" />
+                        </div>
+                        <p className="text-muted-foreground">The queue is empty. Good job!</p>
+                      </div>
                     ) : (
                       filteredPending.map((b) => (
-                        <Card key={b.id} className="card-gradient">
-                          <CardHeader>
+                        <Card key={b.id} className="card-gradient overflow-hidden border-border/50">
+                          <CardHeader className="pb-3">
                             <div className="flex items-start justify-between">
                               <div className="flex items-center gap-4">
-                                <Avatar className="h-12 w-12">
+                                <Avatar className="h-14 w-14 ring-2 ring-primary/10">
                                   <AvatarImage src={b.avatar_url} />
-                                  <AvatarFallback><Bot className="w-6 h-6" /></AvatarFallback>
+                                  <AvatarFallback className="bg-primary/5"><Bot className="w-7 h-7 text-primary/40" /></AvatarFallback>
                                 </Avatar>
                                 <div>
-                                  <div className="text-lg font-semibold">{b.name}</div>
-                                  <div className="text-xs text-muted-foreground">by {b.profiles?.username} • ID: {b.client_id}</div>
+                                  <div className="text-lg font-bold">{b.name}</div>
+                                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+                                    <span className="bg-secondary/50 px-2 py-0.5 rounded text-secondary-foreground font-mono">ID: {b.client_id}</span>
+                                    <span>•</span>
+                                    <span>by {b.profiles?.username}</span>
+                                  </div>
                                 </div>
                               </div>
 
@@ -386,7 +443,7 @@ const Management: React.FC = () => {
                             </div>
                           </CardHeader>
                           <CardContent>
-                            <div className="text-sm text-muted-foreground">{b.short_description}</div>
+                            <div className="text-sm text-muted-foreground line-clamp-2 italic">{b.short_description}</div>
                           </CardContent>
                         </Card>
                       ))
@@ -396,56 +453,84 @@ const Management: React.FC = () => {
               </div>
             )}
 
+            {/* Edit Bots */}
             {activeTab === 'edit' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-                  <div className="mb-6 flex items-center justify-between">
+                  <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                       <h2 className="text-2xl font-semibold">Edit Registered Bot</h2>
-                      <p className="text-sm text-muted-foreground">Search approved bots by name or ID and update their listing data.</p>
+                      <p className="text-sm text-muted-foreground">Modify metadata for existing approved bots.</p>
                     </div>
-                    <div className="max-w-xs">
+                    <div className="w-full sm:max-w-xs">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
-                        <Input className="pl-10" placeholder="Search approved bots..." value={editQuery} onChange={(e) => setEditQuery(e.target.value)} />
+                        <Input className="pl-10 h-10" placeholder="Search approved bots..." value={editQuery} onChange={(e) => setEditQuery(e.target.value)} />
                       </div>
                     </div>
                   </div>
 
                   <div className="grid gap-4">
                     {approvedBots.filter((b) => !editQuery || (b.name || '').toLowerCase().includes(editQuery.toLowerCase()) || (b.client_id || '').includes(editQuery)).map((b) => (
-                      <Card key={b.id}>
-                        <CardContent className="flex items-center justify-between p-6">
-                          <div>
-                            <div className="font-semibold">{b.name}</div>
-                            <div className="text-xs text-muted-foreground">ID: {b.client_id}</div>
+                      <Card key={b.id} className="hover:border-primary/30 transition-colors">
+                        <CardContent className="flex items-center justify-between p-5">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10 border border-border/50">
+                              <AvatarImage src={b.avatar_url} />
+                              <AvatarFallback><Bot className="w-5 h-5 text-muted-foreground" /></AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <div className="font-semibold">{b.name}</div>
+                              <div className="text-xs text-muted-foreground font-mono">{b.client_id}</div>
+                            </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Button onClick={() => openEdit(b)}>Edit</Button>
-                          </div>
+                          <Button variant="outline" size="sm" onClick={() => openEdit(b)}>Edit Listing</Button>
                         </CardContent>
                       </Card>
                     ))}
 
                     {selectedEditBot && (
-                      <Card className="border-primary/50">
+                      <Card className="border-primary bg-primary/5 shadow-lg animate-in fade-in zoom-in-95 duration-200">
                         <CardContent className="p-6">
-                          <div className="grid gap-4">
-                            <h3 className="font-bold">Editing: {selectedEditBot.name}</h3>
-                            <Input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Bot name" />
-                            <Input value={editShort} onChange={(e) => setEditShort(e.target.value)} placeholder="Short description" />
-                            <Textarea value={editLong} onChange={(e) => setEditLong(e.target.value)} rows={4} placeholder="Long description" />
-                            <div className="grid sm:grid-cols-2 gap-4">
-                              <Input value={editInvite} onChange={(e) => setEditInvite(e.target.value)} placeholder="Invite URL" />
-                              <Input value={editSupport} onChange={(e) => setEditSupport(e.target.value)} placeholder="Support server URL" />
+                          <div className="grid gap-6">
+                            <div className="flex items-center justify-between border-b pb-4">
+                              <h3 className="font-bold flex items-center gap-2">
+                                <Settings className="w-4 h-4 text-primary" /> Modifying: {selectedEditBot.name}
+                              </h3>
+                              <Button variant="ghost" size="icon" onClick={() => setSelectedEditBot(null)}><X className="h-4 w-4" /></Button>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <Checkbox checked={editFeatured} onCheckedChange={(v) => setEditFeatured(Boolean(v))} />
-                              <div className="text-sm">Featured listing</div>
+                            
+                            <div className="grid gap-4">
+                              <div className="grid gap-2">
+                                <label className="text-sm font-medium">Display Name</label>
+                                <Input value={editName} onChange={(e) => setEditName(e.target.value)} />
+                              </div>
+                              <div className="grid gap-2">
+                                <label className="text-sm font-medium">Short Description</label>
+                                <Input value={editShort} onChange={(e) => setEditShort(e.target.value)} />
+                              </div>
+                              <div className="grid gap-2">
+                                <label className="text-sm font-medium">Long Description (Markdown support)</label>
+                                <Textarea value={editLong} onChange={(e) => setEditLong(e.target.value)} rows={5} />
+                              </div>
+                              <div className="grid sm:grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                  <label className="text-sm font-medium">Invite URL</label>
+                                  <Input value={editInvite} onChange={(e) => setEditInvite(e.target.value)} />
+                                </div>
+                                <div className="grid gap-2">
+                                  <label className="text-sm font-medium">Support Server</label>
+                                  <Input value={editSupport} onChange={(e) => setEditSupport(e.target.value)} />
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 p-3 bg-card border rounded-lg">
+                                <Checkbox id="feat" checked={editFeatured} onCheckedChange={(v) => setEditFeatured(Boolean(v))} />
+                                <label htmlFor="feat" className="text-sm cursor-pointer select-none">Mark as Featured Listing</label>
+                              </div>
                             </div>
-                            <div className="flex gap-3">
-                              <Button onClick={saveEdit} disabled={editLoading}>{editLoading ? 'Saving...' : 'Save changes'}</Button>
-                              <Button variant="outline" onClick={() => setSelectedEditBot(null)}>Clear</Button>
+                            <div className="flex gap-3 pt-2">
+                              <Button onClick={saveEdit} disabled={editLoading} className="flex-1">{editLoading ? 'Saving...' : 'Save Bot Updates'}</Button>
+                              <Button variant="outline" onClick={() => setSelectedEditBot(null)} className="flex-1">Cancel</Button>
                             </div>
                           </div>
                         </CardContent>
@@ -456,88 +541,104 @@ const Management: React.FC = () => {
               </div>
             )}
 
+            {/* Users */}
             {activeTab === 'users' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
                   <div className="mb-6">
                     <h2 className="text-2xl font-semibold">User Profile Lookup</h2>
-                    <p className="text-sm text-muted-foreground">Search for users by ID and manage their accounts.</p>
+                    <p className="text-sm text-muted-foreground">View developer data and manage account access.</p>
                   </div>
                   <div className="space-y-4">
                     <div className="flex gap-2">
-                      <Input value={userSearchId} onChange={(e) => setUserSearchId(e.target.value)} placeholder="Enter user ID to search..." />
-                      <Button onClick={searchUserById} disabled={userSearching}>{userSearching ? 'Searching...' : 'Search'}</Button>
+                      <Input value={userSearchId} onChange={(e) => setUserSearchId(e.target.value)} placeholder="UUID or Profile ID..." className="h-11" />
+                      <Button onClick={searchUserById} disabled={userSearching} className="h-11 px-6">{userSearching ? 'Searching...' : 'Search'}</Button>
                     </div>
 
                     {foundUser ? (
-                      <Card>
-                        <CardContent className="p-6">
-                          <div className="flex items-center gap-4">
-                            <Avatar className="h-16 w-16"><AvatarImage src={foundUser.avatar_url} /><AvatarFallback><User className="w-8 h-8" /></AvatarFallback></Avatar>
-                            <div>
-                              <div className="text-2xl font-semibold">{foundUser.username}</div>
-                              <div className="text-sm text-muted-foreground">ID: {foundUser.id}</div>
-                              <div className="text-sm text-muted-foreground">Discord ID: {foundUser.discord_id}</div>
+                      <Card className="border-border/60">
+                        <CardContent className="p-8">
+                          <div className="flex flex-col md:flex-row items-center gap-6">
+                            <Avatar className="h-24 w-24 border-4 border-background shadow-xl">
+                              <AvatarImage src={foundUser.avatar_url} />
+                              <AvatarFallback className="text-3xl font-bold bg-secondary"><User className="w-12 h-12" /></AvatarFallback>
+                            </Avatar>
+                            <div className="text-center md:text-left flex-1">
+                              <div className="text-3xl font-bold mb-1">{foundUser.username}</div>
+                              <div className="space-y-1">
+                                <p className="text-sm text-muted-foreground flex items-center justify-center md:justify-start gap-2">
+                                  <span className="font-mono bg-muted px-2 py-0.5 rounded">ID: {foundUser.id}</span>
+                                </p>
+                                <p className="text-sm text-muted-foreground flex items-center justify-center md:justify-start gap-2">
+                                  <span className="font-mono bg-muted px-2 py-0.5 rounded text-indigo-500">Discord: {foundUser.discord_id}</span>
+                                </p>
+                              </div>
                             </div>
                           </div>
-                          <div className="mt-4">
-                            <Button variant="destructive" onClick={handleSignOutUser} className="w-full">Sign Out User From All Sessions</Button>
+                          <div className="mt-8 pt-6 border-t">
+                            <Button variant="destructive" onClick={handleSignOutUser} className="w-full h-11 bg-red-600 hover:bg-red-700">
+                              Revoke All Session Tokens
+                            </Button>
                           </div>
                         </CardContent>
                       </Card>
                     ) : (
-                      <Card>
-                        <CardContent className="text-center text-sm text-muted-foreground py-8">Enter a user ID above to view their profile and manage their account.</CardContent>
-                      </Card>
+                      <div className="text-center py-16 border-2 border-dotted rounded-2xl">
+                        <Users className="w-10 h-10 text-muted/30 mx-auto mb-4" />
+                        <p className="text-muted-foreground max-w-xs mx-auto text-sm">Use the search bar above to fetch real-time user profile data and moderation options.</p>
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
             )}
 
+            {/* Alerts */}
             {activeTab === 'alerts' && (
               <div className="space-y-6">
                 <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
                   <div className="mb-6">
                     <h2 className="text-2xl font-semibold">Site Alert Banner</h2>
-                    <p className="text-sm text-muted-foreground">Set an alert banner to display on the home page.</p>
+                    <p className="text-sm text-muted-foreground">Broadcast critical information to all visitors.</p>
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Alert Type</label>
-                      <Select value={alertType} onValueChange={(v: any) => setAlertType(v)}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="warning">Caution / Warning (Yellow Icon)</SelectItem>
-                          <SelectItem value="critical">Critical Alert (Red Icon)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Alert Message</label>
-                      <Textarea value={alertMessage} onChange={(e) => setAlertMessage(e.target.value)} rows={4} placeholder="Enter the alert message..." />
+                  <div className="space-y-6">
+                    <div className="grid gap-4">
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Priority Level</label>
+                        <Select value={alertType} onValueChange={(v: any) => setAlertType(v)}>
+                          <SelectTrigger className="h-11">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="warning">Yellow Caution (Informational/Warning)</SelectItem>
+                            <SelectItem value="critical">Red Alert (System Outage/Critical)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium mb-2 block">Alert Content</label>
+                        <Textarea value={alertMessage} onChange={(e) => setAlertMessage(e.target.value)} rows={4} placeholder="Enter the text to display at the top of the site..." className="resize-none" />
+                      </div>
                     </div>
 
                     {currentAlert && (
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Preview (Management View)</label>
-                        <Card className={`bg-zinc-950 border-2 ${currentAlert.type === 'warning' ? 'border-yellow-500/30' : 'border-red-500/30'}`}>
-                          <CardContent className="p-8">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Live Preview</label>
+                        <Card className={`bg-zinc-950 border-2 ${currentAlert.type === 'warning' ? 'border-yellow-500/30' : 'border-red-500/30'} shadow-2xl overflow-hidden`}>
+                          <CardContent className="p-10">
                             <div className="flex flex-col items-center text-center gap-5">
-                              <div className="p-3 rounded-full bg-background/10">
+                              <div className={`p-4 rounded-full ${currentAlert.type === 'warning' ? 'bg-yellow-500/10' : 'bg-red-500/10'}`}>
                                 {currentAlert.type === 'warning' ? 
-                                  <AlertTriangle className="w-12 h-12 text-yellow-500 animate-pulse" /> : 
-                                  <AlertOctagon className="w-12 h-12 text-red-500 animate-pulse" />
+                                  <AlertTriangle className="w-14 h-14 text-yellow-500 animate-pulse" /> : 
+                                  <AlertOctagon className="w-14 h-14 text-red-500 animate-pulse" />
                                 }
                               </div>
                               <div className="max-w-md">
-                                <h4 className={`text-lg font-bold mb-2 ${currentAlert.type === 'warning' ? 'text-yellow-500' : 'text-red-500'}`}>
-                                  {currentAlert.type === 'warning' ? 'CAUTION' : 'URGENT ALERT'}
+                                <h4 className={`text-xl font-black mb-2 tracking-tight ${currentAlert.type === 'warning' ? 'text-yellow-500' : 'text-red-500'}`}>
+                                  {currentAlert.type === 'warning' ? 'SYSTEM CAUTION' : 'CRITICAL UPDATE'}
                                 </h4>
-                                <p className="text-zinc-100 text-sm leading-relaxed">{currentAlert.message}</p>
-                                <div className="text-[10px] text-zinc-500 mt-6 uppercase tracking-widest font-mono">
+                                <p className="text-zinc-100 text-base leading-relaxed font-medium">{currentAlert.message}</p>
+                                <div className="text-[9px] text-zinc-600 mt-8 uppercase tracking-[0.2em] font-mono">
                                   Deployed: {new Date(currentAlert.created_at).toLocaleString()}
                                 </div>
                               </div>
@@ -547,9 +648,13 @@ const Management: React.FC = () => {
                       </div>
                     )}
 
-                    <div className="flex gap-3">
-                      <Button onClick={saveAlert} disabled={alertLoading} className="flex-1">{alertLoading ? 'Saving...' : 'Save Alert'}</Button>
-                      <Button variant="destructive" onClick={clearAlert} disabled={!currentAlert} className="flex-1">Clear Alert</Button>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Button onClick={saveAlert} disabled={alertLoading} className="flex-1 h-11 text-base shadow-lg shadow-primary/20">
+                        {alertLoading ? 'Processing...' : 'Apply Alert Banner'}
+                      </Button>
+                      <Button variant="secondary" onClick={clearAlert} disabled={!currentAlert} className="flex-1 h-11 text-base">
+                        Clear Active Alert
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -560,18 +665,19 @@ const Management: React.FC = () => {
 
         {/* Removal Modal */}
         <Dialog open={showRemovalModal} onOpenChange={setShowRemovalModal}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-md rounded-2xl">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-destructive"><Trash2 className="w-5 h-5" /> Remove Bot</DialogTitle>
+              <DialogTitle className="flex items-center gap-2 text-destructive font-bold"><Trash2 className="w-5 h-5" /> Permanently Remove</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-5 py-4">
+              <p className="text-sm text-muted-foreground leading-relaxed">This action will immediately delete the bot listing and all associated data. This cannot be undone.</p>
               <div>
-                <label className="text-sm font-medium mb-2 block">Removal Reason</label>
-                <Textarea value={removalReason} onChange={(e) => setRemovalReason(e.target.value)} rows={4} />
+                <label className="text-sm font-semibold mb-2 block">Reason for Removal</label>
+                <Textarea value={removalReason} onChange={(e) => setRemovalReason(e.target.value)} rows={4} placeholder="Breach of TOS, malicous code, etc..." />
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => { setShowRemovalModal(false); setSelectedRemovalBot(''); setRemovalReason(''); }} className="flex-1">Cancel</Button>
-                <Button variant="destructive" onClick={confirmRemoval} className="flex-1">{removingBot ? 'Removing...' : 'Remove Bot'}</Button>
+              <div className="flex gap-3 pt-2">
+                <Button variant="outline" onClick={() => { setShowRemovalModal(false); setSelectedRemovalBot(''); setRemovalReason(''); }} className="flex-1">Keep Bot</Button>
+                <Button variant="destructive" onClick={confirmRemoval} className="flex-1 h-11">{removingBot ? 'Deleting...' : 'Delete Bot'}</Button>
               </div>
             </div>
           </DialogContent>
@@ -579,37 +685,51 @@ const Management: React.FC = () => {
 
         {/* Review Dialog */}
         <Dialog open={reviewOpen} onOpenChange={setReviewOpen}>
-          <DialogContent className="max-w-4xl">
-            <DialogHeader>
-              <DialogTitle>Review Bot</DialogTitle>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl">
+            <DialogHeader className="border-b pb-4 mb-6">
+              <DialogTitle className="text-2xl">Submission Review</DialogTitle>
             </DialogHeader>
             {reviewBot && (
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <Avatar className="h-16 w-16"><AvatarImage src={reviewBot.avatar_url} /><AvatarFallback><Bot className="w-8 h-8" /></AvatarFallback></Avatar>
+              <div className="space-y-8">
+                <div className="flex items-center gap-5 p-4 bg-muted/40 rounded-2xl">
+                  <Avatar className="h-20 w-20 ring-4 ring-background shadow-lg"><AvatarImage src={reviewBot.avatar_url} /><AvatarFallback><Bot className="w-10 h-10" /></AvatarFallback></Avatar>
                   <div>
-                    <div className="text-2xl font-bold">{reviewBot.name}</div>
-                    <div className="text-sm text-muted-foreground">Owner: {reviewBot.profiles?.username} • ID: {reviewBot.client_id}</div>
+                    <div className="text-3xl font-black">{reviewBot.name}</div>
+                    <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                      <Badge variant="outline">Owner: {reviewBot.profiles?.username}</Badge>
+                      <Badge variant="outline" className="font-mono">ID: {reviewBot.client_id}</Badge>
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid gap-4">
-                  <Input value={reviewBot.name} readOnly />
-                  <Textarea value={reviewBot.long_description} readOnly rows={6} />
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Approval Notes (optional)</label>
-                    <Textarea value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={3} />
+                <div className="grid gap-6">
+                  <div className="grid gap-2">
+                    <label className="text-sm font-bold uppercase text-muted-foreground tracking-widest">Metadata Name</label>
+                    <Input value={reviewBot.name} readOnly className="bg-muted border-none font-medium" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Rejection Reason (required if rejecting)</label>
-                    <Textarea value={reviewRejection} onChange={(e) => setReviewRejection(e.target.value)} rows={3} />
+                  <div className="grid gap-2">
+                    <label className="text-sm font-bold uppercase text-muted-foreground tracking-widest">Description Preview</label>
+                    <Textarea value={reviewBot.long_description} readOnly rows={8} className="bg-muted border-none leading-relaxed text-sm" />
                   </div>
-                  <div className="flex gap-3">
-                    <Button onClick={handleApproveBot} disabled={actionLoading === reviewBot.id}>{actionLoading === reviewBot.id ? 'Approving...' : 'Approve'}</Button>
-                    <Button variant="destructive" onClick={handleRejectBot} disabled={actionLoading === reviewBot.id}>{actionLoading === reviewBot.id ? 'Rejecting...' : 'Reject'}</Button>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">Close</Button>
-                    </DialogTrigger>
+                  
+                  <div className="grid md:grid-cols-2 gap-6 pt-4 border-t">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold mb-1">Approval Notes (optional)</label>
+                      <Textarea value={reviewNotes} onChange={(e) => setReviewNotes(e.target.value)} rows={3} placeholder="Add context for this approval..." />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-semibold mb-1 text-red-500">Rejection Reason (required if rejecting)</label>
+                      <Textarea value={reviewRejection} onChange={(e) => setReviewRejection(e.target.value)} rows={3} placeholder="Explain why the bot was rejected..." />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
+                    <Button onClick={handleApproveBot} disabled={actionLoading === reviewBot.id} className="flex-1 h-12 bg-green-600 hover:bg-green-700 text-lg">
+                      {actionLoading === reviewBot.id ? 'Processing...' : 'Approve Submission'}
+                    </Button>
+                    <Button variant="destructive" onClick={handleRejectBot} disabled={actionLoading === reviewBot.id} className="flex-1 h-12 text-lg">
+                      {actionLoading === reviewBot.id ? 'Processing...' : 'Reject Submission'}
+                    </Button>
                   </div>
                 </div>
               </div>
