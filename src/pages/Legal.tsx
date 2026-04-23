@@ -33,7 +33,7 @@ const Legal = () => {
             <CardHeader>
               <CardTitle className="text-2xl">Terms of Service</CardTitle>
               <CardDescription>
-                Last updated: 4/15/2026
+                Last updated: 4/23/2026
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
