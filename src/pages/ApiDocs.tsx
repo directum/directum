@@ -211,25 +211,6 @@ const ApiDocs = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Coming Soon */}
-          <Card className="border-muted bg-secondary/10">
-            <CardHeader>
-              <CardTitle>Coming Soon</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-70">
-                <div className="p-4 border border-dashed border-muted-foreground/30 rounded-lg">
-                  <h4 className="font-medium mb-1">Statistics API</h4>
-                  <p className="text-xs text-muted-foreground">Detailed vote analytics</p>
-                </div>
-                <div className="p-4 border border-dashed border-muted-foreground/30 rounded-lg">
-                  <h4 className="font-medium mb-1">Reviews API</h4>
-                  <p className="text-xs text-muted-foreground">Manage bot reviews via API</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
