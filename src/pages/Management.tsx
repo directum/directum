@@ -291,7 +291,7 @@ const Management: React.FC = () => {
         toast({ title: 'Info', description: 'Server-side sign-out requires (Edge Function)' });
       }
     } catch (e) {
-      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+      toast({ title: 'Error', description: 'Failed to sign out user', variant: 'destructive' });
     }
   }
 
