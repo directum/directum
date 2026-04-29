@@ -24,8 +24,8 @@ jobs:
             "embeds": [{
               "title": "New Changes Found",
               "url": "${{ github.event.head_commit.url }}",
-              "color": 5814783,
-              "description": "**Commit Message:** ${{ github.event.head_commit.message }}\n\n**Changes:**\n\`\`\`diff\n${CLEAN_DIFF:1:-1}\n\`\`\`",
+              "color": 34b169,
+              "description": "**Commit Message:** ${{ github.event.head_commit.message }}\n\n**[First 20] Changes:**\n\`\`\`diff\n${CLEAN_DIFF:1:-1}\n\`\`\`",
               "footer": { "text": "Committed by ${{ github.actor }}" }
             }]
           }
