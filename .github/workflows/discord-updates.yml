@@ -1,0 +1,35 @@
+name: Discord Dev Updates
+on: [push]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Necessary to compare the current commit with the previous one
+
+      - name: Get Diff and Notify
+        run: |
+          # Get the diff summary (stat) and the actual code changes (patch)
+          # We use head -n 20 to ensure we don't exceed Discord's character limit
+          DIFF_CONTENT=$(git diff HEAD^ HEAD | head -n 20)
+          
+          # Use jq to safely escape the string for JSON
+          CLEAN_DIFF=$(echo "$DIFF_CONTENT" | jq -aRs .)
+
+          payload=$(cat <<EOF
+          {
+            "embeds": [{
+              "title": "New Changes Found",
+              "url": "${{ github.event.head_commit.url }}",
+              "color": 5814783,
+              "description": "**Commit Message:** ${{ github.event.head_commit.message }}\n\n**Changes:**\n\`\`\`diff\n${CLEAN_DIFF:1:-1}\n\`\`\`",
+              "footer": { "text": "Committed by ${{ github.actor }}" }
+            }]
+          }
+          EOF
+          )
+
+          curl -X POST -H "Content-Type: application/json" -d "$payload" ${{ secrets.DISCORD_WEBHOOK_URL }}
