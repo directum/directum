@@ -8,28 +8,39 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2 # Necessary to compare the current commit with the previous one
+          # fetch-depth: 0 ensures we have the history needed to compare 
+          # against the previous commit for a valid diff.
+          fetch-depth: 0 
 
       - name: Get Diff and Notify
         run: |
-          # Get the diff summary (stat) and the actual code changes (patch)
-          # We use head -n 20 to ensure we don't exceed Discord's character limit
-          DIFF_CONTENT=$(git diff HEAD^ HEAD | head -n 20)
-          
-          # Use jq to safely escape the string for JSON
-          CLEAN_DIFF=$(echo "$DIFF_CONTENT" | jq -aRs .)
+          # 1. Capture the diff from the most recent commit
+          # We limit to 25 lines to keep the Discord message readable.
+          DIFF_CONTENT=$(git diff HEAD^ HEAD | head -n 25)
 
-          payload=$(cat <<EOF
-          {
-            "embeds": [{
-              "title": "New Changes Found",
-              "url": "${{ github.event.head_commit.url }}",
-              "color": 34b169,
-              "description": "**Commit Message:** ${{ github.event.head_commit.message }}\n\n**[First 20] Changes:**\n\`\`\`diff\n${CLEAN_DIFF:1:-1}\n\`\`\`",
-              "footer": { "text": "Committed by ${{ github.actor }}" }
-            }]
-          }
-          EOF
-          )
+          # 2. Check if the diff is empty (common in initial commits or certain file types)
+          if [ -z "$DIFF_CONTENT" ]; then
+            DIFF_CONTENT="No code preview available (e.g., initial commit or binary file)."
+          fi
 
-          curl -X POST -H "Content-Type: application/json" -d "$payload" ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # 3. Use 'jq' to build the JSON. This is the "magic" part—it 
+          # automatically escapes quotes and newlines so the webhook won't break.
+          JSON_PAYLOAD=$(jq -n \
+            --arg title "🚀 Push to ${{ github.repository }}" \
+            --arg desc "**Message:** ${{ github.event.head_commit.message }}\n\n**Changes:**\n\`\`\`diff\n$DIFF_CONTENT\n\`\`\`" \
+            --arg url "${{ github.event.head_commit.url }}" \
+            --arg footer "Committed by ${{ github.actor }}" \
+            '{
+              embeds: [{
+                title: $title,
+                url: $url,
+                description: $desc,
+                color: 5814783,
+                footer: { text: $footer }
+              }]
+            }')
+
+          # 4. Send it to Discord
+          curl -X POST -H "Content-Type: application/json" \
+          -d "$JSON_PAYLOAD" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
