@@ -32,7 +32,8 @@ import {
   Megaphone,
   Users,
   SearchX,
-  AlertCircle
+  AlertCircle,
+  ExternalLink
 } from 'lucide-react';
 import { isAdminDiscordId } from '@/config/admin';
 
@@ -403,67 +404,88 @@ const Management: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-
-          <div className="lg:col-span-3">
-            {activeTab === 'pending' && (
+        
+              <div className="lg:col-span-3">
+              {activeTab === 'pending' && (
               <div className="space-y-6">
-                <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+               <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
                   <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                       <h2 className="text-2xl font-semibold">Pending Review</h2>
-                      <p className="text-sm text-muted-foreground">Verify and approve new bot submissions.</p>
+                     <p className="text-sm text-muted-foreground">Verify and approve new bot submissions.</p>
                     </div>
                     <div className="w-full sm:max-w-xs">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
                         <Input className="pl-10 h-10" placeholder="Search pending..." value={pendingQuery} onChange={(e) => setPendingQuery(e.target.value)} />
-                      </div>
-                    </div>
-                  </div>
+                     </div>
+                   </div>
+                 </div>
 
                   <div className="grid gap-4">
                     {filteredPending.length === 0 ? (
-                      <div className="text-center py-12 border-2 border-dashed rounded-2xl border-muted/50">
-                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-muted/50 mb-4">
-                          <Check className="w-6 h-6 text-muted-foreground" />
+                     <div className="text-center py-12 border-2 border-dashed rounded-2xl border-muted/50">
+                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-muted/50 mb-4">
+                         <Check className="w-6 h-6 text-muted-foreground" />
                         </div>
                         <p className="text-muted-foreground">The queue is empty. Good job!</p>
                       </div>
                     ) : (
-                      filteredPending.map((b) => (
-                        <Card key={b.id} className="card-gradient overflow-hidden border-border/50">
-                          <CardHeader className="pb-3">
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-center gap-4">
-                                <Avatar className="h-14 w-14 ring-2 ring-primary/10">
-                                  <AvatarImage src={b.avatar_url} />
-                                  <AvatarFallback className="bg-primary/5"><Bot className="w-7 h-7 text-primary/40" /></AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <div className="text-lg font-bold">{b.name}</div>
-                                  <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
-                                    <span className="bg-secondary/50 px-2 py-0.5 rounded text-secondary-foreground font-mono">ID: {b.client_id}</span>
-                                    <span>•</span>
-                                    <span>by {b.profiles?.username}</span>
-                                  </div>
+                     filteredPending.map((b) => (
+                       <Card key={b.id} className="card-gradient overflow-hidden border-border/50">
+                         <CardHeader className="pb-3">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-4">
+                               <Avatar className="h-14 w-14 ring-2 ring-primary/10">
+                                <AvatarImage src={b.avatar_url} />
+                                <AvatarFallback className="bg-primary/5"><Bot className="w-7 h-7 text-primary/40" /></AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <div className="text-lg font-bold">{b.name}</div>
+                                <div className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
+                                  <span className="bg-secondary/50 px-2 py-0.5 rounded text-secondary-foreground font-mono">ID: {b.client_id}</span>
+                                  <span>•</span>
+                                  <span>by {b.profiles?.username}</span>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <Button variant="outline" size="sm" onClick={() => openReview(b)}><Eye className="w-4 h-4 mr-2" /> Review</Button>
-                                <Button variant="destructive" size="sm" onClick={() => { setSelectedRemovalBot(b.id); setShowRemovalModal(true); }}><Trash2 className="w-4 h-4 mr-2" /> Remove</Button>
-                              </div>
                             </div>
-                          </CardHeader>
-                          <CardContent>
+                            <div className="flex items-center gap-2">
+                              {/* Invite Bot Link */}
+                              <Button 
+                                variant="secondary" 
+                                size="sm" 
+                                asChild
+                               >
+                                <a 
+                                  href={`https://discord.com/oauth2/authorize?client_id=${b.client_id}&permissions=0&scope=bot%20applications.commands`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                 >
+                                   <ExternalLink className="w-4 h-4 mr-2" /> 
+                                   Invite
+                                 </a>
+                               </Button>
+
+                              <Button variant="outline" size="sm" onClick={() => openReview(b)}>
+                                <Eye className="w-4 h-4 mr-2" /> Review
+                               </Button>
+
+                              <Button variant="destructive" size="sm" onClick={() => { setSelectedRemovalBot(b.id); setShowRemovalModal(true); }}>
+                                 <Trash2 className="w-4 h-4 mr-2" /> Remove
+                              </Button>
+                              </div>
+                          </div>
+                         </CardHeader>
+                        <CardContent>
                             <div className="text-sm text-muted-foreground line-clamp-2 italic">{b.short_description}</div>
-                          </CardContent>
+                        </CardContent>
                         </Card>
                       ))
                     )}
-                  </div>
-                </div>
-              </div>
-            )}
+                 </div>
+               </div>
+             </div>
+           )}
 
             {activeTab === 'edit' && (
               <div className="space-y-6">
