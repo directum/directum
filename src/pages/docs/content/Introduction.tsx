@@ -18,7 +18,7 @@ const Introduction = () => {
       
       <div className="bg-secondary/50 border-l-4 border-primary p-6 my-8 rounded-r-xl">
         <p className="m-0 font-medium text-foreground">
-          This documentation is a work in progress by dedicated staff and volunteers! A full list of contributors can be found <a href="https://google.com" className="text-primary underline">here</a>
+          This documentation is a work in progress by dedicated staff and volunteers! A full list of contributors can be found <a href="https://directum.org/docs/contributors" className="text-primary underline">here</a>
         </p>
       </div>
       {/* Spacing at the bottom for better UX */}
