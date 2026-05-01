@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-sloppy-imports
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -281,7 +282,7 @@ const CollectionDetail: React.FC = () => {
   };
 
   const shareCollection = async () => {
-    const url = window.location.href;
+    const url = globalThis.location.href;
     
     if (navigator.share) {
       try {
