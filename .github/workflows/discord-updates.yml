@@ -1,0 +1,48 @@
+name: Discord Dev Updates
+on: [push]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Get Diff and Notify
+        run: |
+          # 1. Get the diff and ensure it includes the +/- symbols
+          # We use --color=never to avoid messy ANSI codes but keep the diff markers
+          git diff HEAD^ HEAD | head -n 25 > commit_diff.txt
+
+          # 2. Read the diff into a variable while preserving actual newlines
+          DIFF_CONTENT=$(cat commit_diff.txt)
+
+          if [ -z "$DIFF_CONTENT" ]; then
+            DIFF_CONTENT="No code preview available."
+          fi
+
+          # 3. Create the JSON payload. 
+          # We use --arg to pass the content safely and then use a template
+          # to ensure Discord sees real newlines, not the literal '\n' characters.
+          jq -n \
+            --arg title "🚀 Push to ${{ github.repository }}" \
+            --arg desc "$DIFF_CONTENT" \
+            --arg msg "${{ github.event.head_commit.message }}" \
+            --arg url "${{ github.event.head_commit.url }}" \
+            --arg footer "Committed by ${{ github.actor }}" \
+            '{
+              embeds: [{
+                title: $title,
+                url: $url,
+                description: ("**Message:** " + $msg + "\n\n**Changes:**\n```diff\n" + $desc + "\n```"),
+                color: 5814783,
+                footer: { text: $footer }
+              }]
+            }' > payload.json
+
+          # 4. Send the file directly via curl
+          curl -X POST -H "Content-Type: application/json" \
+          -d @payload.json \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
