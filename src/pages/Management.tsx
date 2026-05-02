@@ -92,7 +92,7 @@ const Management: React.FC = () => {
   const [removingBot, setRemovingBot] = useState(false);
 
   // Notify user upon acceptance or removal
-async function sendDiscordNotification(bot: BotRow, status: 'approved' | 'rejected', reason: string = '') {
+async function sendDiscordNotification(bot: BotRow, status: 'approved' | 'rejected', notes: string = '') {
     const WEBHOOK_URL = import.meta.env.VITE_SUBMITIONNOTIFY_URL;
     
     if (!WEBHOOK_URL) {
@@ -111,19 +111,18 @@ async function sendDiscordNotification(bot: BotRow, status: 'approved' | 'reject
         body: JSON.stringify({
           content: `### Update for ${userPing}`,
           embeds: [{
-            title: isApproved ? '✅ Bot Submission Accepted' : '❌ Bot Submission Rejected',
+            title: isApproved ? '<:approved:1500234841088720916> Bot Accepted' : '<:denied:1500233793397592114> Bot Rejected',
             description: isApproved 
-              ? `Your bot **${bot.name}** was accepted! You can now view it on Directum.`
+              ? `Your bot **${bot.name}** was accepted! You can now view it on Directum!`
               : `Your bot **${bot.name}** was rejected.`,
             color: isApproved ? 0x22c55e : 0xef4444,
-            fields: !isApproved && reason ? [{ name: 'Reason', value: reason }] : [],
-            timestamp: new Date().toISOString(),
-            footer: { text: 'Directum Management' }
+            fields: notes ? [{ name: 'Additional Notes', value: notes }] : [],
+            timestamp: new Date().toISOString()
           }]
         }),
       });
 
-      return response.ok; // Returns true if Discord accepted the message
+      return response.ok;
     } catch (err) {
       console.error('Discord Webhook Error:', err);
       return false;
