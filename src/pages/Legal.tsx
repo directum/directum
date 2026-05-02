@@ -1,19 +1,20 @@
+// deno-lint-ignore-file no-sloppy-imports
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { 
-  ArrowLeft, 
   ShieldCheck, 
-  Scale, 
   Gavel, 
   Mail, 
   ExternalLink,
   ChevronRight,
   FileText,
-  Info
+  Info,
+  Layers
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Navbar } from "@/components/layout/Navbar"; // Ensure this path is correct
 
 const Legal = () => {
   const navigate = useNavigate();
@@ -35,6 +36,10 @@ const Legal = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
+      {/* Standard Navbar */}
+      <Navbar />
+
+      {/* Decorative Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full" />
         <div className="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] bg-accent/5 blur-[120px] rounded-full" />
@@ -45,16 +50,7 @@ const Legal = () => {
           
           {/* Sticky Sidebar */}
           <aside className="lg:w-64 flex-shrink-0">
-            <div className="lg:sticky lg:top-8 space-y-6">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/')}
-                className="group hover:bg-secondary transition-all"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                Back to Home
-              </Button>
-
+            <div className="lg:sticky lg:top-24 space-y-6">
               <div className="space-y-1">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-4 mb-2">Legal Documents</p>
                 <button 
@@ -83,7 +79,7 @@ const Legal = () => {
                 </h4>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-[10px] font-bold uppercase text-muted-foreground">Legal</p>
+                    <p className="text-[10px] font-bold uppercase text-muted-foreground">Legal Inquiry</p>
                     <a href="mailto:developing.soulnet@gmail.com" className="text-xs text-primary hover:underline break-all font-mono">
                       developing.soulnet@gmail.com
                     </a>
@@ -104,7 +100,7 @@ const Legal = () => {
             <header className="space-y-4">
               <h1 className="text-5xl font-black font-fredoka tracking-tight">Legal Center</h1>
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                Terms of Service and Privacy Policy for the Directum Bot Listing platform.
+                Review the terms and policies that govern the Directum Bot Listing platform.
               </p>
             </header>
 
@@ -119,7 +115,6 @@ const Legal = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-8 pt-0 space-y-10">
-                  
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
                       <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">1</span>
@@ -150,9 +145,6 @@ const Legal = () => {
                         </li>
                       ))}
                     </ul>
-                    <p className="text-xs italic text-muted-foreground bg-primary/5 p-3 rounded border-l-2 border-primary">
-                      Directum reserves the right to deny or remove any submission without prior notice.
-                    </p>
                   </section>
 
                   <section className="space-y-4">
@@ -167,45 +159,11 @@ const Legal = () => {
                       <li className="flex gap-2"><span>•</span> No vote manipulation or artificial engagement activity</li>
                       <li className="flex gap-2"><span>•</span> Treat others respectfully in the community environment</li>
                     </ul>
-                    <p className="text-xs italic text-muted-foreground border-l-2 border-muted pl-4 mt-2">
-                      Failure to comply may result in content removal, suspension, or termination of your account.
-                    </p>
                   </section>
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
                       <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">4</span>
-                      Content Moderation and Enforcement
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum reserves the right, but not the obligation, to monitor and moderate content. We may remove content, suspend accounts, and take action to protect platform integrity.
-                    </p>
-                    <p className="text-sm font-bold text-foreground">All enforcement decisions are final.</p>
-                  </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">5</span>
-                      Disclaimer of Liability
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum is a listing platform and does not control third-party bots. We do not guarantee functionality or security. Use at your own risk.
-                    </p>
-                  </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">6</span>
-                      Limitation of Liability
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Service.
-                    </p>
-                  </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">7</span>
                       Dispute Resolution
                     </h3>
                     <div className="bg-secondary/20 p-4 rounded-xl space-y-3 border border-border/50">
@@ -214,29 +172,8 @@ const Legal = () => {
                         <li>• Attempt informal resolution by contacting Directum first</li>
                         <li>• Unresolved disputes settled through binding individual arbitration</li>
                         <li>• Waiver of right to participate in class actions</li>
-                        <li>• Handled confidentially outside of public court</li>
                       </ul>
                     </div>
-                  </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">8</span>
-                      Changes to Terms
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum reserves the right to modify Terms at any time. Changes become effective immediately upon posting.
-                    </p>
-                  </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">9</span>
-                      Termination
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      We reserve the right to suspend or terminate access at any time for conduct that violates these Terms or is harmful to the platform.
-                    </p>
                   </section>
                 </CardContent>
               </Card>
@@ -253,7 +190,6 @@ const Legal = () => {
                   <CardDescription>How we collect, use, and protect your information</CardDescription>
                 </CardHeader>
                 <CardContent className="p-8 pt-0 space-y-12">
-                  
                   <section className="space-y-4">
                     <h3 className="text-xl font-bold">1. Information We Collect</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -271,50 +207,10 @@ const Legal = () => {
                     </div>
                   </section>
 
-                  <section className="space-y-4">
-                    <h3 className="text-xl font-bold">2. How We Use Your Information</h3>
-                    <ul className="space-y-3">
-                      {[
-                        "Operating and maintaining the Service",
-                        "Authenticating users and preventing fraud or abuse",
-                        "Communicating updates and service announcements",
-                        "Improving platform performance and experience",
-                        "Complying with legal obligations"
-                      ].map((item, i) => (
-                        <li key={i} className="flex gap-3 text-sm text-muted-foreground">
-                          <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-xl font-bold">3. Data Sharing and Disclosure</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      We do not sell or rent your personal information. Disclosure occurs only with consent, for legal compliance, to enforce TOS, to prevent fraud, or during business acquisitions.
-                    </p>
-                  </section>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section className="space-y-3">
-                      <h3 className="text-lg font-bold">4. Data Security</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        We use technical safeguards to protect data. However, no internet transmission is 100% secure; we cannot guarantee absolute security.
-                      </p>
-                    </section>
-                    <section className="space-y-3">
-                      <h3 className="text-lg font-bold">5. Data Retention</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        We retain data only as long as necessary for business purposes or as legally required.
-                      </p>
-                    </section>
-                  </div>
-
                   <section className="p-8 rounded-2xl bg-primary/5 border border-primary/10 space-y-6">
                     <div className="flex items-center gap-3">
                       <ShieldCheck className="text-primary" size={24} />
-                      <h3 className="text-xl font-bold">6. Your Privacy Rights</h3>
+                      <h3 className="text-xl font-bold">2. Your Privacy Rights</h3>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       Depending on location, you may access, correct, or delete personal data, withdraw consent, or object to processing.
@@ -332,36 +228,6 @@ const Legal = () => {
                       </div>
                     </div>
                   </section>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold">7. Cookies and Tracking</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      We use cookies to maintain sessions and analyze patterns. You may disable them via browser settings, though it may affect features.
-                    </p>
-                  </section>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <section className="space-y-3">
-                      <h3 className="text-lg font-bold">8. Third-Party Services</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        We rely on third parties like Discord. We aren't responsible for their privacy practices.
-                      </p>
-                    </section>
-                    <section className="space-y-3">
-                      <h3 className="text-lg font-bold">9. Children's Privacy</h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Not intended for individuals under Discord's required age. We don't knowingly collect child data.
-                      </p>
-                    </section>
-                  </div>
-
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold">10. Policy Changes</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Policy updates become effective upon posting. Continued use constitutes acceptance.
-                    </p>
-                  </section>
-
                 </CardContent>
               </Card>
             </div>
