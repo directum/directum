@@ -1,4 +1,5 @@
-import React from 'react';
+// deno-lint-ignore-file no-unused-vars
+import _React from 'react';
 import { Users, Shield, Star, Heart, ExternalLink, Info } from 'lucide-react';
 
 const JoiningTheTeam = () => {
@@ -22,9 +23,7 @@ const JoiningTheTeam = () => {
             <div>
               <h3 className="text-xl font-bold m-0 text-blue-400">Community Helpers</h3>
               <p className="text-muted-foreground mt-2 m-0">
-                Helpers are the face of our community. They answer questions, welcome new members, 
-                and participate in the social development of Directum. While not formal "staff," 
-                they are a vital part of the team.
+                Community helpers are the heart of the community! They help answer questions, find bugs, and guide new users as they interact with the platform! 
               </p>
             </div>
           </div>
@@ -37,9 +36,7 @@ const JoiningTheTeam = () => {
             <div>
               <h3 className="text-xl font-bold m-0 text-green-400">Moderators</h3>
               <p className="text-muted-foreground mt-2 m-0">
-                Moderators handle the heavy lifting. They verify and test bot submissions, 
-                moderate the community to remove bad actors, and handle user reports to keep 
-                the platform safe.
+                Moderators are one of the biggest parts of the team! They help in reveiwing / verifying bots and helping on the Discord server! They even help the devs with development on the site!
               </p>
             </div>
           </div>
@@ -52,8 +49,7 @@ const JoiningTheTeam = () => {
             <div>
               <h3 className="text-xl font-bold m-0 text-primary">Directum Admins</h3>
               <p className="text-muted-foreground mt-2 m-0">
-                The official core team. Admins manage site affairs, oversee the technical 
-                development of the platform, and coordinate community-wide projects.
+                Directum admins are part of the core team responsible for everything on Directum. From site development to managing other members of the team, they are the ones who make sure everything runs smoothly!
               </p>
             </div>
           </div>

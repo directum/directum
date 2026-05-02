@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-sloppy-imports
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/components/auth/AuthContext';
