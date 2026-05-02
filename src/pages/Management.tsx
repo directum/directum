@@ -103,20 +103,26 @@ async function sendDiscordNotification(bot: BotRow, status: 'approved' | 'reject
     const discordId = bot.profiles?.discord_id;
     const userPing = discordId ? `<@${discordId}>` : 'User';
     const isApproved = status === 'approved';
+    
+    // Clean up the notes string to ensure it's not just whitespace
+    const cleanNotes = notes?.trim();
 
     try {
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: `### Update for ${userPing}`,
+          content: userPing,
           embeds: [{
-            title: isApproved ? '<:approved:1500234841088720916> Bot Accepted' : '<:denied:1500233793397592114> Bot Rejected',
+            title: isApproved 
+              ? '<:approved:1500234841088720916> Bot Accepted' 
+              : '<:denied:1500233793397592114> Bot Rejected',
             description: isApproved 
               ? `Your bot **${bot.name}** was accepted! You can now view it on Directum!`
               : `Your bot **${bot.name}** was rejected.`,
             color: isApproved ? 0x22c55e : 0xef4444,
-            fields: notes ? [{ name: 'Additional Notes', value: notes }] : [],
+            // Field is only included if cleanNotes has content
+            fields: cleanNotes ? [{ name: 'Additional Notes', value: cleanNotes }] : [],
             timestamp: new Date().toISOString()
           }]
         }),
