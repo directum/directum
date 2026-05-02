@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-sloppy-imports
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/auth/AuthContext';
@@ -90,6 +91,40 @@ const Management: React.FC = () => {
   const [removalReason, setRemovalReason] = useState('');
   const [removingBot, setRemovingBot] = useState(false);
 
+  // Notify user upon acceptance or removal
+  async function sendDiscordNotification(bot: BotRow, status: 'approved' | 'rejected', reason: string = '') {
+    const WEBHOOK_URL = import.meta.env.VITE_SUBMITIONNOTIFY_URL;
+    if (!WEBHOOK_URL) return;
+
+    const discordId = bot.profiles?.discord_id;
+    const userPing = discordId ? `<@${discordId}>` : 'User';
+    const isApproved = status === 'approved';
+
+    const payload = {
+      content: `### Update for ${userPing}`,
+      embeds: [{
+        title: isApproved ? '✅ Bot Submission Accepted' : '❌ Bot Submission Rejected',
+        description: isApproved 
+          ? `Your bot **${bot.name}** was accepted! You can now view it on Directum.`
+          : `Your bot **${bot.name}** was rejected.`,
+        color: isApproved ? 0x22c55e : 0xef4444,
+        fields: !isApproved && reason ? [{ name: 'Reason', value: reason }] : [],
+        timestamp: new Date().toISOString(),
+        footer: { text: 'Directum Management' }
+      }]
+    };
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      console.error('Discord Webhook Error:', err);
+    }
+  }
+
   useEffect(() => {
     if (!user) {
       navigate('/');
@@ -169,13 +204,19 @@ const Management: React.FC = () => {
     setReviewOpen(true);
   }
 
-  async function handleApproveBot() {
+async function handleApproveBot() {
     if (!reviewBot) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to approve bots.', variant: 'destructive' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', variant: 'destructive' }); return; }
+    
     setActionLoading(reviewBot.id);
     try {
+      // 1. Update Database
       await supabase.from('bots').update({ status: 'approved' }).eq('id', reviewBot.id);
-      toast({ title: 'Approved', description: `${reviewBot.name} approved.` });
+      
+      // 2. Send Discord Notification
+      await sendDiscordNotification(reviewBot, 'approved');
+
+      toast({ title: 'Approved', description: `${reviewBot.name} approved and notified.` });
       setReviewOpen(false);
       await fetchPending();
       await fetchApproved();
@@ -188,12 +229,18 @@ const Management: React.FC = () => {
 
   async function handleRejectBot() {
     if (!reviewBot) return;
-    if (!isAdmin()) { toast({ title: 'Unauthorized', description: 'You are not authorized to reject bots.', variant: 'destructive' }); return; }
+    if (!isAdmin()) { toast({ title: 'Unauthorized', variant: 'destructive' }); return; }
     if (!reviewRejection) { toast({ title: 'Rejection reason required' }); return; }
+    
     setActionLoading(reviewBot.id);
     try {
+      // 1. Update Database
       await supabase.from('bots').update({ status: 'rejected' }).eq('id', reviewBot.id);
-      toast({ title: 'Rejected', description: `${reviewBot.name} rejected.` });
+      
+      // 2. Send Discord Notification with Reason
+      await sendDiscordNotification(reviewBot, 'rejected', reviewRejection);
+
+      toast({ title: 'Rejected', description: `${reviewBot.name} rejected and notified.` });
       setReviewOpen(false);
       await fetchPending();
     } catch (e) {
