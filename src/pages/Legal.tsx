@@ -16,7 +16,8 @@ import {
   Database,
   EyeOff,
   Clock,
-  Globe
+  Globe,
+  Scale
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar"; 
@@ -126,7 +127,7 @@ const Legal = () => {
                       Acceptance of Terms
                     </h3>
                     <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
-                      By accessing, using, or interacting with Directum (“the Service”) in any manner, you agree to be bound by these Terms of Service (“Terms”). If you do not agree to these Terms, you must discontinue use of the Service immediately.
+                      By accessing, using, or interacting with Directum (“the Service”) in any manner, you agree to be bound by these Terms of Service (“Terms”). If you do not agree to these Terms, you must discontinue use of the Service immediately. These terms constitute a legally binding agreement between you and Directum regarding your use of our platform.
                     </p>
                   </section>
 
@@ -162,6 +163,7 @@ const Legal = () => {
                       <li>• Bot owners must ensure information remains up to date</li>
                       <li>• No vote manipulation or artificial engagement activity</li>
                       <li>• Treat others respectfully in the community environment</li>
+                      <li>• You agree not to bypass any security measures or rate-limiting on the Service.</li>
                     </ul>
                   </section>
 
@@ -171,7 +173,7 @@ const Legal = () => {
                       Content Moderation and Enforcement
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum reserves the right, but not the obligation, to monitor and moderate content. We may remove content, suspend accounts, and take action to protect platform integrity. All enforcement decisions are final.
+                      Directum reserves the right, but not the obligation, to monitor and moderate content. We may remove content, suspend accounts, and take action to protect platform integrity. All enforcement decisions are final. This includes the right to remove any bot that is deemed harmful, offensive, or in violation of these terms without providing a refund or prior notification.
                     </p>
                   </section>
 
@@ -181,7 +183,7 @@ const Legal = () => {
                       Disclaimer of Liability
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum is a listing platform and does not control third-party bots. We do not guarantee functionality or security. Use of listed bots is at your own risk. Directum shall not be liable for any indirect, incidental, or consequential damages.
+                      Directum is a listing platform and does not control third-party bots. We do not guarantee functionality or security. Use of listed bots is at your own risk. Directum shall not be liable for any indirect, incidental, or consequential damages. The Service is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express or implied.
                     </p>
                   </section>
 
@@ -193,7 +195,7 @@ const Legal = () => {
                     <div className="p-4 rounded-lg bg-secondary/30 border border-border/50 space-y-3">
                       <p className="text-xs font-bold text-foreground uppercase tracking-wider">MANDATORY PROCESS</p>
                       <p className="text-muted-foreground text-xs leading-relaxed">
-                        Attempt informal resolution by contacting Directum first. Unresolved disputes must be settled through binding individual arbitration. You waive the right to participate in class actions or external litigation. As a US-based hobby project, we operate under US legal jurisdiction.
+                        Attempt informal resolution by contacting Directum first. Unresolved disputes must be settled through binding individual arbitration. You waive the right to participate in class actions or external litigation. As a US-based hobby project, we operate under US legal jurisdiction. Any legal action or proceeding shall be brought exclusively in the courts located in the United States.
                       </p>
                     </div>
                   </section>
@@ -204,7 +206,7 @@ const Legal = () => {
                       Changes to Terms
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                      Directum reserves the right to modify Terms at any time. Changes become effective immediately upon posting. Continued use of the platform constitutes acceptance of revised terms.
+                      Directum reserves the right to modify Terms at any time. Changes become effective immediately upon posting. Continued use of the platform constitutes acceptance of revised terms. We recommend checking this page regularly for updates.
                     </p>
                   </section>
                 </CardContent>
@@ -232,15 +234,15 @@ const Legal = () => {
                     <ul className="space-y-3 text-sm text-muted-foreground">
                       <li className="flex flex-col gap-1">
                         <span className="font-bold text-foreground">Discord Account Data</span>
-                        We collect your Username, avatar, and Discord ID via Discord OAuth. We may collect your email address solely for account identification and authentication.
+                        We collect your Username, avatar, and Discord ID via Discord OAuth. We may collect your email address solely for account identification and authentication. This is processed under the legal basis of "Contractual Necessity."
                       </li>
                       <li className="flex flex-col gap-1">
                         <span className="font-bold text-foreground">Bot Submissions</span>
-                        Details provided during bot management and platform interactions.
+                        Details provided during bot management and platform interactions, including public bot metadata and configurations.
                       </li>
                       <li className="flex flex-col gap-1">
                         <span className="font-bold text-foreground">Usage & Technical Data</span>
-                        Interactions, voting patterns, IP addresses, and browser metadata for security and analytics.
+                        Interactions, voting patterns, IP addresses, and browser metadata for security and analytics. We use this to detect fraud and ensure platform stability (Legitimate Interest).
                       </li>
                     </ul>
                   </section>
@@ -270,28 +272,37 @@ const Legal = () => {
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <EyeOff size={18} className="text-primary" /> 3. Data Sharing & Disclosure
+                      <Scale size={18} className="text-primary" /> 3. International Data Transfers (GDPR)
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                      We do not sell or rent your personal information. Disclosure occurs only for legal compliance, to enforce our TOS, to prevent fraud, or during business transfers.
+                      Although Directum is located in the United States, we recognize global privacy standards. By using the service, you acknowledge that your information will be transferred to, and processed in, the United States. We ensure that our subprocessors (Vercel, Supabase) utilize Standard Contractual Clauses (SCCs) to protect data originating from the EEA, UK, or Switzerland.
                     </p>
                   </section>
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Clock size={18} className="text-primary" /> 4. Data Retention
+                      <EyeOff size={18} className="text-primary" /> 4. Data Sharing & Disclosure
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                      We retain data only as long as necessary for business purposes or as legally required. Users may request data deletion at any time.
+                      We do not sell or rent your personal information. Disclosure occurs only for legal compliance, to enforce our TOS, to prevent fraud, or during business transfers. Public bot information you submit is, by design, visible to all platform visitors.
                     </p>
                   </section>
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Globe size={18} className="text-primary" /> 5. Your Privacy Rights
+                      <Clock size={18} className="text-primary" /> 5. Data Retention
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      We retain data only as long as necessary for business purposes or as legally required. Inactive account data may be purged after a period of 12 months. Users may request manual data deletion at any time via the button below.
+                    </p>
+                  </section>
+
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2">
+                      <Globe size={18} className="text-primary" /> 6. Your Privacy Rights (GDPR/CCPA)
                     </h3>
                     <p className="text-muted-foreground text-sm">
-                      Depending on your location, you may access, correct, or delete personal data. You may withdraw consent or object to processing by contacting us via our Discord community.
+                      Depending on your location, you have the right to access, correct, or delete personal data (Right to be Forgotten). You may also withdraw consent or object to processing. We respond to all valid requests within 30 days.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 mt-4">
                       <Button 
@@ -302,7 +313,7 @@ const Legal = () => {
                         <ExternalLink size={14} className="ml-2" />
                       </Button>
                       <div className="flex items-center gap-2 text-[10px] text-muted-foreground px-4 py-2 bg-secondary/50 rounded-lg">
-                        <Info size={12} /> Verification may be required for data requests.
+                        <Info size={12} /> Identity verification via Discord is required for all data access requests.
                       </div>
                     </div>
                   </section>
