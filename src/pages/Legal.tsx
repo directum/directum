@@ -83,6 +83,12 @@ const Legal = () => {
                       developing.soulnet@gmail.com
                     </a>
                   </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase text-muted-foreground">Support</p>
+                    <a href="https://discord.gg" target="_blank" rel="noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
+                      Discord Server <ExternalLink size={10} />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -92,18 +98,17 @@ const Legal = () => {
             <header className="space-y-4">
               <h1 className="text-5xl font-black font-fredoka tracking-tight">Legal Center</h1>
               <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                Review the terms and policies that govern the Directum platform.
+                Review the terms and policies that govern the Directum Bot Listing platform.
               </p>
             </header>
 
-            {/* TERMS OF SERVICE */}
             <div id="tos" className="scroll-mt-24">
               <Card className="border-border/50 shadow-xl overflow-hidden bg-card/50 backdrop-blur-sm">
                 <div className="h-2 bg-primary w-full" />
                 <CardHeader className="p-8">
                   <CardTitle className="text-3xl font-bold">Terms of Service</CardTitle>
                   <CardDescription className="flex items-center gap-2">
-                    <FileText size={14} /> Last updated: 4/25/2026
+                    <FileText size={14} /> Last updated: 4/23/2026
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-8 pt-0 space-y-10">
@@ -112,8 +117,8 @@ const Legal = () => {
                       <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">1</span>
                       Acceptance of Terms
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed text-sm">
-                      By accessing, using, or interacting with Directum (“the Service”) in any manner, you agree to be bound by these Terms. If you do not agree, you must discontinue use immediately.
+                    <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
+                      By accessing, using, or interacting with Directum (“the Service”) in any manner, you agree to be bound by these Terms of Service (“Terms”). If you do not agree to these Terms, you must discontinue use of the Service immediately.
                     </p>
                   </section>
 
@@ -122,7 +127,7 @@ const Legal = () => {
                       <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">2</span>
                       Bot Submission Guidelines
                     </h3>
-                    <p className="text-muted-foreground text-sm">All submissions must adhere to the following:</p>
+                    <p className="text-muted-foreground text-sm">To maintain a safe and high-quality platform, all bot submissions must adhere to the following:</p>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {[
                         "Comply with Discord’s TOS & Community Guidelines",
@@ -131,7 +136,7 @@ const Legal = () => {
                         "NSFW content must be clearly labeled",
                         "No spam, duplicate, or deceptive submissions"
                       ].map((item, i) => (
-                        <li key={i} className="flex gap-3 p-3 rounded-lg bg-secondary/30 border border-border/50 text-xs text-muted-foreground">
+                        <li key={i} className="flex gap-3 p-3 rounded-lg bg-secondary/30 border border-border/50 text-xs text-muted-foreground leading-relaxed">
                           <ChevronRight size={14} className="text-primary shrink-0" />
                           {item}
                         </li>
@@ -155,10 +160,10 @@ const Legal = () => {
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
                       <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">4</span>
-                      Dispute Resolution & Liability
+                      Dispute Resolution
                     </h3>
                     <div className="p-4 rounded-lg bg-secondary/30 border border-border/50 space-y-3">
-                      <p className="text-xs font-bold text-foreground uppercase tracking-wider">Mandatory Process</p>
+                      <p className="text-xs font-bold text-foreground uppercase tracking-wider">MANDATORY PROCESS</p>
                       <p className="text-muted-foreground text-xs leading-relaxed">
                         Attempt informal resolution by contacting Directum first. Unresolved disputes must be settled through binding individual arbitration. You waive the right to participate in class actions or external litigation. As a US-based hobby project, we operate under US legal jurisdiction.
                       </p>
@@ -168,7 +173,6 @@ const Legal = () => {
               </Card>
             </div>
 
-            {/* PRIVACY POLICY */}
             <div id="privacy" className="scroll-mt-24">
               <Card className="border-border/50 shadow-xl overflow-hidden bg-card/50 backdrop-blur-sm">
                 <div className="h-2 bg-accent w-full" />
@@ -185,8 +189,8 @@ const Legal = () => {
                     </h3>
                     <ul className="space-y-3 text-sm text-muted-foreground">
                       <li className="flex flex-col gap-1">
-                        <span className="font-bold text-foreground">Discord Account</span>
-                        Username, avatar, and Discord ID via the 'identify' scope. We do NOT collect your email.
+                        <span className="font-bold text-foreground">Discord Account Data</span>
+                        We collect your Username, avatar, and Discord ID. If provided via Discord OAuth scopes, we collect your email address solely for account identification and authentication.
                       </li>
                       <li className="flex flex-col gap-1">
                         <span className="font-bold text-foreground">Bot Submissions</span>
@@ -194,30 +198,30 @@ const Legal = () => {
                       </li>
                       <li className="flex flex-col gap-1">
                         <span className="font-bold text-foreground">Usage & Technical Data</span>
-                        Interactions, voting, IP address, and browser info for security purposes.
+                        Interactions, voting, IP address, and browser info for security and analytics.
                       </li>
                     </ul>
                   </section>
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Lock size={18} className="text-primary" /> 2. Data Security & Protection
+                      <Lock size={18} className="text-primary" /> 2. Data Protection & Security
                     </h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
-                      We utilize industry-standard 3rd party infrastructure to keep your data secure:
+                      We prioritize the security of your information using industry-standard measures:
                     </p>
                     <ul className="space-y-2">
                       <li className="text-xs text-muted-foreground flex gap-2">
                         <Database size={14} className="text-primary" />
-                        <strong>Infrastructure:</strong> Hosted on Vercel and Supabase (SOC 2 Type 2 Compliant).
+                        <strong>Infrastructure:</strong> Data is hosted on Vercel and Supabase (SOC 2 Type 2 compliant).
                       </li>
                       <li className="text-xs text-muted-foreground flex gap-2">
                         <ShieldCheck size={14} className="text-primary" />
-                        <strong>Encryption:</strong> AES-256 at rest and TLS encryption in transit.
+                        <strong>Encryption:</strong> Personal data, including email addresses, is protected with AES-256 encryption at rest and TLS encryption in transit.
                       </li>
                       <li className="text-xs text-muted-foreground flex gap-2">
                         <ChevronRight size={14} className="text-primary" />
-                        <strong>RLS:</strong> Supabase Row Level Security is enabled to ensure data isolation.
+                        <strong>Isolation:</strong> We utilize Row Level Security (RLS) to ensure that users can only access their own data.
                       </li>
                     </ul>
                   </section>
