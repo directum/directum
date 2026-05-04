@@ -1,7 +1,6 @@
 // deno-lint-ignore-file no-sloppy-imports
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { 
   ShieldCheck, 
@@ -10,83 +9,71 @@ import {
   ExternalLink,
   ChevronRight,
   FileText,
-  Info,
-  Layers,
-  Lock,
-  Database
+  Clock,
+  Scale
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar"; 
 
 const Legal = () => {
-  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("tos");
 
   const scrollTo = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       const offset = 100;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      window.scrollTo({ 
+        top: element.getBoundingClientRect().top + window.scrollY - offset, 
+        behavior: "smooth" 
+      });
       setActiveSection(id);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 selection:bg-slate-200">
       <Navbar />
 
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full" />
-        <div className="absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] bg-accent/5 blur-[120px] rounded-full" />
-      </div>
-
-      <div className="container mx-auto px-4 py-12 relative">
-        <div className="flex flex-col lg:flex-row gap-12 max-w-6xl mx-auto">
+      <div className="container mx-auto px-6 py-16 max-w-6xl">
+        <div className="flex flex-col lg:flex-row gap-16">
           
-          <aside className="lg:w-64 flex-shrink-0">
-            <div className="lg:sticky lg:top-24 space-y-6">
-              <div className="space-y-1">
-                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground px-4 mb-2">Legal Documents</p>
-                <button 
-                  onClick={() => scrollTo('tos')}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${activeSection === 'tos' ? 'bg-primary/10 text-primary border border-primary/20' : 'hover:bg-secondary/50 text-muted-foreground'}`}
-                >
-                  <div className="flex items-center gap-3 font-medium text-sm">
-                    <Gavel size={18} /> Terms of Service
-                  </div>
-                  {activeSection === 'tos' && <ChevronRight size={14} />}
-                </button>
-                <button 
-                  onClick={() => scrollTo('privacy')}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${activeSection === 'privacy' ? 'bg-primary/10 text-primary border border-primary/20' : 'hover:bg-secondary/50 text-muted-foreground'}`}
-                >
-                  <div className="flex items-center gap-3 font-medium text-sm">
-                    <ShieldCheck size={18} /> Privacy Policy
-                  </div>
-                  {activeSection === 'privacy' && <ChevronRight size={14} />}
-                </button>
+          {/* Professional Sidebar */}
+          <aside className="lg:w-72 flex-shrink-0">
+            <div className="lg:sticky lg:top-28 space-y-8">
+              <div>
+                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-6 px-2">Documentation</h2>
+                <nav className="space-y-2">
+                  <button 
+                    onClick={() => scrollTo('tos')}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-md transition-all text-sm font-medium ${activeSection === 'tos' ? 'bg-white shadow-sm border border-slate-200 text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
+                  >
+                    <div className="flex items-center gap-3"><Gavel size={16} /> Terms of Service</div>
+                    <ChevronRight size={14} className={activeSection === 'tos' ? "opacity-100" : "opacity-0"} />
+                  </button>
+                  <button 
+                    onClick={() => scrollTo('privacy')}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-md transition-all text-sm font-medium ${activeSection === 'privacy' ? 'bg-white shadow-sm border border-slate-200 text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}
+                  >
+                    <div className="flex items-center gap-3"><ShieldCheck size={16} /> Privacy Policy</div>
+                    <ChevronRight size={14} className={activeSection === 'privacy' ? "opacity-100" : "opacity-0"} />
+                  </button>
+                </nav>
               </div>
 
-              <div className="p-6 rounded-2xl bg-secondary/30 border border-border">
-                <h4 className="text-sm font-bold mb-2 flex items-center gap-2">
-                  <Mail size={14} className="text-primary" /> Contact
+              <div className="p-6 rounded-lg bg-slate-100 border border-slate-200">
+                <h4 className="text-xs font-bold uppercase text-slate-900 mb-4 flex items-center gap-2">
+                  <Mail size={14} /> Legal Contact
                 </h4>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div>
-                    <p className="text-[10px] font-bold uppercase text-muted-foreground">Legal Inquiry</p>
-                    <a href="mailto:developing.soulnet@gmail.com" className="text-xs text-primary hover:underline break-all font-mono">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Email Inquiries</p>
+                    <a href="mailto:developing.soulnet@gmail.com" className="text-sm text-blue-600 hover:underline break-all font-mono">
                       developing.soulnet@gmail.com
                     </a>
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase text-muted-foreground">Support</p>
-                    <a href="https://discord.gg" target="_blank" rel="noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
-                      Discord Server <ExternalLink size={10} />
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Community Support</p>
+                    <a href="https://discord.gg/UHeWA6mXxS" target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                      Discord Server <ExternalLink size={12} />
                     </a>
                   </div>
                 </div>
@@ -94,150 +81,121 @@ const Legal = () => {
             </div>
           </aside>
 
-          <main className="flex-1 space-y-16">
-            <header className="space-y-4">
-              <h1 className="text-5xl font-black font-fredoka tracking-tight">Legal Center</h1>
-              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                Review the terms and policies that govern the Directum Bot Listing platform.
+          {/* Clean Content Area */}
+          <main className="flex-1 max-w-3xl">
+            <header className="mb-16 border-b border-slate-200 pb-10">
+              <h1 className="text-4xl font-serif font-bold text-slate-900 mb-4 tracking-tight">Directum Legal Center</h1>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                The governing guidelines and data protection policies for the Directum Bot Listing platform.
               </p>
             </header>
 
-            <div id="tos" className="scroll-mt-24">
-              <Card className="border-border/50 shadow-xl overflow-hidden bg-card/50 backdrop-blur-sm">
-                <div className="h-2 bg-primary w-full" />
-                <CardHeader className="p-8">
-                  <CardTitle className="text-3xl font-bold">Terms of Service</CardTitle>
-                  <CardDescription className="flex items-center gap-2">
-                    <FileText size={14} /> Last updated: 4/23/2026
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-8 pt-0 space-y-10">
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">1</span>
-                      Acceptance of Terms
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
-                      By accessing, using, or interacting with Directum (“the Service”) in any manner, you agree to be bound by these Terms of Service (“Terms”). If you do not agree to these Terms, you must discontinue use of the Service immediately.
-                    </p>
-                  </section>
+            {/* TERMS OF SERVICE */}
+            <article id="tos" className="scroll-mt-28 mb-24">
+              <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-widest mb-4">
+                <Scale size={14} /> Agreement
+              </div>
+              <h2 className="text-3xl font-serif font-bold text-slate-900 mb-6">Terms of Service</h2>
+              <div className="flex items-center gap-4 text-slate-400 text-sm mb-10 pb-6 border-b border-slate-100">
+                <span className="flex items-center gap-1"><Clock size={14} /> Effective: April 23, 2026</span>
+                <span className="flex items-center gap-1"><FileText size={14} /> Version 1.4</span>
+              </div>
 
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">2</span>
-                      Bot Submission Guidelines
-                    </h3>
-                    <p className="text-muted-foreground text-sm">To maintain a safe and high-quality platform, all bot submissions must adhere to the following:</p>
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {[
-                        "Comply with Discord’s TOS & Community Guidelines",
-                        "Descriptions must be accurate and not misleading",
-                        "No malicious code, exploits, or harmful functions",
-                        "NSFW content must be clearly labeled",
-                        "No spam, duplicate, or deceptive submissions"
-                      ].map((item, i) => (
-                        <li key={i} className="flex gap-3 p-3 rounded-lg bg-secondary/30 border border-border/50 text-xs text-muted-foreground leading-relaxed">
-                          <ChevronRight size={14} className="text-primary shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
+              <div className="prose prose-slate max-w-none space-y-12">
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">1. Acceptance of Terms</h3>
+                  <p className="text-slate-600 leading-7">
+                    By accessing or using Directum (“the Service”), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. These terms apply to all visitors, users, and bot developers who access the service.
+                  </p>
+                </section>
 
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">3</span>
-                      User Responsibilities
-                    </h3>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li>• You are responsible for the accuracy of information provided</li>
-                      <li>• Bot owners must ensure information remains up to date</li>
-                      <li>• No vote manipulation or artificial engagement activity</li>
-                      <li>• Treat others respectfully in the community environment</li>
-                    </ul>
-                  </section>
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">2. Submission & Listing Policy</h3>
+                  <p className="text-slate-600 leading-7 mb-4">All bot submissions must maintain compliance with the following standards:</p>
+                  <ul className="space-y-3 list-none pl-0">
+                    {["Full compliance with Discord's Terms of Service", "Accurate and transparent bot descriptions", "Strict prohibition of malicious code or exploits", "Appropriate labeling of NSFW functionality"].map((item, i) => (
+                      <li key={i} className="flex gap-3 text-slate-600 items-start">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
 
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">4</span>
-                      Dispute Resolution
-                    </h3>
-                    <div className="p-4 rounded-lg bg-secondary/30 border border-border/50 space-y-3">
-                      <p className="text-xs font-bold text-foreground uppercase tracking-wider">MANDATORY PROCESS</p>
-                      <p className="text-muted-foreground text-xs leading-relaxed">
-                        Attempt informal resolution by contacting Directum first. Unresolved disputes must be settled through binding individual arbitration. You waive the right to participate in class actions or external litigation. As a US-based hobby project, we operate under US legal jurisdiction.
-                      </p>
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">3. User Conduct</h3>
+                  <p className="text-slate-600 leading-7">
+                    Users are prohibited from engaging in vote manipulation, artificial traffic generation, or harassment within the community. Bot owners are responsible for keeping their listings current and providing support to their users.
+                  </p>
+                </section>
+
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">4. Content Moderation</h3>
+                  <p className="text-slate-600 leading-7">
+                    We reserve the right to remove any bot or user account that violates these terms or Discord's community guidelines. All moderation actions are at the discretion of the Directum administration team.
+                  </p>
+                </section>
+
+                <section className="bg-white p-8 border border-slate-200 rounded-lg shadow-sm">
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">5. Limitation of Liability</h3>
+                  <p className="text-sm text-slate-500 leading-6 italic">
+                    Directum is provided "as is" without warranties of any kind. We are not responsible for the actions of third-party bots listed on our platform. Disputes must be handled through individual arbitration under the jurisdiction of the United States.
+                  </p>
+                </section>
+              </div>
+            </article>
+
+            <Separator className="my-16 bg-slate-200" />
+
+            {/* PRIVACY POLICY */}
+            <article id="privacy" className="scroll-mt-28">
+              <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-widest mb-4">
+                <ShieldCheck size={14} /> Security
+              </div>
+              <h2 className="text-3xl font-serif font-bold text-slate-900 mb-6">Privacy Policy</h2>
+              <div className="flex items-center gap-4 text-slate-400 text-sm mb-10 pb-6 border-b border-slate-100">
+                <span className="flex items-center gap-1"><Clock size={14} /> Last Revision: April 25, 2026</span>
+              </div>
+
+              <div className="space-y-12">
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">1. Data Collection</h3>
+                  <p className="text-slate-600 leading-7 mb-4">To provide our services, we collect limited personal data through Discord OAuth:</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 border border-slate-200 rounded">
+                      <p className="text-sm font-bold text-slate-900">Identity Data</p>
+                      <p className="text-xs text-slate-500">Discord ID, Username, and Avatar.</p>
                     </div>
-                  </section>
-                </CardContent>
-              </Card>
-            </div>
+                    <div className="p-4 border border-slate-200 rounded">
+                      <p className="text-sm font-bold text-slate-900">Technical Data</p>
+                      <p className="text-xs text-slate-500">IP address and browser metadata.</p>
+                    </div>
+                  </div>
+                </section>
 
-            <div id="privacy" className="scroll-mt-24">
-              <Card className="border-border/50 shadow-xl overflow-hidden bg-card/50 backdrop-blur-sm">
-                <div className="h-2 bg-accent w-full" />
-                <CardHeader className="p-8">
-                  <CardTitle className="text-3xl font-bold">Privacy Policy</CardTitle>
-                  <CardDescription className="flex items-center gap-2">
-                    <ShieldCheck size={14} /> Last updated: 4/25/2026
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-8 pt-0 space-y-10">
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Info size={18} className="text-primary" /> 1. Information We Collect
-                    </h3>
-                    <ul className="space-y-3 text-sm text-muted-foreground">
-                      <li className="flex flex-col gap-1">
-                        <span className="font-bold text-foreground">Discord Account Data</span>
-                        We collect your Username, avatar, and Discord ID. If provided via Discord OAuth scopes, we collect your email address solely for account identification and authentication.
-                      </li>
-                      <li className="flex flex-col gap-1">
-                        <span className="font-bold text-foreground">Bot Submissions</span>
-                        Details provided during bot management.
-                      </li>
-                      <li className="flex flex-col gap-1">
-                        <span className="font-bold text-foreground">Usage & Technical Data</span>
-                        Interactions, voting, IP address, and browser info for security and analytics.
-                      </li>
-                    </ul>
-                  </section>
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">2. Security Measures</h3>
+                  <p className="text-slate-600 leading-7">
+                    Your data is stored using AES-256 encryption at rest and TLS encryption in transit. Our infrastructure is managed via Supabase and Vercel, ensuring high-level security compliance (SOC 2 Type 2).
+                  </p>
+                </section>
 
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Lock size={18} className="text-primary" /> 2. Data Protection & Security
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      We prioritize the security of your information using industry-standard measures:
-                    </p>
-                    <ul className="space-y-2">
-                      <li className="text-xs text-muted-foreground flex gap-2">
-                        <Database size={14} className="text-primary" />
-                        <strong>Infrastructure:</strong> Data is hosted on Vercel and Supabase (SOC 2 Type 2 compliant).
-                      </li>
-                      <li className="text-xs text-muted-foreground flex gap-2">
-                        <ShieldCheck size={14} className="text-primary" />
-                        <strong>Encryption:</strong> Personal data, including email addresses, is protected with AES-256 encryption at rest and TLS encryption in transit.
-                      </li>
-                      <li className="text-xs text-muted-foreground flex gap-2">
-                        <ChevronRight size={14} className="text-primary" />
-                        <strong>Isolation:</strong> We utilize Row Level Security (RLS) to ensure that users can only access their own data.
-                      </li>
-                    </ul>
-                  </section>
+                <section>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">3. Data Subject Rights</h3>
+                  <p className="text-slate-600 leading-7 mb-6">
+                    You have the right to access, rectify, or delete your data at any time. To exercise these rights, please contact us or join our Discord community.
+                  </p>
+                  <button 
+                    onClick={() => window.open('https://discord.gg/UHeWA6mXxS')}
+                    className="px-6 py-2 bg-slate-900 text-white text-sm font-medium rounded hover:bg-slate-800 transition-colors"
+                  >
+                    Contact Support for Data Requests
+                  </button>
+                </section>
+              </div>
+            </article>
 
-                  <section className="space-y-4">
-                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
-                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">3</span>
-                      Your Privacy Rights
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      Depending on location, you may access, correct, or delete personal data, withdraw consent, or object to processing.
-                    </p>
-                  </section>
-                </CardContent>
-              </Card>
-            </div>
+            <div className="h-32" />
           </main>
         </div>
       </div>
