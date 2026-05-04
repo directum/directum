@@ -12,7 +12,8 @@ import {
   FileText,
   Info,
   Layers,
-  Lock
+  Lock,
+  Database
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar"; 
@@ -112,19 +113,54 @@ const Legal = () => {
                       Acceptance of Terms
                     </h3>
                     <p className="text-muted-foreground leading-relaxed text-sm">
-                      By accessing Directum, you agree to these Terms. If you do not agree, you must cease use immediately.
+                      By accessing, using, or interacting with Directum (“the Service”) in any manner, you agree to be bound by these Terms. If you do not agree, you must discontinue use immediately.
                     </p>
                   </section>
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
                       <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">2</span>
-                      Dispute Resolution & Mandatory Arbitration
+                      Bot Submission Guidelines
                     </h3>
-                    <div className="p-4 rounded-lg bg-destructive/5 border border-destructive/20 space-y-3">
-                      <p className="text-xs font-bold text-foreground uppercase tracking-wider">Mandatory Binding Arbitration</p>
+                    <p className="text-muted-foreground text-sm">All submissions must adhere to the following:</p>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {[
+                        "Comply with Discord’s TOS & Community Guidelines",
+                        "Descriptions must be accurate and not misleading",
+                        "No malicious code, exploits, or harmful functions",
+                        "NSFW content must be clearly labeled",
+                        "No spam, duplicate, or deceptive submissions"
+                      ].map((item, i) => (
+                        <li key={i} className="flex gap-3 p-3 rounded-lg bg-secondary/30 border border-border/50 text-xs text-muted-foreground">
+                          <ChevronRight size={14} className="text-primary shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
+                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">3</span>
+                      User Responsibilities
+                    </h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li>• You are responsible for the accuracy of information provided</li>
+                      <li>• Bot owners must ensure information remains up to date</li>
+                      <li>• No vote manipulation or artificial engagement activity</li>
+                      <li>• Treat others respectfully in the community environment</li>
+                    </ul>
+                  </section>
+
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
+                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">4</span>
+                      Dispute Resolution & Liability
+                    </h3>
+                    <div className="p-4 rounded-lg bg-secondary/30 border border-border/50 space-y-3">
+                      <p className="text-xs font-bold text-foreground uppercase tracking-wider">Mandatory Process</p>
                       <p className="text-muted-foreground text-xs leading-relaxed">
-                        All disputes must be resolved through informal negotiation or binding individual arbitration. By using this service, you waive your right to a trial by jury or to participate in any class action lawsuit. Directum is a US-based hobby project; any legal proceedings are governed by US law.
+                        Attempt informal resolution by contacting Directum first. Unresolved disputes must be settled through binding individual arbitration. You waive the right to participate in class actions or external litigation. As a US-based hobby project, we operate under US legal jurisdiction.
                       </p>
                     </div>
                   </section>
@@ -145,33 +181,54 @@ const Legal = () => {
                 <CardContent className="p-8 pt-0 space-y-10">
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Lock size={18} className="text-primary" /> Data Security & Infrastructure
+                      <Info size={18} className="text-primary" /> 1. Information We Collect
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      We utilize industry-standard 3rd party processors to ensure your data is handled securely:
-                    </p>
-                    <ul className="space-y-2">
-                      <li className="text-xs text-muted-foreground flex gap-2">
-                        <ChevronRight size={14} className="text-primary" />
-                        <strong>Storage:</strong> Hosted on Supabase (SOC 2 Type 2) with AES-256 encryption at rest.
+                    <ul className="space-y-3 text-sm text-muted-foreground">
+                      <li className="flex flex-col gap-1">
+                        <span className="font-bold text-foreground">Discord Account</span>
+                        Username, avatar, and Discord ID via the 'identify' scope. We do NOT collect your email.
                       </li>
-                      <li className="text-xs text-muted-foreground flex gap-2">
-                        <ChevronRight size={14} className="text-primary" />
-                        <strong>Access:</strong> Row Level Security (RLS) is enabled to prevent unauthorized data cross-access.
+                      <li className="flex flex-col gap-1">
+                        <span className="font-bold text-foreground">Bot Submissions</span>
+                        Details provided during bot management.
                       </li>
-                      <li className="text-xs text-muted-foreground flex gap-2">
-                        <ChevronRight size={14} className="text-primary" />
-                        <strong>Transmission:</strong> All data in transit is protected via TLS encryption.
+                      <li className="flex flex-col gap-1">
+                        <span className="font-bold text-foreground">Usage & Technical Data</span>
+                        Interactions, voting, IP address, and browser info for security purposes.
                       </li>
                     </ul>
                   </section>
 
                   <section className="space-y-4">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Info size={18} className="text-primary" /> Information Collected
+                      <Lock size={18} className="text-primary" /> 2. Data Security & Protection
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      We utilize industry-standard 3rd party infrastructure to keep your data secure:
+                    </p>
+                    <ul className="space-y-2">
+                      <li className="text-xs text-muted-foreground flex gap-2">
+                        <Database size={14} className="text-primary" />
+                        <strong>Infrastructure:</strong> Hosted on Vercel and Supabase (SOC 2 Type 2 Compliant).
+                      </li>
+                      <li className="text-xs text-muted-foreground flex gap-2">
+                        <ShieldCheck size={14} className="text-primary" />
+                        <strong>Encryption:</strong> AES-256 at rest and TLS encryption in transit.
+                      </li>
+                      <li className="text-xs text-muted-foreground flex gap-2">
+                        <ChevronRight size={14} className="text-primary" />
+                        <strong>RLS:</strong> Supabase Row Level Security is enabled to ensure data isolation.
+                      </li>
+                    </ul>
+                  </section>
+
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
+                      <span className="flex items-center justify-center w-6 h-6 rounded bg-primary/10 text-primary text-xs">3</span>
+                      Your Privacy Rights
                     </h3>
                     <p className="text-muted-foreground text-sm">
-                      We only request the <strong>identify</strong> scope via Discord OAuth. We do not receive, store, or process your email address.
+                      Depending on location, you may access, correct, or delete personal data, withdraw consent, or object to processing.
                     </p>
                   </section>
                 </CardContent>
