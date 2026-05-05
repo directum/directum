@@ -20,11 +20,9 @@ import Legal from "./pages/Legal";
 import Collections from "./pages/Collections";
 import CollectionDetail from "./pages/CollectionDetail";
 import ApiDocs from "./pages/docs/content/ApiDocs.tsx";
-import MyBots from "./pages/MyBots";
 import PremiumSuccess from "./pages/PremiumSuccess";
 import NotFound from "./pages/NotFound";
 import Partners from "./pages/Partners";
-// Import the Docs component we created
 import Docs from "./pages/documentation.tsx";
 
 const queryClient = new QueryClient();
@@ -52,7 +50,6 @@ const App = () => (
                 <Route path="/collection/:collectionId" element={<CollectionDetail />} />
                 <Route path="/partners" element={<Partners />} />
                 <Route path="/api-docs" element={<ApiDocs />} />
-                <Route path="/my-bots" element={<MyBots />} />
 
                 {/* Documentation Routes */}
                 {/* This handles /docs */}
