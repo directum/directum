@@ -638,7 +638,7 @@ const Index = () => {
         {/* Partnership Footer */}
         <div className="py-8 pb-24 text-center border-t border-border mt-16">
           <p className="text-muted-foreground text-sm">
-            Working in partnership with Soulnet and Ghostlabs
+            You've reached the end! Thanks for exploring the current Directum collection!
           </p>
         </div>
 
