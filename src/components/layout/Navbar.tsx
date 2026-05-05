@@ -111,7 +111,6 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end">
                     <DropdownMenuItem onClick={() => navigate('/profile')}><User className="mr-2 h-4 w-4" />Profile</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/my-bots')}><Bot className="mr-2 h-4 w-4" />My Bots</DropdownMenuItem>
                     {isAdmin() && <DropdownMenuItem onClick={() => navigate('/management')}><Settings className="mr-2 h-4 w-4" />Management</DropdownMenuItem>}
                     <DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Sign out</DropdownMenuItem>
                   </DropdownMenuContent>
@@ -140,7 +139,6 @@ export const Navbar = ({ onAddBot }: NavbarProps) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end">
                     <DropdownMenuItem onClick={() => navigate('/profile')}><User className="mr-2 h-4 w-4" />Profile</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/my-bots')}><Bot className="mr-2 h-4 w-4" />My Bots</DropdownMenuItem>
                     {isAdmin() && <DropdownMenuItem onClick={() => navigate('/management')}><Settings className="mr-2 h-4 w-4" />Management</DropdownMenuItem>}
                     <DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Sign out</DropdownMenuItem>
                   </DropdownMenuContent>
